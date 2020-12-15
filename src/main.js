@@ -3,7 +3,7 @@ import 'url-search-params-polyfill';
 import 'babel-polyfill';
 
 import Vue from 'vue';
-import BootstrapVue from 'bootstrap-vue';
+// import BootstrapVue from 'bootstrap-vue';
 import App from '@/App';
 import router from '@/router';
 // import axios from '@/core/auth'
@@ -15,7 +15,10 @@ import zh from 'vee-validate/dist/locale/zh_CN';
 import localForage from 'localforage';
 import 'localforage-getitems';
 import VueSweetalert2 from 'vue-sweetalert2';
-import ViewUI from 'view-design';
+// import ViewUI from 'view-design';
+import Element from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+Element.Dialog.props.closeOnClickModal.default = false;
 // import * as directives from "./directives";
 import VueSilentbox from 'vue-silentbox';
 
@@ -30,8 +33,9 @@ dayjs.locale('zh-cn');
 dayjs.extend(relativeTime);
 
 // iView 4.x
-Vue.use(ViewUI);
+// Vue.use(ViewUI);
 Vue.use(VueSilentbox);
+Vue.use(Element);
 
 Vue.use(VeeValidate, {
   events: 'input|change',
@@ -39,7 +43,7 @@ Vue.use(VeeValidate, {
 });
 Validator.localize('zh', zh);
 
-Vue.use(BootstrapVue);
+// Vue.use(BootstrapVue);
 Vue.use(VueSweetalert2);
 // Vue.mixin(iviewFixer)
 
