@@ -1,33 +1,217 @@
 <template>
-  <div class="container">
-    {{ info }}
+  <div class="login-container">
+    <el-form
+      class="login-form"
+      auto-complete="on"
+      :model="loginForm"
+      ref="loginForm"
+      label-position="left"
+    >
+      <!--登录的标题-->
+      <div class="title-container">
+        <h3 class="title">登录</h3>
+      </div>
+      <!--登录表单-->
+      <el-form-item prop="account">
+        <el-input
+          name="account"
+          type="text"
+          v-model="loginForm.account"
+          auto-complete="on"
+          placeholder="请输入用户名"
+        >
+          <i slot="suffix" class="el-input__icon el-icon-user"></i>
+        </el-input>
+      </el-form-item>
+
+      <el-form-item prop="password">
+        <el-input
+          name="password"
+          :type="passwordType"
+          @keyup.enter.native="handleLogin"
+          v-model="loginForm.password"
+          auto-complete="on"
+          placeholder="请输入用户密码"
+          show-password
+        >
+          <i slot="suffix" class="el-input__icon el-icon-lock"></i>
+        </el-input>
+      </el-form-item>
+      <el-button
+        type="primary"
+        style="width: 100%; margin-bottom: 30px;"
+        :loading="loading"
+        :disabled="processing"
+        @click.native.prevent="handleLogin"
+      >
+        登录
+      </el-button>
+    </el-form>
   </div>
 </template>
 
 <script>
-import login from '@/core/mixins/login';
-import { mapGetters } from 'vuex';
+import qs from 'qs';
 
 export default {
   name: 'Login',
-  mixins: [login],
   data() {
     return {
-      msg: '登录页面',
+      loginForm: {
+        account: '',
+        password: '',
+      },
+      passwordType: 'password',
+      loading: false,
+      processing: false,
     };
   },
-  computed: {
-    ...mapGetters('UserStore', ['info']),
-  },
-  mounted() {
-    this.fetchUserInfo();
-  },
+  created() {},
+  destroyed() {},
+  mounted() {},
   methods: {
-    test() {
-      console.log('测试commit成功啦222 ');
+    handleLogin() {
+      this.processing = true;
+      this.loading = true;
+      // 进行登录
+      this.$axios
+        .post('/user/login', qs.stringify(this.loginForm))
+        .then(res => {
+          if (res.status === 200 && res.data.code === 200) {
+            const data = JSON.parse(JSON.stringify(res.data.data));
+            this.$store.dispatch('Common/Auth/login', data.token);
+            this.$store.dispatch('UserStore/fetch', data);
+            this.$router.push({ path: '/project/dashboard' });
+            this.$message.success('恭喜您，登录成功');
+          } else {
+            this.$message.error('登录失败，请稍后重试');
+          }
+          this.processing = false;
+          this.loading = false;
+        })
+        .catch(e => {
+          console.error(e);
+          this.processing = false;
+          this.loading = false;
+          this.$message.error('登录失败，请您检查您的登录信息。');
+        });
     },
   },
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style rel="stylesheet/scss" lang="scss">
+$bg: #2d3a4b;
+$light_gray: #eee;
+
+/* reset element-ui css */
+.login-container {
+  .el-input {
+    display: inline-block;
+    height: 47px;
+    input {
+      height: 47px;
+      padding: 12px 5px 12px 15px;
+      color: $light_gray;
+      background: transparent;
+      border: 0;
+      border-radius: 0;
+      /* stylelint-disable */
+      -webkit-appearance: none;
+      /* stylelint-enable */
+      &:-webkit-autofill {
+        /* stylelint-disable selector-no-id, declaration-no-important   */
+        box-shadow: 0 0 0 1000px $bg inset !important;
+        -webkit-text-fill-color: #fff !important;
+        /* stylelint-enable */
+      }
+    }
+  }
+  .el-form-item {
+    color: #454545;
+    background: rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+  }
+}
+</style>
+
+<style rel="stylesheet/scss" lang="scss" scoped>
+$bg: #2d3a4b;
+$dark_gray: #889aa4;
+$light_gray: #eee;
+
+.login-container {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: $bg;
+  .login-form {
+    position: absolute;
+    right: 0;
+    left: 0;
+    width: 520px;
+    padding: 35px 35px 15px;
+    margin: 120px auto;
+  }
+  .tips {
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: #fff;
+    span {
+      &:first-of-type {
+        margin-right: 16px;
+      }
+    }
+  }
+  .svg-container {
+    display: inline-block;
+    width: 30px;
+    padding: 6px 5px 6px 15px;
+    color: $dark_gray;
+    vertical-align: middle;
+    &_login {
+      font-size: 20px;
+    }
+  }
+  .title-container {
+    position: relative;
+    .title {
+      margin: 0 auto 40px;
+      font-size: 26px;
+      font-weight: bold;
+      color: $light_gray;
+      text-align: center;
+    }
+    .set-language {
+      position: absolute;
+      top: 5px;
+      right: 0;
+      color: #fff;
+    }
+  }
+  .show-pwd {
+    position: absolute;
+    top: 7px;
+    right: 10px;
+    font-size: 16px;
+    color: $dark_gray;
+    cursor: pointer;
+    user-select: none;
+  }
+  .imageCode {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    font-size: 16px;
+    color: $dark_gray;
+    cursor: pointer;
+    user-select: none;
+  }
+  .thirdparty-button {
+    position: absolute;
+    right: 35px;
+    bottom: 28px;
+  }
+}
+</style>

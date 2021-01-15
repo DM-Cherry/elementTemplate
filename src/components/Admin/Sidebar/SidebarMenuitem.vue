@@ -6,13 +6,18 @@
     </a>
     <template v-else>
       <a
-        href="/"
+        v-if="isAbsoluteUrl"
+        :href="absoluteUrl"
         class="nav-link"
         :target="item.attributes && item.attributes.target ? item.attributes.target : 'self'"
       >
         <i :class="item.icon" />
         {{ item.name }}
       </a>
+      <router-link v-else :to="targetUrl" class="nav-link">
+        <i :class="item.icon" />
+        {{ item.name }}
+      </router-link>
     </template>
     <ul v-if="isFolder" class="nav-dropdown-items">
       <z-sidebar-menuitem
@@ -43,10 +48,6 @@ export default {
     },
   },
   computed: {
-    // permissions() {
-    //   const permissions = this.$store.getters['SiteStore/permissions'];
-    //   return Array.isArray(permissions) ? permissions : [];
-    // },
     subLevel() {
       if (Number.isNaN(this.level)) {
         return 1;
@@ -66,18 +67,17 @@ export default {
       }
       return className;
     },
-    // isAbsoluteUrl() {
-    //   return /^(f|ht)tps?:\/\//i.test(this.item.url);
-    // },
-    // absoluteUrl() {
-    //   const jwtToken = localStorage.getItem('jwtToken');
-    //   if (this.item.attributes && this.item.attributes.jwt && jwtToken) {
-    //     return `${this.item.url}?token=${jwtToken.substr(7)}`;
-    //   }
-    //   return this.item.url;
-    // },
+    isAbsoluteUrl() {
+      return /^(f|ht)tps?:\/\//i.test(this.item.url);
+    },
+    absoluteUrl() {
+      const jwtToken = localStorage.getItem('jwtToken');
+      if (this.item.attributes && jwtToken) {
+        return `${this.item.url}?token=${jwtToken.substr(7)}`;
+      }
+      return this.item.url;
+    },
     targetUrl() {
-      const site = this.$route.params.site || 'main';
       let { url } = this.item;
       if (this.item?.attributes?.route?.query) {
         try {
@@ -99,7 +99,7 @@ export default {
         }
       }
       if (url) {
-        return format(url, { site });
+        return format(url);
       }
       return '#';
     },
@@ -116,21 +116,6 @@ export default {
       // }
       return false;
     },
-    //   visible() {
-    //     let routes = [this.item.route_name];
-    //     if (Array.isArray(this.item.children)) {
-    //       const flatten = function(into, node) {
-    //         if (node == null) return into;
-    //         if (Array.isArray(node)) return node.reduce(flatten, into);
-    //         into.push(node.route_name);
-    //         return flatten(into, node.children);
-    //       };
-    //       routes = flatten(routes, this.item.children);
-    //     }
-
-    //     routes = routes.filter(item => this.permissions.includes(item));
-    //     return routes.length > 0 && this.item.visible;
-    //   },
   },
   methods: {
     handleClick(e) {

@@ -21,32 +21,31 @@
           <ul v-if="info" class="info">
             <li>
               姓名：
-              <span class="text-muted">{{ info.name || '' }}</span>
+              <span class="text-muted">{{ info.realName || '' }}</span>
             </li>
             <li>
               手机：
-              <span class="text-muted">{{ info.mobile || '' }}</span>
+              <span class="text-muted">{{ info.userName || '' }}</span>
             </li>
             <li>
               邮箱：
-              <span class="text-muted">{{ info.email || '' }}</span>
+              <span class="text-muted">{{ info.mail || '' }}</span>
             </li>
           </ul>
         </div>
-        <hr class="transparent my-3" />
+        <!-- <hr class="transparent my-3" />
         <div class="aside-options px-3 text-center">
           <el-button :block="true" type="danger" @click="logout">
             <i class="fas fa-sign-out-alt" />
             退出登录
           </el-button>
-        </div>
+        </div> -->
       </el-tab-pane>
     </el-tabs>
   </aside>
 </template>
 
 <script>
-import EventBus from '@/core/eventbus';
 import { mapGetters } from 'vuex';
 
 export default {
@@ -59,7 +58,7 @@ export default {
   },
   methods: {
     logout() {
-      EventBus.$emit('account_logout');
+      this.$store.dispatch('Common/Auth/logout');
     },
   },
 };

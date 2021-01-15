@@ -5,7 +5,7 @@ import router from '../router';
 // axios 配置
 axios.defaults.timeout = 60 * 1000;
 axios.defaults.baseURL = store.state.default.apiBase;
-axios.defaults.withCredentials = true;
+// axios.defaults.withCredentials = true;
 
 // http request 拦截器
 axios.interceptors.request.use(
@@ -45,6 +45,7 @@ axios.interceptors.response.use(
   response => {
     /* eslint-disable */
     const url = response?.config?.url || '';
+    return response;
   },
   error => {
     if (error.response) {
@@ -60,87 +61,30 @@ axios.interceptors.response.use(
             name: route.name,
             params: route.params,
           });
-          console.warn('太久不操作退出登录了', r); // eslint-disable-line no-console
-          vue.$Notice.close('sessionTime');
-          const lastLoginTime = localStorage.getItem('jwtLastLoginedAt');
-          if (lastLoginTime) {
-            vue.$Notice.error({
-              title: '登录超时',
-              desc: '您太久没有操作了，需要重新登录后再继续操作。',
-              duration: vue.$store.state.default.notice.error.duration || 8,
-              name: 'sessionTime',
-            });
-          } else {
-            vue.$Notice.warning({
-              title: '未登录',
-              desc: '您尚未登录，请您先登录。',
-              duration: vue.$store.state.default.notice.warning.duration || 8,
-              name: 'sessionTime',
-            });
-          }
+          console.warn('token过期', r); // eslint-disable-line no-console
           setTimeout(() => {
-            // 返回 401 清除token信息并跳转到登录页面
-            store.commit('Common/Auth/logout');
+            // 返回 401 更新token信息
+            store.commit('Common/Auth/refreshToken');
             router.replace({
-              name: 'auth.login',
-              query: {
-                _ts: +new Date(),
-              },
+              name: r.name,
             });
           }, 3000);
           return Promise.reject(error.response);
         }
-        case 403:
-          vue.$Notice.error({
-            title: '权限错误',
-            desc: '您没有权限访问该模块，请联系系统管理员。',
-            duration: vue.$store.state.default.notice.error.duration || 8,
-          });
-          break;
         case 404:
-          break;
-        case 422:
-          Object.keys(error.response.data).forEach(key => {
-            const values = error.response.data[key];
-            body.push({
-              field: key,
-              msg: values.join(','),
-            });
-          });
-          error.response.data = body;
-          break;
-        case 423:
-          if (typeof error.response.data === 'string') {
-            vue.$Notice.error({
-              title: '您操作的太快',
-              desc: error.response.data,
-              duration: vue.$store.state.default.notice.error.duration || 8,
-            });
-            return;
-          }
-          Object.keys(error.response.data).forEach(key => {
-            const values = error.response.data[key];
-            body.push({
-              field: key,
-              msg: values.join(','),
-            });
-          });
-          error.response.data = body;
           break;
         case 500:
           message = getErrorMessage(error);
-          vue.$Notice.error({
+          vue.$notify.error({
             title: '服务器内部错误',
             desc: message,
-            duration: vue.$store.state.default.notice.error.duration || 8,
           });
           break;
         default:
           message = getErrorMessage(error);
-          vue.$Notice.error({
+          vue.$notify.error({
             title: '出错了',
             desc: `错误代码：${error.response.status}，详情：${message}`,
-            duration: vue.$store.state.default.notice.error.duration || 8,
           });
           break;
       }

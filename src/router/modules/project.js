@@ -12,6 +12,38 @@ export default [
         },
         component: () => import('@/views/project/dashboard/Index.vue'),
       },
+      {
+        path: 'users',
+        name: 'project.users',
+        meta: {
+          name: '用户管理',
+        },
+        component: () => import('@/views/project/users/Index.vue'),
+      },
+      {
+        path: 'histroy',
+        name: 'project.histroy',
+        meta: {
+          name: '历史数据管理',
+        },
+        component: () => import('@/views/project/histroy/Index.vue'),
+      },
+      {
+        path: 'system',
+        name: 'project.system',
+        meta: {
+          name: '系统配置管理',
+        },
+        component: () => import('@/views/project/system/Index.vue'),
+      },
+      {
+        path: 'email',
+        name: 'project.email',
+        meta: {
+          name: '邮箱配置管理',
+        },
+        component: () => import('@/views/project/email/Index.vue'),
+      },
     ],
   },
 ];

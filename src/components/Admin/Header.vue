@@ -60,7 +60,7 @@ export default {
     },
     async asideToggle(e) {
       e.preventDefault();
-      // await this.$store.dispatch('UserStore/initialize', true)
+      await this.$store.dispatch('UserStore/initialize', true);
       window.dispatchEvent(new Event('resize'));
       document.body.classList.toggle('aside-menu-hidden');
     },

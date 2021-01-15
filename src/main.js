@@ -6,7 +6,7 @@ import Vue from 'vue';
 // import BootstrapVue from 'bootstrap-vue';
 import App from '@/App';
 import router from '@/router';
-// import axios from '@/core/auth'
+import axios from '@/core/auth';
 // import iviewFixer from '@/core/mixins/iview'
 import store from '@/store';
 import VeeValidate, { Validator } from 'vee-validate';
@@ -23,7 +23,6 @@ Element.Dialog.props.closeOnClickModal.default = false;
 import VueSilentbox from 'vue-silentbox';
 
 import echarts from 'echarts';
-import 'echarts-liquidfill';
 
 import dayjs from 'dayjs';
 import 'dayjs/locale/zh-cn';
@@ -48,13 +47,13 @@ Vue.use(VueSweetalert2);
 // Vue.mixin(iviewFixer)
 
 Vue.prototype.$storage = {};
-// for (let name in store.state.default.storage.localforage) {
-//   Vue.prototype.$storage[name] = localForage.createInstance(
-//     store.state.default.storage.localforage[name]
-//   )
-// }
+for (let name in store.state.default.storage.localforage) {
+  Vue.prototype.$storage[name] = localForage.createInstance(
+    store.state.default.storage.localforage[name],
+  );
+}
 
-// Vue.prototype.$axios = axios
+Vue.prototype.$axios = axios;
 Vue.prototype.$dayjs = dayjs;
 Vue.prototype.$echarts = echarts;
 
