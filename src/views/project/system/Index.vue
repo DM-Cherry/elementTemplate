@@ -8,8 +8,7 @@
               <div slot="header" class="clearfix">
                 <span>系统配置</span>
               </div>
-              <Spin v-if="loading" size="large" fix />
-              <template v-else>
+              <template>
                 <h5 class="mb-4">
                   上次修改时间：
                   <span>{{ systemData.time[0].value }}</span>
@@ -58,6 +57,7 @@
                   <el-row :gutter="12" class="mt-3">
                     <el-col :sm="24" :md="24" :lg="24">
                       <el-table
+                        v-loading="loading"
                         ref="exportTable"
                         :data="systemData.exportField"
                         tooltip-effect="dark"
@@ -77,12 +77,13 @@
                           width="50"
                         ></el-table-column>
                         <el-table-column align="center" prop="name" label="字段"></el-table-column>
-                        <el-table-column
-                          align="center"
-                          prop="creatertime"
-                          label="创建日期"
-                          :formatter="formatDate"
-                        ></el-table-column>
+                        <el-table-column align="center" prop="creatertime" label="创建日期">
+                          <template slot-scope="scope">
+                            <div>
+                              {{ $dayjs(scope.row.creatertime).format('YYYY-MM-DD') }}
+                            </div>
+                          </template>
+                        </el-table-column>
                       </el-table>
                     </el-col>
                   </el-row>
@@ -118,21 +119,6 @@ export default {
   },
   mounted() {},
   methods: {
-    checked() {},
-    // 格式化时间
-    formatDate(row, column) {
-      // 获取单元格数据
-      const data = row[column.property];
-      if (data === '') {
-        return '';
-      }
-      const dt = new Date(data);
-      let m = dt.getMonth() + 1;
-      let d = dt.getDate();
-      m = m < 10 ? `0${m}` : m;
-      d = d < 10 ? `0${d}` : d;
-      return `${dt.getFullYear()}-${m}-${d}`;
-    },
     handleSelectionChange(val) {
       this.selectField = val.map(item => {
         return item.id;
@@ -145,18 +131,17 @@ export default {
         .post('/tdDictionary/dictionaryUpdate', this.systemData)
         .then(res => {
           if (res.data.code !== 200) {
-            this.loading = false;
-            this.$message.error('修改设备信息失败');
+            this.$message.error('修改设备信息失败，请稍后重试');
           } else {
-            this.loading = false;
             this.$message.success('修改设备信息成功');
             this.getSystem();
           }
+          this.loading = false;
         })
         .catch(err => {
           this.loading = false;
           console.error(err);
-          this.$message.error('修改设备信息失败');
+          this.$message.error('服务请求失败，请稍后重试');
         });
     },
     getSystem() {
@@ -166,8 +151,7 @@ export default {
           .post('/tdDictionary/dictionaryInfo')
           .then(res => {
             if (res.data.code !== 200) {
-              this.$message.error('获取设备信息失败');
-              this.loading = false;
+              this.$message.error('获取设备信息失败，请稍后重试');
             } else {
               this.systemData = JSON.parse(JSON.stringify(res.data.data));
               this.loading = false;
@@ -181,6 +165,7 @@ export default {
                 }
               });
             }
+            this.loading = false;
           })
           .catch(err => {
             this.loading = false;
@@ -188,6 +173,8 @@ export default {
             this.$message.error('获取设备信息失败');
           });
       } catch (e) {
+        const err = e || '请求服务出错了，请稍后重试';
+        this.$message.error(err);
         this.loading = false;
         console.error(e);
       }

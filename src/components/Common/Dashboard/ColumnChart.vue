@@ -79,7 +79,7 @@ export default {
         });
       });
       this.option.series = dataArr;
-      this.option.yAxis[0].name = unit;
+      this.option.yAxis[0].name = unit || '';
       this.myechart.setOption(this.option);
       window.addEventListener('resize', this.resize);
     },

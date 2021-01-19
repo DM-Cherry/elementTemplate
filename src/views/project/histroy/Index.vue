@@ -8,8 +8,7 @@
               <div slot="header" class="clearfix">
                 <span>历史报警数据</span>
               </div>
-              <Spin v-if="loading" size="large" fix />
-              <template v-else>
+              <template>
                 <el-form :inline="true" :model="search" class="demo-form-inline">
                   <el-form-item label="设备编码">
                     <el-input v-model="search.deviceCode" placeholder="请输入设备编码"></el-input>
@@ -22,7 +21,12 @@
                   </el-form-item>
                 </el-form>
                 <div class="mb-3">
-                  <el-table border :data="histroyData.list" style="width: 100%;">
+                  <el-table
+                    v-loading="loading"
+                    border
+                    :data="histroyData.list"
+                    style="width: 100%;"
+                  >
                     <el-table-column
                       align="center"
                       type="index"
@@ -53,13 +57,13 @@
                       label="报警等级"
                       width="100"
                     ></el-table-column> -->
-                    <el-table-column
-                      align="center"
-                      prop="creatertime"
-                      label="创建日期"
-                      :formatter="formatDate"
-                      width="120"
-                    ></el-table-column>
+                    <el-table-column align="center" prop="creatertime" label="创建日期" width="120">
+                      <template slot-scope="scope">
+                        <div>
+                          {{ $dayjs(scope.row.creatertime).format('YYYY-MM-DD') }}
+                        </div>
+                      </template>
+                    </el-table-column>
                     <el-table-column align="center" prop="deviceState" label="解决状态" width="100">
                       <template slot-scope="scope">
                         <el-tag size="medium" type="danger" v-if="scope.row.deviceState === false">
@@ -128,20 +132,6 @@ export default {
     this.getHistroy();
   },
   methods: {
-    // 格式化时间
-    formatDate(row, column) {
-      // 获取单元格数据
-      const data = row[column.property];
-      if (data === '') {
-        return '';
-      }
-      const dt = new Date(data);
-      let m = dt.getMonth() + 1;
-      let d = dt.getDate();
-      m = m < 10 ? `0${m}` : m;
-      d = d < 10 ? `0${d}` : d;
-      return `${dt.getFullYear()}-${m}-${d}`;
-    },
     handleEdit(row) {
       this.loading = true;
       try {
@@ -150,20 +140,21 @@ export default {
           .then(res => {
             if (res.data.code !== 200) {
               this.$message.error('修改状态失败，请稍后重试');
-              this.loading = false;
             } else {
-              this.loading = false;
               this.$message.success('修改状态成功');
               this.getHistroy();
             }
+            this.loading = false;
           })
           .catch(err => {
             console.error(err);
             this.loading = false;
-            this.$message.error('修改状态失败，请稍后重试');
+            this.$message.error('服务请求失败，请稍后重试');
           });
       } catch (e) {
-        this.$message.error('修改状态失败，请稍后重试');
+        this.loading = false;
+        const err = e || '请求服务出错了，请稍后重试';
+        this.$message.error(err);
         console.error(e);
       }
     },
@@ -173,7 +164,6 @@ export default {
         pageNum: this.histroyData.pageNum,
         pageSize: this.histroyData.pageSize,
       });
-
       try {
         this.$axios
           .get('/tdlasDeviceLog/byPageCondition', { params })
@@ -189,13 +179,14 @@ export default {
           .catch(err => {
             console.error(err);
             this.loading = false;
-            this.$message.error('获取历史数据列表失败');
+            this.$message.error('服务请求失败，请稍后重试');
           });
-      } catch (error) {
+      } catch (e) {
+        const err = e || '请求服务出错了，请稍后重试';
         this.loading = false;
-        this.$message.error(error);
+        this.$message.error(err);
         // eslint-disable-next-line no-console
-        console.error(error);
+        console.error(e);
       }
     },
     indexMethod(index) {

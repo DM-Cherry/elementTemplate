@@ -8,8 +8,7 @@
               <div slot="header" class="clearfix">
                 <span>邮箱列表</span>
               </div>
-              <Spin v-if="loading" size="large" fix />
-              <template v-else>
+              <template>
                 <el-form :inline="true" :model="search" class="demo-form-inline">
                   <el-form-item label="邮箱">
                     <el-input v-model="search.mail" placeholder="请输入邮箱" clearable></el-input>
@@ -22,7 +21,7 @@
                   </el-form-item>
                 </el-form>
                 <div class="mb-3">
-                  <el-table border :data="emailData.list" style="width: 100%;">
+                  <el-table border v-loading="loading" :data="emailData.list" style="width: 100%;">
                     <el-table-column
                       align="center"
                       type="index"
@@ -31,13 +30,13 @@
                       :index="indexMethod"
                     ></el-table-column>
                     <el-table-column align="center" prop="mail" label="邮箱"></el-table-column>
-                    <el-table-column
-                      align="center"
-                      prop="creatertime"
-                      label="创建日期"
-                      :formatter="formatDate"
-                      width="180"
-                    ></el-table-column>
+                    <el-table-column align="center" prop="creatertime" label="创建日期" width="180">
+                      <template slot-scope="scope">
+                        <div>
+                          {{ $dayjs(scope.row.creatertime).format('YYYY-MM-DD') }}
+                        </div>
+                      </template>
+                    </el-table-column>
                     <el-table-column label="操作" align="center">
                       <template slot-scope="scope">
                         <el-button size="mini" type="primary" plain @click="handleEdit(scope.row)">
@@ -128,20 +127,6 @@ export default {
     this.getEmail();
   },
   methods: {
-    // 格式化时间
-    formatDate(row, column) {
-      // 获取单元格数据
-      const data = row[column.property];
-      if (data === '') {
-        return '';
-      }
-      const dt = new Date(data);
-      let m = dt.getMonth() + 1;
-      let d = dt.getDate();
-      m = m < 10 ? `0${m}` : m;
-      d = d < 10 ? `0${d}` : d;
-      return `${dt.getFullYear()}-${m}-${d}`;
-    },
     handleClose() {},
     getEmail() {
       this.loading = true;
@@ -154,23 +139,22 @@ export default {
           .get('/tdlasMail/byPageCondition', { params })
           .then(response => {
             if (response.status === 200 && response.data.code === 200) {
-              this.loading = false;
               this.emailData = JSON.parse(JSON.stringify(response.data.data));
             } else {
-              this.loading = false;
               this.$message.error('获取邮箱列表失败');
             }
+            this.loading = false;
           })
           .catch(err => {
             console.error(err);
             this.loading = false;
-            this.$message.error('获取邮箱列表失败');
+            this.$message.error('服务发送失败，获取邮箱列表失败');
           });
-      } catch (error) {
+      } catch (e) {
+        const err = e || '请求服务出错了，请稍后重试';
         this.loading = false;
-        this.$message.error(error);
-        // eslint-disable-next-line no-console
-        console.error(error);
+        this.$message.error(err);
+        console.error(e);
       }
     },
     submitForm() {
@@ -208,9 +192,9 @@ export default {
             console.error(err);
           });
       } catch (e) {
-        // eslint-disable-next-line no-console
+        const err = e || '请求服务出错了，请稍后重试';
         console.error(e);
-        this.$message.error('请求失败，请稍后重试');
+        this.$message.error(err);
         this.loading = false;
       }
     },
@@ -237,11 +221,10 @@ export default {
               this.$message.success('删除邮箱信息成功');
               this.emailData.pageNum = 1;
               this.getEmail();
-              this.loading = false;
             } else {
-              this.loading = false;
               this.$message.success('删除邮箱信息失败，请稍后重试');
             }
+            this.loading = false;
           })
           .catch(err => {
             this.loading = false;
@@ -250,7 +233,8 @@ export default {
           });
       } catch (e) {
         console.error(e);
-        this.$message.error('请求失败，请稍后重试');
+        const err = e || '请求服务出错了，请稍后重试';
+        this.$message.error(err);
         this.loading = false;
       }
     },

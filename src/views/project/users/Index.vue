@@ -8,8 +8,7 @@
               <div slot="header" class="clearfix">
                 <span>用户列表</span>
               </div>
-              <Spin v-if="loading" size="large" fix />
-              <template v-else>
+              <template>
                 <el-form :inline="true" :model="search" class="demo-form-inline">
                   <el-form-item label="手机号">
                     <el-input
@@ -33,7 +32,7 @@
                   </el-form-item>
                 </el-form>
                 <div class="mb-3">
-                  <el-table border :data="usersData.list" style="width: 100%;">
+                  <el-table v-loading="loading" border :data="usersData.list" style="width: 100%;">
                     <el-table-column
                       align="center"
                       type="index"
@@ -56,13 +55,13 @@
                     <el-table-column align="center" prop="password" label="密码"></el-table-column>
                     <el-table-column align="center" prop="mail" label="邮箱"></el-table-column>
                     <el-table-column align="center" prop="phone" label="电话"></el-table-column>
-                    <el-table-column
-                      align="center"
-                      prop="createTime"
-                      label="创建日期"
-                      width="120"
-                      :formatter="formatDate"
-                    ></el-table-column>
+                    <el-table-column align="center" prop="createTime" label="创建日期" width="120">
+                      <template slot-scope="scope">
+                        <div>
+                          {{ $dayjs(scope.row.createTime).format('YYYY-MM-DD') }}
+                        </div>
+                      </template>
+                    </el-table-column>
                     <el-table-column label="操作" align="center">
                       <template slot-scope="scope">
                         <el-button size="mini" type="primary" plain @click="handleEdit(scope.row)">
@@ -176,20 +175,6 @@ export default {
     this.getUsers();
   },
   methods: {
-    // 格式化时间
-    formatDate(row, column) {
-      // 获取单元格数据
-      const data = row[column.property];
-      if (data === '') {
-        return '';
-      }
-      const dt = new Date(data);
-      let m = dt.getMonth() + 1;
-      let d = dt.getDate();
-      m = m < 10 ? `0${m}` : m;
-      d = d < 10 ? `0${d}` : d;
-      return `${dt.getFullYear()}-${m}-${d}`;
-    },
     submitForm() {
       // 提交用户信息
       this.loading = true;
@@ -207,18 +192,19 @@ export default {
       }
       try {
         this.$axios.post(url, qs.stringify(this.form)).then(res => {
+          const msg = this.type === 'add' ? '添加用户信息' : '编辑用户信息';
           if (res.data.code !== 200) {
-            this.$message.error(res.data.msg);
-            this.loading = false;
+            this.$message.error(`${msg}失败，请稍后重试`);
           } else {
-            this.loading = false;
-            const msg = this.type === 'add' ? '添加用户信息成功' : '编辑用户信息成功';
-            this.$message.success(msg);
+            this.$message.success(`${msg}成功`);
             this.getUsers();
           }
+          this.loading = false;
           this.dialogVisible = false;
         });
       } catch (e) {
+        const err = e || '请求服务出错了，请稍后重试';
+        this.$message.error(err);
         console.error(e);
         this.loading = false;
       }
@@ -235,22 +221,22 @@ export default {
           .get('/user/userList', { params })
           .then(response => {
             if (response.status === 200 && response.data.code === 200) {
-              this.loading = false;
               this.usersData = JSON.parse(JSON.stringify(response.data.data));
             } else {
-              this.loading = false;
               this.$message.error('获取用户列表失败，请稍后重试');
             }
+            this.loading = false;
           })
           .catch(err => {
-            console.error('err', err);
+            console.error(err);
             this.loading = false;
-            this.$message.error('获取用户列表失败，请稍后重试');
+            this.$message.error('服务请求失败，请稍后重试');
           });
-      } catch (error) {
+      } catch (e) {
+        const err = e || '请求服务出错了，请稍后重试';
         this.loading = false;
-        this.$message.error(error);
-        console.error(error);
+        this.$message.error(err);
+        console.error(e);
       }
     },
     handleEdit(row) {
@@ -283,10 +269,12 @@ export default {
             }
           })
           .catch(err => {
-            this.$message.error(err);
+            console.error(err);
+            this.$message.error('服务请求失败，请稍后重试');
           });
       } catch (e) {
-        this.$message.error(e);
+        const err = e || '请求服务出错了，请稍后重试';
+        this.$message.error(err);
         console.error(e);
       }
     },

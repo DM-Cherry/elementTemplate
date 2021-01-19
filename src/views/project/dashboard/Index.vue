@@ -1,7 +1,6 @@
 <template>
   <section>
     <div class="container-fluid mt-2">
-      <!-- <Spin v-if="loading" size="large" fix /> -->
       <div class="animated fadeIn">
         <h5 class="my-3">室内</h5>
         <el-row :gutter="20">
@@ -67,7 +66,6 @@
               </el-row>
             </el-card>
           </el-col>
-
           <el-col :span="8">
             <el-card class="box-card" :body-style="{ padding: '0px' }">
               <div slot="header" class="clearfix">
@@ -104,11 +102,15 @@
           <el-col :span="8">
             <el-card class="box-card" :body-style="{ padding: '0px' }">
               <div slot="header" class="clearfix">
-                <el-button style="float: left; padding: 3px 0;" type="text" @click="viewImg('1')">
+                <el-button class="float-left py-1 mr-1" type="text" @click="viewImg('1')">
                   预览
                 </el-button>
+                <div class="float-left py-1">
+                  <div class="point normal float-left"></div>
+                  <div class="point warn float-left"></div>
+                </div>
                 <el-button
-                  style="float: right; padding: 3px 0;"
+                  class="float-right py-1"
                   type="text"
                   @click="viewHistory('gateway-1234_1')"
                 >
@@ -150,11 +152,15 @@
           <el-col :span="8">
             <el-card class="box-card" :body-style="{ padding: '0px' }">
               <div slot="header" class="clearfix">
-                <el-button style="float: left; padding: 3px 0;" type="text" @click="viewImg('2')">
+                <el-button class="float-left py-1 mr-1" type="text" @click="viewImg('2')">
                   预览
                 </el-button>
+                <div class="float-left py-1">
+                  <div class="point normal float-left"></div>
+                  <div class="point warn float-left"></div>
+                </div>
                 <el-button
-                  style="float: right; padding: 3px 0;"
+                  class="float-right py-1"
                   type="text"
                   @click="viewHistory('gateway-1234_2')"
                 >
@@ -279,11 +285,15 @@
           <el-col :span="8">
             <el-card class="box-card" :body-style="{ padding: '0px' }">
               <div slot="header" class="clearfix">
-                <!-- <el-button style="float: left; padding: 3px 0" type="text" @click="viewImg('3')">
+                <!-- <el-button class="float-left py-1" type="text" @click="viewImg('3')">
                   预览
                 </el-button> -->
+                <div class="float-left py-1">
+                  <div class="point normal float-left"></div>
+                  <div class="point warn float-left"></div>
+                </div>
                 <el-button
-                  style="float: right; padding: 3px 0;"
+                  class="float-right py-1"
                   type="text"
                   @click="viewHistory('gateway-1234_3')"
                 >
@@ -348,13 +358,13 @@
             <el-tag v-else size="medium" type="success">已解决</el-tag>
           </template>
         </el-table-column>
-        <el-table-column
-          prop="creatertime"
-          label="创建日期"
-          align="center"
-          width="180"
-          :formatter="formatDate"
-        ></el-table-column>
+        <el-table-column prop="creatertime" label="创建日期" align="center" width="180">
+          <template slot-scope="scope">
+            <div>
+              {{ $dayjs(scope.row.creatertime).format('YYYY-MM-DD HH:mm:ss') }}
+            </div>
+          </template>
+        </el-table-column>
         <el-table-column property="warnimg" align="center" label="报警预览">
           <template slot-scope="scope">
             <el-image
@@ -404,7 +414,6 @@ export default {
   components: { ColumnChart },
   data() {
     return {
-      loading: false,
       videoSrc: '',
       histroyVisible: false,
       viewVisible: false,
@@ -457,26 +466,6 @@ export default {
     }, 21000);
   },
   methods: {
-    // 格式化时间
-    formatDate(row, column) {
-      // 获取单元格数据
-      const data = row[column.property];
-      if (data === '') {
-        return '';
-      }
-      const dt = new Date(data);
-      let m = dt.getMonth() + 1;
-      let d = dt.getDate();
-      let h = dt.getHours();
-      let mm = dt.getMinutes();
-      let s = dt.getSeconds();
-      m = m < 10 ? `0${m}` : m;
-      d = d < 10 ? `0${d}` : d;
-      h = h < 10 ? `0${h}` : h;
-      mm = mm < 10 ? `0${mm}` : mm;
-      s = s < 10 ? `0${s}` : s;
-      return `${dt.getFullYear()}-${m}-${d} ${h}:${mm}:${s}`;
-    },
     filterData(data) {
       // 过滤数据
       const chartArr = [];
@@ -599,13 +588,13 @@ export default {
             clearInterval(this.dataTimer);
             this.dataTimer = null;
             this.$message.error('请求失败，请稍后重试');
-            console.error('err', err);
+            console.error(err);
           });
       } catch (e) {
         clearInterval(this.dataTimer);
         this.dataTimer = null;
         this.$message.error(e);
-        console.error('e', e);
+        console.error(e);
       }
     },
     async getVideo() {
@@ -652,9 +641,6 @@ export default {
         case '2':
           this.srcList = ['/static/images/dashboard/floor2.jpg'];
           break;
-        case '3':
-          this.srcList = ['/static/images/dashboard/floor2.jpg'];
-          break;
         default:
           this.srcList = ['/static/images/dashboard/floor1.jpg'];
           break;
@@ -688,7 +674,9 @@ export default {
           }
         });
       } catch (e) {
-        this.$message.error(e);
+        console.error(e);
+        const err = e || '请求服务出错了，请稍后重试';
+        this.$message.error(err);
       }
     },
     viewHistory(id) {
@@ -784,6 +772,33 @@ export default {
 }
 .fade {
   animation: fade 3s linear 0s infinite;
+}
+.point {
+  width: 10px;
+  height: 10px;
+  margin: 3px 30px 0 0;
+  font-size: 12px;
+  border-radius: 50%;
+  &.normal {
+    position: relative;
+    background: green;
+    &:after {
+      position: absolute;
+      width: 50px;
+      margin: -4px 0 0 12px;
+      content: '正常';
+    }
+  }
+  &.warn {
+    position: relative;
+    background: red;
+    &:after {
+      position: absolute;
+      width: 50px;
+      margin: -4px 0 0 12px;
+      content: '报警';
+    }
+  }
 }
 @keyframes fade {
   0% {
