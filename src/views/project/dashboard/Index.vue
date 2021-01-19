@@ -502,7 +502,6 @@ export default {
             console.log('err', err);
           });
       } catch (e) {
-        // 测试
         clearInterval(this.carouselTimer);
         this.carouselTimer = null;
         this.$message.error(e);
