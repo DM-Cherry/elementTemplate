@@ -8,7 +8,7 @@
               <div slot="header" class="clearfix">
                 <span>系统配置</span>
               </div>
-              <template>
+              <template v-if="systemData.time">
                 <h5 class="mb-4">
                   上次修改时间：
                   <span>{{ systemData.time[0].value }}</span>

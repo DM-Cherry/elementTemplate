@@ -163,6 +163,7 @@ export default {
       if (this.type === 'edit') {
         // 过滤敏感字段以及空字段
         const formData = JSON.parse(JSON.stringify(this.form));
+        console.log('formData', formData);
         const newForm = {};
         Object.keys(formData).forEach(key => {
           if (formData[key] && key !== 'creatertime') {
