@@ -200,7 +200,7 @@ export default {
     },
     handleEdit(row) {
       if (row) {
-        this.form = row;
+        this.form = JSON.parse(JSON.stringify(row));
         this.type = 'edit';
       } else {
         this.form = {
