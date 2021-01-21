@@ -423,7 +423,7 @@ export default {
       statistics4: {},
       statistics5: {},
       tdlshistoryId: '',
-      srcList: ['/static/images/dashboard/floor1.jpg'],
+      srcList: ['./static/images/dashboard/floor1.jpg'],
       page_sizes: [5, 10, 15, 20, 50],
       tdlsHistroyData: {
         list: [],
@@ -636,13 +636,13 @@ export default {
       // 查看3D图
       switch (code) {
         case '1':
-          this.srcList = ['/static/images/dashboard/floor1.jpg'];
+          this.srcList = ['./static/images/dashboard/floor1.jpg'];
           break;
         case '2':
-          this.srcList = ['/static/images/dashboard/floor2.jpg'];
+          this.srcList = ['./static/images/dashboard/floor2.jpg'];
           break;
         default:
-          this.srcList = ['/static/images/dashboard/floor1.jpg'];
+          this.srcList = ['./static/images/dashboard/floor1.jpg'];
           break;
       }
       this.viewVisible = true;

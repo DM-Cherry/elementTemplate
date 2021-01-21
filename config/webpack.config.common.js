@@ -1,34 +1,34 @@
-'use strict'
+'use strict';
 
-const VueLoaderPlugin = require('vue-loader/lib/plugin')
-const HtmlPlugin = require('html-webpack-plugin')
-const MiniCSSExtractPlugin = require('mini-css-extract-plugin')
-const { CleanWebpackPlugin } = require('clean-webpack-plugin')
-const CopyPlugin = require('copy-webpack-plugin')
-const helpers = require('./helpers')
-const isDev = process.env.NODE_ENV === 'development'
-const webpack = require('webpack')
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const HtmlPlugin = require('html-webpack-plugin');
+const MiniCSSExtractPlugin = require('mini-css-extract-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
+const helpers = require('./helpers');
+const isDev = process.env.NODE_ENV === 'development';
+const webpack = require('webpack');
 
 const webpackConfig = {
   node: {
-    fs: 'empty'
+    fs: 'empty',
   },
   entry: {
-    main: helpers.root('src', 'main')
+    main: helpers.root('src', 'main'),
   },
   resolve: {
     extensions: ['.js', '.vue'],
     alias: {
       vue$: isDev ? 'vue/dist/vue.runtime.js' : 'vue/dist/vue.runtime.min.js',
-      '@': helpers.root('src')
-    }
+      '@': helpers.root('src'),
+    },
   },
   module: {
     rules: [
       {
         test: /\.vue$/,
         loader: 'vue-loader',
-        exclude: '/node_modules/'
+        exclude: '/node_modules/',
       },
       {
         test: /\.js$/,
@@ -37,9 +37,9 @@ const webpackConfig = {
         options: {
           plugins: [
             '@babel/plugin-proposal-nullish-coalescing-operator',
-            '@babel/plugin-proposal-optional-chaining'
-          ]
-        }
+            '@babel/plugin-proposal-optional-chaining',
+          ],
+        },
       },
       {
         test: /\.css$/,
@@ -50,14 +50,14 @@ const webpackConfig = {
             options: {
               sourceMap: isDev,
               alias: {
-                '../images': helpers.root('static/images')
-              }
-            }
+                '../images': helpers.root('static/images'),
+              },
+            },
           },
           {
-            loader: 'postcss-loader'
-          }
-        ]
+            loader: 'postcss-loader',
+          },
+        ],
       },
       {
         test: /\.less$/,
@@ -66,19 +66,19 @@ const webpackConfig = {
           {
             loader: 'css-loader',
             options: {
-              importLoaders: 1
-            }
+              importLoaders: 1,
+            },
           },
           {
-            loader: 'postcss-loader'
+            loader: 'postcss-loader',
           },
           {
             loader: 'less-loader',
             options: {
-              javascriptEnabled: true
-            }
-          }
-        ]
+              javascriptEnabled: true,
+            },
+          },
+        ],
       },
       {
         test: /\.scss$/,
@@ -89,24 +89,24 @@ const webpackConfig = {
             options: {
               sourceMap: isDev,
               alias: {
-                '../images': helpers.root('static/images')
-              }
-            }
+                '../images': helpers.root('static/images'),
+              },
+            },
           },
           {
-            loader: 'postcss-loader'
+            loader: 'postcss-loader',
           },
           {
             loader: 'sass-loader',
             options: {
               sourceMap: isDev,
               alias: {
-                '../images': helpers.root('static/images')
+                '../images': helpers.root('static/images'),
               },
-              data: '$site:' + (process.env.SITE || 'default') + ';'
-            }
-          }
-        ]
+              data: '$site:' + (process.env.SITE || 'default') + ';',
+            },
+          },
+        ],
       },
       {
         test: /\.sass$/,
@@ -115,17 +115,17 @@ const webpackConfig = {
           {
             loader: 'css-loader',
             options: {
-              sourceMap: isDev
-            }
+              sourceMap: isDev,
+            },
           },
           {
             loader: 'sass-loader',
             options: {
               sourceMap: isDev,
-              data: '$site:' + (process.env.SITE || 'default') + ';'
-            }
-          }
-        ]
+              data: '$site:' + (process.env.SITE || 'default') + ';',
+            },
+          },
+        ],
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
@@ -134,9 +134,10 @@ const webpackConfig = {
           loader: 'file-loader',
           options: {
             name: '[name].[hash:7].[ext]',
-            outputPath: 'images/'
-          }
-        }
+            outputPath: 'static/images/',
+            publicPath: '../../static/images/',
+          },
+        },
       },
       {
         test: /\.(woff2?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
@@ -145,9 +146,10 @@ const webpackConfig = {
           loader: 'file-loader',
           options: {
             name: '[name].[hash:7].[ext]',
-            outputPath: 'fonts/'
-          }
-        }
+            outputPath: 'static/fonts/',
+            publicPath: '../../static/fonts/',
+          },
+        },
       },
       {
         test: helpers.root('node_modules/leader-line/'),
@@ -155,37 +157,37 @@ const webpackConfig = {
           {
             loader: 'skeleton-loader',
             options: {
-              procedure: content => `${content}export default LeaderLine`
-            }
-          }
-        ]
-      }
-    ]
+              procedure: content => `${content}export default LeaderLine`,
+            },
+          },
+        ],
+      },
+    ],
   },
   plugins: [
     new CleanWebpackPlugin(),
     new VueLoaderPlugin(),
     new webpack.DefinePlugin({
-      VUE_APP_FAVICON: 'default'
+      VUE_APP_FAVICON: 'default',
     }),
     new HtmlPlugin({
       template: 'index.html',
       inject: true,
       chunksSortMode: 'dependency',
-      meta: 'testing'
+      meta: 'testing',
     }),
     new CopyPlugin([
       {
         from: 'static',
         to: 'static',
-        ignore: ['.*']
-      }
+        ignore: ['.*'],
+      },
       // {
       //   from: 'unsupported.html',
       //   to: 'unsupported.html'
       // }
-    ])
-  ]
-}
+    ]),
+  ],
+};
 
-module.exports = webpackConfig
+module.exports = webpackConfig;

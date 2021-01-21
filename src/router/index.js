@@ -7,6 +7,7 @@ import store from '../store';
 import web from './modules/web';
 import project from './modules/project';
 
+const isDev = process.env.NODE_ENV === 'development';
 Vue.use(VueRouter);
 // Vue.use(iView)
 
@@ -15,10 +16,9 @@ Vue.use(ViewUI);
 const routes = [].concat(web, project);
 
 const router = new VueRouter({
-  mode: 'history',
+  mode: isDev ? 'history' : 'hash',
   routes,
 });
-
 router.beforeEach((to, from, next) => {
   ViewUI.LoadingBar.start();
   // 修改如果打开的菜单有标题，则修改标题

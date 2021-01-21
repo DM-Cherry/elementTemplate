@@ -13,7 +13,7 @@
               v-if="!info || !info.avatar"
               :size="100"
               fit="cover"
-              src="/static/images/placeholder/avatar.png"
+              src="./static/images/placeholder/avatar.png"
             ></el-avatar>
             <el-avatar v-else :size="100" fit="cover" :src="info.avatar_url" alt="用户头像" />
           </div>

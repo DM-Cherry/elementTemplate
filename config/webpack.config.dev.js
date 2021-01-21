@@ -1,13 +1,13 @@
-'use strict'
+'use strict';
 
-const webpack = require('webpack')
-const merge = require('webpack-merge')
-const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
+const webpack = require('webpack');
+const merge = require('webpack-merge');
+const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
 
-const helpers = require('./helpers')
-const commonConfig = require('./webpack.config.common')
+const helpers = require('./helpers');
+const commonConfig = require('./webpack.config.common');
 
-const environment = require(`./env/${process.env.SITE || 'default'}/dev.env`)
+const environment = require(`./env/${process.env.SITE || 'default'}/dev.env`);
 
 const devServer = {
   compress: true,
@@ -18,11 +18,11 @@ const devServer = {
   hot: true,
   open: true,
   overlay: true,
-  port: 8000,
+  port: 8001,
   stats: {
-    normal: true
-  }
-}
+    normal: true,
+  },
+};
 const webpackConfig = merge(commonConfig, {
   mode: 'development',
   devtool: 'cheap-module-eval-source-map',
@@ -30,13 +30,13 @@ const webpackConfig = merge(commonConfig, {
     path: helpers.root('dist'),
     publicPath: '/',
     filename: 'js/[name].bundle.js',
-    chunkFilename: 'js/[id].chunk.js'
+    chunkFilename: 'js/[id].chunk.js',
   },
   optimization: {
     runtimeChunk: 'single',
     splitChunks: {
-      chunks: 'all'
-    }
+      chunks: 'all',
+    },
   },
   plugins: [
     new webpack.EnvironmentPlugin(environment),
@@ -46,17 +46,15 @@ const webpackConfig = merge(commonConfig, {
       clearConsole: true,
       // 打包成功之后在控制台给予开发者的提示
       compilationSuccessInfo: {
-        messages: [
-          `开发环境启动成功，项目运行在: http://${devServer.host}:${devServer.port}`
-        ]
+        messages: [`开发环境启动成功，项目运行在: http://${devServer.host}:${devServer.port}`],
       },
       // 打包发生错误的时候
       onErrors: () => {
-        console.log('打包失败')
-      }
-    })
+        console.log('打包失败');
+      },
+    }),
   ],
-  devServer
-})
+  devServer,
+});
 
-module.exports = webpackConfig
+module.exports = webpackConfig;
