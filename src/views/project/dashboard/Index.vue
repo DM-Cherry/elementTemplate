@@ -414,6 +414,7 @@ export default {
   components: { ColumnChart },
   data() {
     return {
+      isDev: true,
       videoSrc: '',
       histroyVisible: false,
       viewVisible: false,
@@ -450,6 +451,10 @@ export default {
     }
   },
   mounted() {
+    this.isDev = process.env.NODE_ENV === 'development';
+    this.srcList = this.isDev
+      ? ['/static/images/dashboard/floor1.jpg']
+      : ['./static/images/dashboard/floor1.jpg'];
     this.getVideo();
     this.getData();
     this.getCarousel();
@@ -636,13 +641,19 @@ export default {
       // 查看3D图
       switch (code) {
         case '1':
-          this.srcList = ['./static/images/dashboard/floor1.jpg'];
+          this.srcList = this.isDev
+            ? ['/static/images/dashboard/floor1.jpg']
+            : ['./static/images/dashboard/floor1.jpg'];
           break;
         case '2':
-          this.srcList = ['./static/images/dashboard/floor2.jpg'];
+          this.srcList = this.isDev
+            ? ['/static/images/dashboard/floor2.jpg']
+            : ['./static/images/dashboard/floor2.jpg'];
           break;
         default:
-          this.srcList = ['./static/images/dashboard/floor1.jpg'];
+          this.srcList = this.isDev
+            ? ['/static/images/dashboard/floor1.jpg']
+            : ['./static/images/dashboard/floor1.jpg'];
           break;
       }
       this.viewVisible = true;

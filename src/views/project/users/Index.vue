@@ -94,25 +94,31 @@
       </div>
     </div>
     <el-dialog title="编辑用户信息" :visible.sync="dialogVisible" width="40%">
-      <el-form :model="form" :rules="rules" :inline="true">
+      <el-form
+        :model="form"
+        :rules="rules"
+        label-width="80px"
+        label-position="right"
+        :inline="true"
+      >
         <el-row>
           <el-col :sm="12" :md="12" :lg="12" class="filter-item">
-            <el-form-item label="名称" label-width="50" label-position="right">
+            <el-form-item label="名称">
               <el-input v-model="form.realName" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
           <el-col :sm="12" :md="12" :lg="12" class="filter-item">
-            <el-form-item label="密码" label-width="50" label-position="right">
+            <el-form-item label="密码">
               <el-input v-model="form.password" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
           <el-col :sm="12" :md="12" :lg="12" class="filter-item">
-            <el-form-item label="邮箱" label-width="50" prop="mail" label-position="right">
+            <el-form-item label="邮箱" prop="mail">
               <el-input v-model="form.mail" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
           <el-col :sm="12" :md="12" :lg="12" class="filter-item">
-            <el-form-item label="电话" prop="phone" label-width="50" label-position="right">
+            <el-form-item label="电话" prop="phone">
               <el-input v-model="form.phone" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>

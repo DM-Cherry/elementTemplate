@@ -13,7 +13,11 @@
               v-if="!info || !info.avatar"
               :size="100"
               fit="cover"
-              src="./static/images/placeholder/avatar.png"
+              :src="
+                isDev
+                  ? '/static/images/placeholder/avatar.png'
+                  : './static/images/placeholder/avatar.png'
+              "
             ></el-avatar>
             <el-avatar v-else :size="100" fit="cover" :src="info.avatar_url" alt="用户头像" />
           </div>
@@ -51,10 +55,15 @@ import { mapGetters } from 'vuex';
 export default {
   name: 'ZAside',
   data() {
-    return {};
+    return {
+      isDev: true,
+    };
   },
   computed: {
     ...mapGetters('UserStore', ['info']),
+  },
+  mounted() {
+    this.isDev = process.env.NODE_ENV === 'development';
   },
   methods: {
     logout() {
