@@ -2,12 +2,12 @@
   <section>
     <div class="container-fluid mt-2">
       <div class="animated fadeIn">
-        <h5 class="my-3">室内</h5>
+        <h5 class="my-3">氨制冷房泄漏监测</h5>
         <el-row :gutter="20">
           <el-col :span="8">
             <el-card class="box-card" :body-style="{ padding: '0px' }">
               <div slot="header" class="clearfix">
-                <span>1号TDLAS设备氨浓度</span>
+                <span>1号TDLAS</span>
               </div>
               <ColumnChart ref="tdlas1" />
               <el-row class="text-center border-top">
@@ -38,7 +38,7 @@
           <el-col :span="8">
             <el-card class="box-card" :body-style="{ padding: '0px' }">
               <div slot="header" class="clearfix">
-                <span>2号TDLAS设备氨浓度</span>
+                <span>2号TDLAS</span>
               </div>
               <ColumnChart ref="tdlas2" />
               <el-row class="text-center border-top">
@@ -69,7 +69,7 @@
           <el-col :span="8">
             <el-card class="box-card" :body-style="{ padding: '0px' }">
               <div slot="header" class="clearfix">
-                <span>1号超声波设备氨浓度</span>
+                <span>1号超声波</span>
               </div>
               <ColumnChart ref="sonic1" />
               <el-row class="text-center border-top">
@@ -200,12 +200,12 @@
             </el-card>
           </el-col>
         </el-row>
-        <h5 class="my-3">室外</h5>
+        <h5 class="my-3">赛道出发区泄漏监测</h5>
         <el-row :gutter="20" class="mt-2">
           <el-col :span="8">
             <el-card class="box-card" :body-style="{ padding: '0px' }">
               <div slot="header" class="clearfix">
-                <span>3号TDLAS设备氨浓度</span>
+                <span>3号TDLAS</span>
               </div>
               <ColumnChart ref="tdlas3" />
               <el-row class="text-center border-top">
@@ -236,7 +236,7 @@
           <el-col :span="8">
             <el-card class="box-card" :body-style="{ padding: '0px' }">
               <div slot="header" class="clearfix">
-                <span>2号超声波设备氨浓度</span>
+                <span>2号超声波</span>
               </div>
               <ColumnChart ref="sonic2" />
               <el-row class="text-center border-top">
