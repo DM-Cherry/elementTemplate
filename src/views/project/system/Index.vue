@@ -36,13 +36,30 @@
                       </el-form-item>
                     </el-col>
                   </el-row>
-                  <h6>超声波</h6>
+                  <h6>1号超声波设备</h6>
                   <el-row :gutter="12">
                     <el-col
                       :sm="12"
                       :md="12"
                       :lg="12"
-                      v-for="item in systemData.voice"
+                      v-for="item in systemData.voice1"
+                      :key="item.id"
+                      class="filter-item"
+                    >
+                      <el-form-item :label="item.name">
+                        <el-input v-model="item.value" type="number">
+                          <template slot="append">db</template>
+                        </el-input>
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+                  <h6>2号超声波设备</h6>
+                  <el-row :gutter="12">
+                    <el-col
+                      :sm="12"
+                      :md="12"
+                      :lg="12"
+                      v-for="item in systemData.voice2"
                       :key="item.id"
                       class="filter-item"
                     >
