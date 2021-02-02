@@ -16,7 +16,7 @@
                   <el-form-item>
                     <el-button type="primary" @click="getEmail">查询</el-button>
                   </el-form-item>
-                  <el-form-item>
+                  <el-form-item v-if="info.userId === 14">
                     <el-button @click="handleEdit('')">添加</el-button>
                   </el-form-item>
                 </el-form>
@@ -39,10 +39,22 @@
                     </el-table-column>
                     <el-table-column label="操作" align="center">
                       <template slot-scope="scope">
-                        <el-button size="mini" type="primary" plain @click="handleEdit(scope.row)">
+                        <el-button
+                          v-if="info.userId === 14"
+                          size="mini"
+                          type="primary"
+                          plain
+                          @click="handleEdit(scope.row)"
+                        >
                           编辑
                         </el-button>
-                        <el-button size="mini" type="danger" plain @click="handleRemove(scope.row)">
+                        <el-button
+                          v-if="info.userId === 14"
+                          size="mini"
+                          type="danger"
+                          plain
+                          @click="handleRemove(scope.row)"
+                        >
                           删除
                         </el-button>
                       </template>
@@ -84,6 +96,7 @@
 
 <script>
 import qs from 'qs';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'Email',
@@ -122,6 +135,9 @@ export default {
         mail: [{ validator: checkEmail, required: true, trigger: 'blur' }],
       },
     };
+  },
+  computed: {
+    ...mapGetters('UserStore', ['info']),
   },
   mounted() {
     this.getEmail();

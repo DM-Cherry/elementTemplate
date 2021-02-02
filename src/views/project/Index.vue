@@ -14,6 +14,7 @@
 <script>
 import { Header as AppHeader, Aside as AppAside, Sidebar } from '@/components/Admin/';
 import admin from '@/core/mixins/admin';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'Project',
@@ -21,6 +22,7 @@ export default {
   mixins: [admin],
   data() {
     return {
+      navList: [],
       nav: [
         {
           id: 1,
@@ -30,6 +32,7 @@ export default {
           icon: 'fa fa-tachometer',
           url: '/project/dashboard',
           children: [],
+          visible: true,
           attributes: {
             target: '/project/dashboard',
           },
@@ -41,6 +44,7 @@ export default {
           module: '',
           icon: 'fa fa-user-circle',
           children: [],
+          visible: true,
           url: '/project/users',
           attributes: {
             target: '/project/users',
@@ -53,6 +57,7 @@ export default {
           module: '',
           icon: 'fa fa-history',
           children: [],
+          visible: true,
           url: '/project/histroy',
           attributes: {
             target: '/project/histroy',
@@ -65,6 +70,7 @@ export default {
           module: '',
           icon: 'fa fa-cog',
           children: [],
+          visible: true,
           url: '/project/system',
           attributes: {
             target: '/project/system',
@@ -77,6 +83,7 @@ export default {
           module: '',
           icon: 'fa fa-envelope-square',
           children: [],
+          visible: true,
           url: '/project/email',
           attributes: {
             target: '/project/email',
@@ -84,6 +91,23 @@ export default {
         },
       ],
     };
+  },
+  computed: {
+    ...mapGetters('UserStore', ['info']),
+  },
+  mounted() {
+    this.getNav();
+  },
+  methods: {
+    async getNav() {
+      await this.$store.dispatch('UserStore/initialize', true);
+      this.nav.forEach((item, index) => {
+        if (item.name === '用户管理' && this.info.userId !== 14) {
+          this.nav[index].visible = false;
+        }
+        this.navList.push(item);
+      });
+    },
   },
 };
 </script>
