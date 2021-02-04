@@ -22,7 +22,6 @@ export default {
   mixins: [admin],
   data() {
     return {
-      navList: [],
       nav: [
         {
           id: 1,
@@ -95,20 +94,8 @@ export default {
   computed: {
     ...mapGetters('UserStore', ['info']),
   },
-  mounted() {
-    this.getNav();
-  },
-  methods: {
-    async getNav() {
-      await this.$store.dispatch('UserStore/initialize', true);
-      this.nav.forEach((item, index) => {
-        if (item.name === '用户管理' && this.info.userId !== 14) {
-          this.nav[index].visible = false;
-        }
-        this.navList.push(item);
-      });
-    },
-  },
+  mounted() {},
+  methods: {},
 };
 </script>
 
