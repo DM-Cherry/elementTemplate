@@ -1,275 +1,141 @@
 <template>
-  <section>
-    <div class="container-fluid mt-2">
+  <section class="dashboard-container">
+    <div class="container-fluid">
       <div class="animated fadeIn">
-        <h5 class="my-3">氨制冷房泄漏监测</h5>
-        <el-row :gutter="20">
-          <el-col :span="8">
-            <el-card class="box-card" :body-style="{ padding: '0px' }">
-              <div slot="header" class="clearfix">
-                <span>1号TDLAS</span>
-              </div>
-              <ColumnChart ref="tdlas1" />
-              <el-row class="text-center border-top">
-                <el-col :span="8" class="right-line">
-                  <div class="p-2">
-                    <h5 class="mb-0">{{ statistics1.isAvg }}</h5>
-                    <small class="mb-0">时均浓度值</small>
-                    <div class="mb-0 small-size">（ppm*m）</div>
-                  </div>
-                </el-col>
-                <el-col :span="8" class="right-line">
-                  <div class="p-2">
-                    <h5 class="mb-0">{{ statistics1.isMin }}</h5>
-                    <small class="mb-0">最小浓度值</small>
-                    <div class="mb-0 small-size">（ppm*m）</div>
-                  </div>
-                </el-col>
-                <el-col :span="8" class="right-line">
-                  <div class="p-2">
-                    <h5 class="mb-0">{{ statistics1.isMAx }}</h5>
-                    <small class="mb-0">最大浓度值</small>
-                    <div class="mb-0 small-size">（ppm*m）</div>
-                  </div>
-                </el-col>
-              </el-row>
-            </el-card>
-          </el-col>
-          <el-col :span="8">
-            <el-card class="box-card" :body-style="{ padding: '0px' }">
-              <div slot="header" class="clearfix">
-                <span>2号TDLAS</span>
-              </div>
-              <ColumnChart ref="tdlas2" />
-              <el-row class="text-center border-top">
-                <el-col :span="8" class="right-line">
-                  <div class="p-2">
-                    <h5 class="mb-0">{{ statistics2.isAvg }}</h5>
-                    <small class="mb-0">时均浓度值</small>
-                    <div class="mb-0 small-size">（ppm*m）</div>
-                  </div>
-                </el-col>
-                <el-col :span="8" class="right-line">
-                  <div class="p-2">
-                    <h5 class="mb-0">{{ statistics2.isMin }}</h5>
-                    <small class="mb-0">最小浓度值</small>
-                    <div class="mb-0 small-size">（ppm*m）</div>
-                  </div>
-                </el-col>
-                <el-col :span="8" class="right-line">
-                  <div class="p-2">
-                    <h5 class="mb-0">{{ statistics2.isMAx }}</h5>
-                    <small class="mb-0">最大浓度值</small>
-                    <div class="mb-0 small-size">（ppm*m）</div>
-                  </div>
-                </el-col>
-              </el-row>
-            </el-card>
-          </el-col>
-          <el-col :span="8">
-            <el-card class="box-card" :body-style="{ padding: '0px' }">
-              <div slot="header" class="clearfix">
-                <span>1号超声波</span>
-              </div>
-              <ColumnChart ref="sonic1" />
-              <el-row class="text-center border-top">
-                <el-col :span="8" class="right-line">
-                  <div class="p-2">
-                    <h5 class="mb-0">{{ statistics4.isAvg }}</h5>
-                    <small class="mb-0">时均声强值</small>
-                    <div class="mb-0 small-size">（db）</div>
-                  </div>
-                </el-col>
-                <el-col :span="8" class="right-line">
-                  <div class="p-2">
-                    <h5 class="mb-0">{{ statistics4.isMin }}</h5>
-                    <small class="mb-0">最小声强值</small>
-                    <div class="mb-0 small-size">（db）</div>
-                  </div>
-                </el-col>
-                <el-col :span="8" class="right-line">
-                  <div class="p-2">
-                    <h5 class="mb-0">{{ statistics4.isMAx }}</h5>
-                    <small class="mb-0">最大声强值</small>
-                    <div class="mb-0 small-size">（db）</div>
-                  </div>
-                </el-col>
-              </el-row>
-            </el-card>
-          </el-col>
-        </el-row>
-        <el-row :gutter="20" class="mt-2">
-          <el-col :span="8">
-            <el-card class="box-card" :body-style="{ padding: '0px' }">
-              <div slot="header" class="clearfix">
-                <el-button class="float-left py-1 mr-1" type="text" @click="viewImg('1')">
-                  预览
-                </el-button>
-                <div class="float-left py-1">
-                  <div class="point normal float-left"></div>
-                  <div class="point warn float-left"></div>
-                </div>
-                <el-button
-                  class="float-right py-1"
-                  type="text"
+        <div class="dashboard-header">
+          <div class="header-title"></div>
+          <div class="header-menu clearfix">
+            <div v-for="(item, index) in staticData.routerList" :key="index" class="menu-item">
+              <router-link :to="item.url" class="menu-item-link">
+                {{ item.name }}
+              </router-link>
+            </div>
+          </div>
+        </div>
+        <el-row :gutter="20" class="main-data">
+          <el-col :span="7" class="main-data-left">
+            <div class="main-data-l-t">
+              <div class="chart-header clearfix">
+                <span class="name float-left mt-2 ml-3">1号TDLAS设备（室内）</span>
+                <span
+                  class="histroy float-right mt-4 mr-4 cursor-pointer"
                   @click="viewHistory('gateway-1234_1')"
                 >
-                  查看历史
-                </el-button>
+                  历史报警
+                </span>
               </div>
-              <div class="position-relative wrap">
-                <div class="traffic-light clearfix">
-                  <el-row :gutter="28" class="mx-0 light">
-                    <el-col
-                      :span="3"
-                      v-for="(item, index) in tdls1Status"
-                      :key="index"
-                      class="text-center px-0"
-                    >
-                      <div
-                        class="traffic-light-item"
-                        :class="`${index === activeId ? 'fade' : ''}`"
-                        :style="
-                          `background-color:${item.deviceState === 'False' ? 'red' : 'green'}`
-                        "
-                      ></div>
-                    </el-col>
-                  </el-row>
-                </div>
-                <el-row :gutter="28" class="mx-0 clearfix my-3 serial-number">
-                  <el-col
-                    :span="3"
-                    :key="index"
-                    v-for="(item, index) in tdls1Status"
-                    class="text-center px-0"
-                  >
-                    {{ index + 1 }}号
-                  </el-col>
-                </el-row>
+              <div class="chart">
+                <ColumnChart ref="indoor" />
               </div>
-            </el-card>
-          </el-col>
-          <el-col :span="8">
-            <el-card class="box-card" :body-style="{ padding: '0px' }">
-              <div slot="header" class="clearfix">
-                <el-button class="float-left py-1 mr-1" type="text" @click="viewImg('2')">
-                  预览
-                </el-button>
-                <div class="float-left py-1">
-                  <div class="point normal float-left"></div>
-                  <div class="point warn float-left"></div>
-                </div>
-                <el-button
-                  class="float-right py-1"
-                  type="text"
+              <el-row class="chart-footer">
+                <el-col :span="8" class="data-item">
+                  <div class="data-name">时均浓度值</div>
+                  <p>{{ statistics1.isAvg }}</p>
+                </el-col>
+                <el-col :span="8" class="data-item">
+                  <div class="data-name">最大浓度值</div>
+                  <p>{{ statistics1.isMAx }}</p>
+                </el-col>
+                <el-col :span="8" class="data-item">
+                  <div class="data-name">最小浓度值</div>
+                  <p>{{ statistics1.isMin }}</p>
+                </el-col>
+              </el-row>
+            </div>
+            <div class="main-data-l-b">
+              <div class="chart-header clearfix">
+                <span class="name float-left mt-2 ml-3">1号TDLAS设备（室内）</span>
+                <span
+                  class="histroy float-right mt-4 mr-4 cursor-pointer"
                   @click="viewHistory('gateway-1234_2')"
                 >
-                  查看历史
-                </el-button>
+                  历史报警
+                </span>
               </div>
-              <div class="position-relative wrap">
-                <div class="traffic-light clearfix">
-                  <el-row :gutter="28" class="mx-0 light">
-                    <el-col
-                      :span="3"
-                      v-for="(item, index) in tdls2Status"
-                      :key="index"
-                      class="text-center px-0"
-                    >
-                      <div
-                        class="traffic-light-item"
-                        :class="`${index === activeId ? 'fade' : ''}`"
-                        :style="
-                          `background-color:${item.deviceState === 'False' ? 'red' : 'green'}`
-                        "
-                      ></div>
-                    </el-col>
-                  </el-row>
-                </div>
-                <el-row :gutter="28" class="mx-0 clearfix my-3 serial-number">
-                  <el-col
-                    :span="3"
+              <div class="chart">
+                <ColumnChart ref="indoor2" />
+              </div>
+              <el-row class="chart-footer">
+                <el-col :span="8" class="data-item">
+                  <div class="data-name">时均浓度值</div>
+                  <p>{{ statistics2.isAvg }}</p>
+                </el-col>
+                <el-col :span="8" class="data-item">
+                  <div class="data-name">最大浓度值</div>
+                  <p>{{ statistics2.isMAx }}</p>
+                </el-col>
+                <el-col :span="8" class="data-item">
+                  <div class="data-name">最小浓度值</div>
+                  <p>{{ statistics2.isMin }}</p>
+                </el-col>
+              </el-row>
+            </div>
+          </el-col>
+          <el-col :span="10" class="main-data-middle">
+            <div class="middle-header mt-2">
+              <span class="theme-name">监测位示意图</span>
+            </div>
+            <el-row class="middle-t">
+              <el-col :span="12" class="middle-t-l">
+                <div class="options clearfix mt-2">
+                  <div
+                    class="option-item cursor-pointer float-left ml-3"
+                    v-for="(item, index) in staticData.options"
                     :key="index"
-                    v-for="(item, index) in tdls2Status"
-                    class="text-center px-0"
+                    @click="activeOption = index"
                   >
-                    {{ index + 1 }}号
-                  </el-col>
-                </el-row>
+                    <small class="small-name" :class="`${index === activeOption ? 'active' : ''}`">
+                      {{ item.name }}
+                    </small>
+                  </div>
+                </div>
+                <div class="equipment-img ml-3 mt-3">
+                  <div v-for="(item, index) in staticData.equImages" :key="index">
+                    <el-image v-if="index === activeOption" :src="item"></el-image>
+                  </div>
+                </div>
+              </el-col>
+              <el-col :span="12" class="middle-t-r mt-1 clearfix">
+                <div class="float-right mr-1">
+                  <el-image
+                    :src="
+                      deviceState === '0'
+                        ? '/static/images/dashboard/normal.png'
+                        : '/static/images/dashboard/warn.png'
+                    "
+                  ></el-image>
+                </div>
+                <Pie ref="pie" class="mt-2" />
+              </el-col>
+            </el-row>
+            <div class="middle-b mt-1">
+              <div class="clearfix middle-b-chart">
+                <span class="float-right cursor-pointer histroy ml-3" @click="viewHistory('')">
+                  历史报警
+                </span>
+                <div class="float-right sonic cursor-pointer">
+                  <div
+                    class="float-left"
+                    v-for="(item, index) in staticData.sonicList"
+                    :key="index"
+                  >
+                    <span
+                      :class="`${index === activeSonic ? 'active' : ''}`"
+                      class="mr-3"
+                      @click="sonicChange(index, item.id)"
+                    >
+                      {{ item.name }}
+                    </span>
+                  </div>
+                </div>
               </div>
-            </el-card>
+              <DoubleColumn ref="doublecolumn" />
+            </div>
           </el-col>
-        </el-row>
-        <h5 class="my-3">赛道出发区泄漏监测</h5>
-        <el-row :gutter="20" class="mt-2">
-          <el-col :span="8">
-            <el-card class="box-card" :body-style="{ padding: '0px' }">
-              <div slot="header" class="clearfix">
-                <span>3号TDLAS</span>
-              </div>
-              <ColumnChart ref="tdlas3" />
-              <el-row class="text-center border-top">
-                <el-col :span="8" class="right-line">
-                  <div class="p-2">
-                    <h5 class="mb-0">{{ statistics3.isAvg }}</h5>
-                    <small class="mb-0">时均浓度值</small>
-                    <div class="mb-0 small-size">（ppm*m）</div>
-                  </div>
-                </el-col>
-                <el-col :span="8" class="right-line">
-                  <div class="p-2">
-                    <h5 class="mb-0">{{ statistics3.isMin }}</h5>
-                    <small class="mb-0">最小浓度值</small>
-                    <div class="mb-0 small-size">（ppm*m）</div>
-                  </div>
-                </el-col>
-                <el-col :span="8" class="right-line">
-                  <div class="p-2">
-                    <h5 class="mb-0">{{ statistics3.isMAx }}</h5>
-                    <small class="mb-0">最大浓度值</small>
-                    <div class="mb-0 small-size">（ppm*m）</div>
-                  </div>
-                </el-col>
-              </el-row>
-            </el-card>
-          </el-col>
-          <el-col :span="8">
-            <el-card class="box-card" :body-style="{ padding: '0px' }">
-              <div slot="header" class="clearfix">
-                <span>2号超声波</span>
-              </div>
-              <ColumnChart ref="sonic2" />
-              <el-row class="text-center border-top">
-                <el-col :span="8" class="right-line">
-                  <div class="p-2">
-                    <h5 class="mb-0">{{ statistics5.isAvg }}</h5>
-                    <small class="mb-0">时均声强值</small>
-                    <div class="mb-0 small-size">（db）</div>
-                  </div>
-                </el-col>
-                <el-col :span="8" class="right-line">
-                  <div class="p-2">
-                    <h5 class="mb-0">{{ statistics5.isMin }}</h5>
-                    <small class="mb-0">最小声强值</small>
-                    <div class="mb-0 small-size">（db）</div>
-                  </div>
-                </el-col>
-                <el-col :span="8" class="right-line">
-                  <div class="p-2">
-                    <h5 class="mb-0">{{ statistics5.isMAx }}</h5>
-                    <small class="mb-0">最大声强值</small>
-                    <div class="mb-0 small-size">（db）</div>
-                  </div>
-                </el-col>
-              </el-row>
-            </el-card>
-          </el-col>
-          <el-col :span="8">
-            <el-card class="box-card" :body-style="{ padding: '0px' }">
-              <div slot="header" class="clearfix">
-                <span>视频展示区域</span>
-              </div>
-              <div style="height: 320px;">
+          <el-col :span="7" class="main-data-right">
+            <div class="main-data-l-t px-3">
+              <span class="header-title mt-2 mr-2">监控摄像</span>
+              <div style="height: 195px;" class="mt-1">
                 <iframe
                   :src="videoSrc"
                   height="100%"
@@ -278,59 +144,35 @@
                   allowfullscreen
                 ></iframe>
               </div>
-            </el-card>
-          </el-col>
-        </el-row>
-        <el-row :gutter="20" class="mt-2">
-          <el-col :span="8">
-            <el-card class="box-card" :body-style="{ padding: '0px' }">
-              <div slot="header" class="clearfix">
-                <!-- <el-button class="float-left py-1" type="text" @click="viewImg('3')">
-                  预览
-                </el-button> -->
-                <div class="float-left py-1">
-                  <div class="point normal float-left"></div>
-                  <div class="point warn float-left"></div>
-                </div>
-                <el-button
-                  class="float-right py-1"
-                  type="text"
+            </div>
+            <div class="main-data-r-b">
+              <div class="header clearfix">
+                <span
+                  class="histroy float-left mt-3 ml-4 cursor-pointer"
                   @click="viewHistory('gateway-1234_3')"
                 >
-                  查看历史
-                </el-button>
+                  历史报警
+                </span>
+                <span class="name float-right mt-2 mr-2">1号TDLAS设备（室内）</span>
               </div>
-              <div class="position-relative wrap">
-                <div class="traffic-light clearfix">
-                  <el-row :gutter="28" class="mx-0 light">
-                    <el-col
-                      :span="3"
-                      v-for="(item, index) in tdls3Status"
-                      :key="index"
-                      class="text-center px-0"
-                    >
-                      <div
-                        class="traffic-light-item"
-                        :class="`${index === activeId ? 'fade' : ''}`"
-                        :style="
-                          `background-color:${item.deviceState === 'False' ? 'red' : 'green'}`
-                        "
-                      ></div>
-                    </el-col>
-                  </el-row>
-                </div>
-                <el-row :gutter="28" class="mx-0 clearfix my-3 serial-number">
-                  <el-col
-                    :span="3"
-                    :key="index"
-                    v-for="(item, index) in tdls3Status"
-                    class="text-center px-0"
-                  >
-                    {{ index + 1 }}号
-                  </el-col>
-                </el-row>
+              <div class="chart mt-1">
+                <ColumnChart ref="indoor3" />
               </div>
-            </el-card>
+              <el-row class="chart-footer">
+                <el-col :span="8" class="data-item">
+                  <div class="data-name">时均浓度值</div>
+                  <p>{{ statistics3.isAvg }}</p>
+                </el-col>
+                <el-col :span="8" class="data-item">
+                  <div class="data-name">最大浓度值</div>
+                  <p>{{ statistics3.isMAx }}</p>
+                </el-col>
+                <el-col :span="8" class="data-item">
+                  <div class="data-name">最小浓度值</div>
+                  <p>{{ statistics3.isMin }}</p>
+                </el-col>
+              </el-row>
+            </div>
           </el-col>
         </el-row>
       </div>
@@ -343,12 +185,6 @@
           label="序号"
           width="50"
           :index="indexMethod"
-        ></el-table-column>
-        <el-table-column
-          align="center"
-          property="deviceAngle"
-          label="设备角度"
-          width="100"
         ></el-table-column>
         <el-table-column property="deviceState" align="center" label="设备状态" width="150">
           <template slot-scope="scope">
@@ -365,15 +201,33 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column property="warnimg" align="center" label="报警预览">
-          <template slot-scope="scope">
-            <el-image
-              style="width: 50px; height: 50px;"
-              :src="scope.row.url"
-              :preview-src-list="scope.row.srcList"
-            ></el-image>
-          </template>
-        </el-table-column>
+        <template v-if="tdlshistoryId !== ''">
+          <el-table-column property="warnimg" align="center" label="报警预览">
+            <template v-if="tdlshistoryId !== ''" slot-scope="scope">
+              <el-image
+                style="width: 50px; height: 50px;"
+                :src="scope.row.url"
+                :preview-src-list="scope.row.srcList"
+              ></el-image>
+            </template>
+          </el-table-column>
+          <el-table-column
+            align="center"
+            property="deviceAngle"
+            label="设备角度"
+            width="100"
+          ></el-table-column>
+        </template>
+        <template v-else>
+          <el-table-column
+            align="center"
+            property="deviceCode"
+            label="设备编号"
+            width="100"
+          ></el-table-column>
+          <el-table-column align="center" property="l" label="瞬时" width="100"></el-table-column>
+          <el-table-column align="center" property="leq" label="等效" width="100"></el-table-column>
+        </template>
       </el-table>
       <!-- 分页 -->
       <div class="pagination-container mt-3">
@@ -389,19 +243,15 @@
       </div>
       <!-- 分页 -->
     </el-dialog>
-    <el-dialog title="平面图" :visible.sync="viewVisible">
-      <el-image
-        style="width: 100%; height: 100%;"
-        :src="srcList[0]"
-        :preview-src-list="srcList"
-      ></el-image>
-    </el-dialog>
   </section>
 </template>
 
 <script>
-import ColumnChart from '@/components/Common/Dashboard/ColumnChart';
+import ColumnChart from '@/components/Common/Dashboard/Column';
+import Pie from '@/components/Common/Dashboard/Pie';
+import DoubleColumn from '@/components/Common/Dashboard/DoubleColumn';
 import qs from 'qs';
+import staticData from './mixins/static';
 
 const restList = {
   list: [],
@@ -411,20 +261,17 @@ const restList = {
 };
 export default {
   name: 'Dashboard',
-  components: { ColumnChart },
+  components: { ColumnChart, Pie, DoubleColumn },
+  mixins: [staticData],
   data() {
     return {
-      isDev: true,
+      timer: null,
+      update: false,
       videoSrc: '',
+      activeSonic: 0,
+      activeOption: 0,
       histroyVisible: false,
-      viewVisible: false,
-      statistics2: {},
-      statistics3: {},
-      statistics1: {},
-      statistics4: {},
-      statistics5: {},
       tdlshistoryId: '',
-      srcList: ['./static/images/dashboard/floor1.jpg'],
       page_sizes: [5, 10, 15, 20, 50],
       tdlsHistroyData: {
         list: [],
@@ -432,175 +279,32 @@ export default {
         pageNum: 1,
         pageSize: 5,
       },
-      activeId: 0,
-      tdls1Status: [],
-      tdls2Status: [],
-      tdls3Status: [],
-      dataTimer: null,
-      carouselTimer: null,
+      statistics1: {},
+      statistics2: {},
+      statistics3: {},
+      deviceState: '0',
     };
   },
   destroyed() {
-    if (this.dataTimer) {
-      clearInterval(this.dataTimer);
-      this.dataTimer = null;
-    }
-    if (this.carouselTimer) {
-      clearInterval(this.carouselTimer);
-      this.carouselTimer = null;
+    if (this.timer) {
+      clearInterval(this.timer);
+      this.timer = null;
     }
   },
   mounted() {
-    this.isDev = process.env.NODE_ENV === 'development';
-    this.srcList = this.isDev
-      ? ['/static/images/dashboard/floor1.jpg']
-      : ['./static/images/dashboard/floor1.jpg'];
-    this.getVideo();
     this.getData();
-    this.getCarousel();
-    this.dataTimer = setInterval(() => {
-      this.getData();
-      if (this.activeId === 6) {
-        this.activeId = 0;
-      } else {
-        this.activeId += 1;
-      }
-    }, 3000);
-    this.carouselTimer = setInterval(() => {
-      this.getCarousel();
-    }, 21000);
+    this.getPie();
+    this.getSonicData(1);
+    // this.getVideo();
+    // this.timer = setInterval(() => {
+    //   this.update = true;
+    //   this.getData();
+    // }, 5000);
   },
   methods: {
-    filterData(data) {
-      // 过滤数据
-      const chartArr = [];
-      data.forEach(item => chartArr.push(item.dataList));
-      return chartArr;
-    },
-    getCarousel() {
-      // 获取设备状态
-      const request = [
-        this.$axios.get(
-          'tdlasDeviceMonitor/queryLineChartCarouselByDeviceCode?deviceCode=gateway-1234_1',
-        ),
-        this.$axios.get(
-          'tdlasDeviceMonitor/queryLineChartCarouselByDeviceCode?deviceCode=gateway-1234_2',
-        ),
-        this.$axios.get(
-          'tdlasDeviceMonitor/queryLineChartCarouselByDeviceCode?deviceCode=gateway-1234_3',
-        ),
-      ];
-      try {
-        this.$axios
-          .all(request)
-          .then(
-            this.$axios.spread((carousel1, carousel2, carousel3) => {
-              this.tdls1Status = carousel1.data.data;
-              this.tdls2Status = carousel2.data.data;
-              this.tdls3Status = carousel3.data.data;
-            }),
-          )
-          .catch(err => {
-            clearInterval(this.carouselTimer);
-            this.carouselTimer = null;
-            this.$message.error('请求失败，请稍后重试');
-            console.log('err', err);
-          });
-      } catch (e) {
-        clearInterval(this.carouselTimer);
-        this.carouselTimer = null;
-        this.$message.error(e);
-        console.error('e', e);
-      }
-    },
-    getData() {
-      // 获取折线图数据
-      const request = [
-        this.$axios.get('/tdlasDeviceMonitor/queryLineChart?deviceCode=gateway-1234_1'),
-        this.$axios.get('/tdlasDeviceMonitor/queryLineChart?deviceCode=gateway-1234_2'),
-        this.$axios.get('/tdlasDeviceMonitor/queryLineChart?deviceCode=gateway-1234_3'),
-        this.$axios.get('tdlasSonicWave/queryLineChart?deviceCode=1'),
-        this.$axios.get('tdlasSonicWave/queryLineChart?deviceCode=2'),
-      ];
-      let echart1 = [];
-      let echart2 = [];
-      let echart3 = [];
-      let echart4 = [];
-      let echart5 = [];
-      let date1 = [];
-      let date2 = [];
-      let date3 = [];
-      let date4 = [];
-      let date5 = [];
-      try {
-        this.$axios
-          .all(request)
-          .then(
-            this.$axios.spread((tdlas1, tdlas2, tdlas3, sonic1, sonic2) => {
-              this.statistics2 = tdlas2.data.data.statistics;
-              this.statistics3 = tdlas3.data.data.statistics;
-              this.statistics1 = tdlas1.data.data.statistics;
-              this.statistics4 = sonic1.data.data.statistics;
-              this.statistics5 = sonic2.data.data.statistics;
-              echart1 = this.filterData(tdlas1.data.data.TdlasDeviceMonitorList);
-              echart2 = this.filterData(tdlas2.data.data.TdlasDeviceMonitorList);
-              echart3 = this.filterData(tdlas3.data.data.TdlasDeviceMonitorList);
-              echart4 = this.filterData(sonic1.data.data.TdlasDeviceMonitorList);
-              echart5 = this.filterData(sonic2.data.data.TdlasDeviceMonitorList);
-              date1 = tdlas1.data.data.time;
-              date2 = tdlas2.data.data.time;
-              date3 = tdlas3.data.data.time;
-              date4 = sonic1.data.data.time;
-              date5 = sonic2.data.data.time;
-              // eslint-disable-next-line no-unused-expressions
-              this.$refs.tdlas1?.initialize(
-                date1,
-                echart1,
-                ['#5694fb', '#71e8c5', '#57617B', '#f60', '#ffde33', '#6a7985', '#409EFF'],
-                '（ppm*m）',
-              );
-              // eslint-disable-next-line no-unused-expressions
-              this.$refs.tdlas2?.initialize(
-                date2,
-                echart2,
-                ['#E69029', '#CC3E1A', '#E3AD0C', '#AAE30C', '#10E30C', '#0CE3AA', '#0C33E3'],
-                '（ppm*m）',
-              );
-              // eslint-disable-next-line no-unused-expressions
-              this.$refs.tdlas3?.initialize(
-                date3,
-                echart3,
-                ['#D5A93A', '#3FC464', '#5DD6D2', '#2F4B91', '#940CE3', '#E30CD8', '#E30C5B'],
-                '（ppm*m）',
-              );
-              // eslint-disable-next-line no-unused-expressions
-              this.$refs.sonic1?.initialize(
-                date4,
-                echart4,
-                ['#FF9040', '#FCFF40', '#40FFEC', '#40A3FF', '#4043FF', '#FF4059', '#AC40FF'],
-                '（db）',
-              );
-              // eslint-disable-next-line no-unused-expressions
-              this.$refs.sonic2?.initialize(
-                date5,
-                echart5,
-                ['#A0350E', '#F49C0E', '#D0D259', '#218708', '#08E1B6', '#190774', '#EE0ED4'],
-                '（db）',
-              );
-            }),
-          )
-          .catch(err => {
-            clearInterval(this.dataTimer);
-            this.dataTimer = null;
-            this.$message.error('请求失败，请稍后重试');
-            console.error(err);
-          });
-      } catch (e) {
-        clearInterval(this.dataTimer);
-        this.dataTimer = null;
-        this.$message.error(e);
-        console.error(e);
-      }
+    sonicChange(i, id) {
+      this.activeSonic = i;
+      this.getSonicData(id);
     },
     async getVideo() {
       // 获取视频数据
@@ -637,49 +341,161 @@ export default {
         this.$message.error(err);
       }
     },
-    viewImg(code) {
-      // 查看3D图
-      switch (code) {
-        case '1':
-          this.srcList = this.isDev
-            ? ['/static/images/dashboard/floor1.jpg']
-            : ['./static/images/dashboard/floor1.jpg'];
-          break;
-        case '2':
-          this.srcList = this.isDev
-            ? ['/static/images/dashboard/floor2.jpg']
-            : ['./static/images/dashboard/floor2.jpg'];
-          break;
-        default:
-          this.srcList = this.isDev
-            ? ['/static/images/dashboard/floor1.jpg']
-            : ['./static/images/dashboard/floor1.jpg'];
-          break;
+    getSonicData(id) {
+      // 获取声波数据
+      const url = `/tdlasSonicWave/queryLineChart?deviceCode=${id}`;
+      let sonicData = null;
+      try {
+        this.$axios.get(url).then(res => {
+          if (res.data.code === 200) {
+            sonicData = JSON.parse(JSON.stringify(res.data.data));
+            this.$refs.doublecolumn.initialize(
+              sonicData.legend,
+              sonicData.xData,
+              sonicData.left,
+              sonicData.right,
+              sonicData.columnList,
+              sonicData.polyline,
+              sonicData.ListMax,
+            );
+          } else {
+            this.$message.error('获取图表数据失败，请稍后重试');
+          }
+        });
+      } catch (e) {
+        console.error(e);
+        const err = e || '请求服务出错了，请稍后重试';
+        this.$message.error(err);
       }
-      this.viewVisible = true;
+    },
+    filterData(data) {
+      // 过滤数据
+      const chartArr = [];
+      data.forEach(item => item.dataList.length !== 0 && chartArr.push(item.dataList));
+      return chartArr;
+    },
+    getData() {
+      // 获取折线图
+      const request = [
+        this.$axios.get('/tdlasDeviceMonitor/queryLineChart?deviceCode=gateway-1234_1'),
+        this.$axios.get('/tdlasDeviceMonitor/queryLineChart?deviceCode=gateway-1234_2'),
+        this.$axios.get('/tdlasDeviceMonitor/queryLineChart?deviceCode=gateway-1234_3'),
+      ];
+      let indoor = [];
+      let indoor2 = [];
+      let indoor3 = [];
+      let talsData1 = null;
+      let talsData2 = null;
+      let talsData3 = null;
+      try {
+        this.$axios
+          .all(request)
+          .then(
+            this.$axios.spread((tdlas1, tdlas2, tdlas3) => {
+              talsData1 = tdlas1.data.data;
+              talsData2 = tdlas2.data.data;
+              talsData3 = tdlas3.data.data;
+              this.statistics1 = talsData1.statistics;
+              this.statistics2 = talsData2.statistics;
+              this.statistics3 = talsData3.statistics;
+              this.deviceState = talsData3.deviceState;
+              indoor = this.filterData(talsData1.TdlasDeviceMonitorList);
+              indoor2 = this.filterData(talsData2.TdlasDeviceMonitorList);
+              indoor3 = this.filterData(talsData3.TdlasDeviceMonitorList);
+              // eslint-disable-next-line no-unused-expressions
+              this.$refs.indoor?.initialize(
+                'ppm*m',
+                talsData1.time,
+                indoor,
+                talsData1.colourList,
+                talsData1.deviceAngleList,
+                this.update,
+              );
+              // eslint-disable-next-line no-unused-expressions
+              this.$refs.indoor2?.initialize(
+                'ppm*m',
+                talsData2.time,
+                indoor2,
+                talsData1.colourList,
+                talsData2.deviceAngleList,
+                this.update,
+              );
+              // eslint-disable-next-line no-unused-expressions
+              this.$refs.indoor3?.initialize(
+                'ppm*m',
+                talsData3.time,
+                indoor3,
+                talsData1.colourList,
+                talsData3.deviceAngleList,
+                this.update,
+              );
+            }),
+          )
+          .catch(err => {
+            this.$message.error('请求失败，请稍后重试');
+            console.error(err);
+            clearInterval(this.timer);
+            this.timer = null;
+          });
+      } catch (e) {
+        clearInterval(this.timer);
+        this.timer = null;
+        this.$message.error(e);
+        console.error(e);
+      }
+    },
+    getPie() {
+      // 饼状图
+      const color = ['#FF903A', '#EECE15', '#FF6061', '#823AFF', '#0BE0FF'];
+      let pieData = null;
+      try {
+        this.$axios.get('tdlasDeviceMonitor/queryPieRadarChart').then(res => {
+          if (res.data.code === 200) {
+            pieData = res.data.data;
+            // eslint-disable-next-line no-unused-expressions
+            this.$refs.pie?.initialize(
+              pieData.areaData,
+              pieData.areaValueData,
+              pieData.proportion,
+              color,
+            );
+          } else {
+            this.$message.error('获取数据失败，请稍后重试');
+          }
+        });
+      } catch (e) {
+        this.$message.error(e);
+        console.error(e);
+      }
     },
     getHistroy(code) {
+      // 历史报警
       const params = {
         pageNum: this.tdlsHistroyData.pageNum,
         pageSize: this.tdlsHistroyData.pageSize,
       };
-      const url = `tdlasDeviceLog/pageConditionBydeviceCodeList?deviceCode=${code}`;
+      const url = code
+        ? `tdlasDeviceLog/pageConditionBydeviceCodeList?deviceCode=${code}`
+        : 'tdlasSonicWave/byPageCondition';
       try {
         this.$axios.get(url, { params }).then(res => {
           if (res.status === 200 && res.data.code === 200) {
-            const data = res.data.data.list;
-            const reduceData = data.reduce((acc, cur) => {
-              acc.push({
-                deviceAngle: cur.deviceAngle,
-                deviceState: cur.deviceState,
-                url: cur.deviceImage,
-                srcList: cur.deviceImage ? [cur.deviceImage] : [],
-                creatertime: cur.creatertime,
-              });
-              return acc;
-            }, []);
             this.tdlsHistroyData = JSON.parse(JSON.stringify(res.data.data));
-            this.tdlsHistroyData.list = reduceData;
+            if (code) {
+              const data = res.data.data.list;
+              const reduceData = data.reduce((acc, cur) => {
+                acc.push({
+                  deviceAngle: cur.deviceAngle,
+                  deviceState: cur.deviceState,
+                  url: cur.deviceImage,
+                  srcList: cur.deviceImage ? [cur.deviceImage] : [],
+                  creatertime: cur.creatertime,
+                });
+                return acc;
+              }, []);
+              this.tdlsHistroyData.list = reduceData;
+            }
+            console.log(' this.tdlsHistroyData', this.tdlsHistroyData);
           } else {
             this.$message.error('获取历史数据失败，请稍后重试');
           }
@@ -695,6 +511,8 @@ export default {
       this.tdlshistoryId = id;
       this.tdlsHistroyData = restList;
       this.histroyVisible = true;
+      this.tdlsHistroyData.pageNum = 1;
+      this.tdlsHistroyData.pageSize = 5;
       this.getHistroy(id);
     },
     indexMethod(index) {
@@ -719,107 +537,168 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-.box-card {
-  .el-card__body {
-    height: 320px;
+<style lang="scss">
+.app {
+  /deep/ .app-body {
+    // declaration-no-important
+    // property-no-vendor-prefix
+    overflow-x: scroll !important;
   }
 }
-.small-size {
-  font-size: 12px;
+.dashboard-container {
+  height: 100%;
+  min-width: 1380px;
+  // declaration-no-important
+  // property-no-vendor-prefix
+  overflow-x: scroll !important;
+  background: #060d2a;
 }
-.light {
-  line-height: 70px;
-  .el-col-3 {
-    width: 14%;
-    height: 30px;
+
+.dashboard-header {
+  padding: 30px 20px;
+  .header-title {
+    height: 60px;
+    background: url(/static/images/dashboard/header.png) no-repeat center center;
+    background-size: 100% auto;
   }
-}
-.serial-number {
-  .el-col-3 {
-    width: 14%;
-  }
-}
-.el-dropdown-link {
-  color: #409eff;
-  cursor: pointer;
-}
-.el-icon-arrow-down {
-  font-size: 12px;
-}
-.right-line {
-  border-right: 1px solid rgba(0, 0, 0, 0.1);
-}
-.wrap {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  height: 80px;
-  margin: auto;
-}
-/* 灯框架 */
-.traffic-light {
-  /* 居中代码 */
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 50px;
-  margin: auto;
-  text-align: center;
-  background: #282f2f;
-  border-radius: 30px;
-  box-shadow: 0 0 0 2px #eee inset;
-}
-.traffic-light-item {
-  display: inline-block;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-}
-.fade {
-  animation: fade 3s linear 0s infinite;
-}
-.point {
-  width: 10px;
-  height: 10px;
-  margin: 3px 30px 0 0;
-  font-size: 12px;
-  border-radius: 50%;
-  &.normal {
-    position: relative;
-    background: green;
-    &:after {
-      position: absolute;
-      width: 50px;
-      margin: -4px 0 0 12px;
-      content: '正常';
-    }
-  }
-  &.warn {
-    position: relative;
-    background: red;
-    &:after {
-      position: absolute;
-      width: 50px;
-      margin: -4px 0 0 12px;
-      content: '报警';
+  .header-menu {
+    margin: -30px 10% 0;
+    .menu-item {
+      width: 100px;
+      height: 30px;
+      line-height: 30px;
+      text-align: center;
+      background: url(/static/images/dashboard/menu.png) no-repeat center center;
+      background-size: 100px auto;
+      .menu-item-link {
+        font-size: 14px;
+        color: #fff;
+      }
+      &:nth-child(1),
+      &:nth-child(2) {
+        float: left;
+      }
+      &:nth-child(3),
+      &:nth-child(4) {
+        float: right;
+      }
+      &:nth-child(1),
+      &:nth-child(4) {
+        margin-right: 50px;
+      }
     }
   }
 }
-@keyframes fade {
-  0% {
-    opacity: 0;
+
+.main-data {
+  color: #fff;
+  .main-data-left {
+    .main-data-l-t,
+    .main-data-l-b {
+      height: 280px;
+      background: url(/static/images/dashboard/left-border.png) no-repeat;
+      background-size: 100% auto;
+      .histroy {
+        color: #88ede7;
+      }
+      .chart-footer {
+        .data-item {
+          position: relative;
+          text-align: center;
+          &:first-child,
+          &:nth-child(2) {
+            &:after {
+              position: absolute;
+              top: 0;
+              right: 0;
+              width: 2px;
+              height: 30px;
+              background: #fff;
+              content: '';
+            }
+          }
+          .data-name {
+            margin-top: -5px;
+          }
+        }
+      }
+    }
   }
-  50% {
-    opacity: 0;
+  .main-data-middle {
+    height: 560px;
+    margin-top: -8px;
+    background: url(/static/images/dashboard/middle-border.png) no-repeat;
+    background-size: 100% 540px;
+    .middle-header {
+      text-align: center;
+    }
+    .middle-t {
+      .middle-t-l {
+        .options {
+          .option-item {
+            width: 74px;
+            line-height: 28px;
+            text-align: center;
+            background: url(/static/images/dashboard/btn.png) no-repeat;
+            background-size: 100% auto;
+            .small-name {
+              color: #fff;
+              &.active {
+                color: #88ede7;
+              }
+            }
+          }
+        }
+      }
+    }
+    .middle-b {
+      .middle-b-chart {
+        .histroy {
+          color: #88ede7;
+        }
+        .sonic {
+          .active {
+            color: #88ede7;
+          }
+        }
+      }
+    }
   }
-  100% {
-    opacity: 1;
+  .main-data-right {
+    .main-data-l-t,
+    .main-data-r-b {
+      height: 280px;
+      text-align: right;
+      background: url(/static/images/dashboard/right-border.png) no-repeat;
+      background-size: 100% auto;
+      .header-title {
+        display: inline-block;
+      }
+      .histroy {
+        color: #88ede7;
+      }
+      .chart-footer {
+        .data-item {
+          position: relative;
+          text-align: center;
+          &:first-child,
+          &:nth-child(2) {
+            &:after {
+              position: absolute;
+              top: 0;
+              right: 0;
+              width: 2px;
+              height: 30px;
+              background: #fff;
+              content: '';
+            }
+          }
+          .data-name {
+            margin-top: -5px;
+          }
+        }
+      }
+    }
   }
 }
 </style>

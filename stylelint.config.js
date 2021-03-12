@@ -44,7 +44,7 @@ module.exports = {
     'at-rule-disallowed-list': ['extend'],
 
     // Nesting depth
-    'max-nesting-depth': 3,
+    // 'max-nesting-depth': 6,
 
     /* ==========================================================================
       Best practices
@@ -55,8 +55,8 @@ module.exports = {
     // http://csswizardry.com/2014/07/hacks-for-dealing-with-specificity/
     // "id,class,type",
     // selector-max-specificity
-    'declaration-no-important': true,
-    'selector-max-compound-selectors': 3,
+    // 'declaration-no-important': false,
+    // 'selector-max-compound-selectors': 3,
     'selector-no-qualifying-type': true,
 
     // Selectors

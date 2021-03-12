@@ -88,6 +88,19 @@ export default {
             target: '/project/email',
           },
         },
+        // {
+        //   id: 6,
+        //   route_name: 'test',
+        //   name: '第二版',
+        //   module: '',
+        //   icon: 'fa fa-envelope-square',
+        //   children: [],
+        //   visible: true,
+        //   url: '/project/test',
+        //   attributes: {
+        //     target: '/project/test',
+        //   },
+        // },
       ],
     };
   },

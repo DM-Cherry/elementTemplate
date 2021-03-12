@@ -44,6 +44,14 @@ export default [
         },
         component: () => import('@/views/project/email/Index.vue'),
       },
+      // {
+      //   path: 'test',
+      //   name: 'project.test',
+      //   meta: {
+      //     name: '第二版',
+      //   },
+      //   component: () => import('@/views/project/dashboard/Test.vue'),
+      // },
     ],
   },
 ];
