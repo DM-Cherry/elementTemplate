@@ -18,7 +18,6 @@ import VueSweetalert2 from 'vue-sweetalert2';
 // import ViewUI from 'view-design';
 import Element from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
-Element.Dialog.props.closeOnClickModal.default = false;
 // import * as directives from "./directives";
 import VueSilentbox from 'vue-silentbox';
 
@@ -27,6 +26,8 @@ import echarts from 'echarts';
 import dayjs from 'dayjs';
 import 'dayjs/locale/zh-cn';
 import relativeTime from 'dayjs/plugin/relativeTime';
+
+Element.Dialog.props.closeOnClickModal.default = false;
 
 dayjs.locale('zh-cn');
 dayjs.extend(relativeTime);

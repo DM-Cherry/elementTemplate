@@ -44,6 +44,14 @@ export default [
         },
         component: () => import('@/views/project/email/Index.vue'),
       },
+      {
+        path: 'sonic',
+        name: 'project.sonic',
+        meta: {
+          name: '声波历史数据',
+        },
+        component: () => import('@/views/project/sonic/Index.vue'),
+      },
       // {
       //   path: 'test',
       //   name: 'project.test',

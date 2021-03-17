@@ -365,7 +365,7 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column property="warnimg" align="center" label="报警预览111">
+        <el-table-column property="warnimg" align="center" label="报警预览">
           <template slot-scope="scope">
             <el-image
               style="width: 50px; height: 50px;"
