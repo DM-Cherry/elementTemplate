@@ -35,9 +35,9 @@ export default {
           },
         ],
         equImages: [
-          '/static/images/dashboard/floor1.jpg',
-          '/static/images/dashboard/floor1.jpg',
-          '/static/images/dashboard/floor1.jpg',
+          '/static/images/dashboard/floor1.png',
+          '/static/images/dashboard/floor1.png',
+          '/static/images/dashboard/floor1.png',
         ],
         sonicList: [
           {

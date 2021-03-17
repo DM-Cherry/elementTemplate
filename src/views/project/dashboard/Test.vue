@@ -424,7 +424,7 @@ export default {
       statistics4: {},
       statistics5: {},
       tdlshistoryId: '',
-      srcList: ['./static/images/dashboard/floor1.jpg'],
+      srcList: ['./static/images/dashboard/floor1.png'],
       page_sizes: [5, 10, 15, 20, 50],
       tdlsHistroyData: {
         list: [],
@@ -453,8 +453,8 @@ export default {
   mounted() {
     this.isDev = process.env.NODE_ENV === 'development';
     this.srcList = this.isDev
-      ? ['/static/images/dashboard/floor1.jpg']
-      : ['./static/images/dashboard/floor1.jpg'];
+      ? ['/static/images/dashboard/floor1.png']
+      : ['./static/images/dashboard/floor1.png'];
     this.getVideo();
     this.getData();
     this.getCarousel();
@@ -642,8 +642,8 @@ export default {
       switch (code) {
         case '1':
           this.srcList = this.isDev
-            ? ['/static/images/dashboard/floor1.jpg']
-            : ['./static/images/dashboard/floor1.jpg'];
+            ? ['/static/images/dashboard/floor1.png']
+            : ['./static/images/dashboard/floor1.png'];
           break;
         case '2':
           this.srcList = this.isDev
@@ -652,8 +652,8 @@ export default {
           break;
         default:
           this.srcList = this.isDev
-            ? ['/static/images/dashboard/floor1.jpg']
-            : ['./static/images/dashboard/floor1.jpg'];
+            ? ['/static/images/dashboard/floor1.png']
+            : ['./static/images/dashboard/floor1.png'];
           break;
       }
       this.viewVisible = true;

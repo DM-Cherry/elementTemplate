@@ -266,6 +266,7 @@ export default {
   data() {
     return {
       timer: null,
+      hourTimer: null,
       update: false,
       videoSrc: '',
       activeSonic: 0,
@@ -283,6 +284,7 @@ export default {
       statistics2: {},
       statistics3: {},
       deviceState: '0',
+      sonicDevice: 1,
     };
   },
   destroyed() {
@@ -290,11 +292,19 @@ export default {
       clearInterval(this.timer);
       this.timer = null;
     }
+    if (this.hourTimer) {
+      clearInterval(this.hourTimer);
+      this.hourTimer = null;
+    }
   },
   mounted() {
     this.getData();
     this.getPie();
-    this.getSonicData(1);
+    this.getSonicData(this.sonicDevice);
+    // this.hourTimer = setInterval(() => {
+    //   this.getPie();
+    //   this.getSonicData(this.sonicDevice);
+    // }, 3600000);
     // this.getVideo();
     // this.timer = setInterval(() => {
     //   this.update = true;
@@ -304,7 +314,8 @@ export default {
   methods: {
     sonicChange(i, id) {
       this.activeSonic = i;
-      this.getSonicData(id);
+      this.sonicDevice = id;
+      this.getSonicData(this.sonicDevice);
     },
     async getVideo() {
       // 获取视频数据
@@ -360,12 +371,16 @@ export default {
             );
           } else {
             this.$message.error('获取图表数据失败，请稍后重试');
+            clearInterval(this.hourTimer);
+            this.hourTimer = null;
           }
         });
       } catch (e) {
         console.error(e);
         const err = e || '请求服务出错了，请稍后重试';
         this.$message.error(err);
+        clearInterval(this.hourTimer);
+        this.hourTimer = null;
       }
     },
     filterData(data) {
@@ -461,11 +476,15 @@ export default {
             );
           } else {
             this.$message.error('获取数据失败，请稍后重试');
+            clearInterval(this.timer);
+            this.timer = null;
           }
         });
       } catch (e) {
         this.$message.error(e);
         console.error(e);
+        clearInterval(this.hourTimer);
+        this.hourTimer = null;
       }
     },
     getHistroy(code) {
