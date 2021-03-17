@@ -355,7 +355,7 @@
             <el-tag size="medium" type="danger" v-if="scope.row.deviceState === false">
               未解决
             </el-tag>
-            <el-tag v-else size="medium" type="success">已解决1</el-tag>
+            <el-tag v-else size="medium" type="success">已解决</el-tag>
           </template>
         </el-table-column>
         <el-table-column prop="creatertime" label="创建日期" align="center" width="180">
