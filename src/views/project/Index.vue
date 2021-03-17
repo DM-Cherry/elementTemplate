@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { Header as AppHeader, Aside as AppAside, Sidebar } from '@/components/Admin/';
+import { Aside as AppAside, Header as AppHeader, Sidebar } from '@/components/Admin/';
 import admin from '@/core/mixins/admin';
 import { mapGetters } from 'vuex';
 
@@ -86,6 +86,19 @@ export default {
           url: '/project/email',
           attributes: {
             target: '/project/email',
+          },
+        },
+        {
+          id: 6,
+          route_name: 'sonic',
+          name: '声波历史数据',
+          module: '',
+          icon: 'fa fa-paper-plane',
+          children: [],
+          visible: true,
+          url: '/project/sonic',
+          attributes: {
+            target: '/project/sonic',
           },
         },
         // {
