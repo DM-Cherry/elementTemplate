@@ -18,7 +18,7 @@
               <div class="chart-header clearfix">
                 <span class="name float-left mt-2 ml-3">1号TDLAS设备（室内）</span>
                 <span
-                  class="histroy float-right mt-4 mr-4 cursor-pointer"
+                  class="history float-right mt-4 mr-4 cursor-pointer"
                   @click="viewHistory('gateway-1234_1')"
                 >
                   历史报警
@@ -46,7 +46,7 @@
               <div class="chart-header clearfix">
                 <span class="name float-left mt-2 ml-3">1号TDLAS设备（室内）</span>
                 <span
-                  class="histroy float-right mt-4 mr-4 cursor-pointer"
+                  class="history float-right mt-4 mr-4 cursor-pointer"
                   @click="viewHistory('gateway-1234_2')"
                 >
                   历史报警
@@ -110,7 +110,7 @@
             </el-row>
             <div class="middle-b mt-1">
               <div class="clearfix middle-b-chart">
-                <span class="float-right cursor-pointer histroy ml-3" @click="viewHistory('')">
+                <span class="float-right cursor-pointer history ml-3" @click="viewHistory('')">
                   历史报警
                 </span>
                 <div class="float-right sonic cursor-pointer">
@@ -148,7 +148,7 @@
             <div class="main-data-r-b">
               <div class="header clearfix">
                 <span
-                  class="histroy float-left mt-3 ml-4 cursor-pointer"
+                  class="history float-left mt-3 ml-4 cursor-pointer"
                   @click="viewHistory('gateway-1234_3')"
                 >
                   历史报警
@@ -177,8 +177,8 @@
         </el-row>
       </div>
     </div>
-    <el-dialog title="历史数据" :visible.sync="histroyVisible">
-      <el-table :data="tdlsHistroyData.list">
+    <el-dialog title="历史数据" :visible.sync="historyVisible">
+      <el-table :data="tdlsHistoryData.list">
         <el-table-column
           align="center"
           type="index"
@@ -232,11 +232,11 @@
       <!-- 分页 -->
       <div class="pagination-container mt-3">
         <el-pagination
-          :current-page="tdlsHistroyData.pageNum"
+          :current-page="tdlsHistoryData.pageNum"
           :page-sizes="page_sizes"
-          :page-size="tdlsHistroyData.pageSize"
+          :page-size="tdlsHistoryData.pageSize"
           layout="total, sizes, prev, pager, next, jumper"
-          :total="tdlsHistroyData.total"
+          :total="tdlsHistoryData.total"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
         ></el-pagination>
@@ -271,10 +271,10 @@ export default {
       videoSrc: '',
       activeSonic: 0,
       activeOption: 0,
-      histroyVisible: false,
+      historyVisible: false,
       tdlshistoryId: '',
       page_sizes: [5, 10, 15, 20, 50],
-      tdlsHistroyData: {
+      tdlsHistoryData: {
         list: [],
         total: 1,
         pageNum: 1,
@@ -343,7 +343,7 @@ export default {
                 }
               });
           } else {
-            this.$message.error('获取AccessTokenw为空，请稍后重试');
+            this.$message.error('获取AccessToken为空，请稍后重试');
           }
         } else {
           this.$message.error('获取AccessToken失败，请稍后重试');
@@ -487,11 +487,11 @@ export default {
         this.hourTimer = null;
       }
     },
-    getHistroy(code) {
+    getHistory(code) {
       // 历史报警
       const params = {
-        pageNum: this.tdlsHistroyData.pageNum,
-        pageSize: this.tdlsHistroyData.pageSize,
+        pageNum: this.tdlsHistoryData.pageNum,
+        pageSize: this.tdlsHistoryData.pageSize,
       };
       const url = code
         ? `tdlasDeviceLog/pageConditionBydeviceCodeList?deviceCode=${code}`
@@ -499,7 +499,7 @@ export default {
       try {
         this.$axios.get(url, { params }).then(res => {
           if (res.status === 200 && res.data.code === 200) {
-            this.tdlsHistroyData = JSON.parse(JSON.stringify(res.data.data));
+            this.tdlsHistoryData = JSON.parse(JSON.stringify(res.data.data));
             if (code) {
               const data = res.data.data.list;
               const reduceData = data.reduce((acc, cur) => {
@@ -512,9 +512,8 @@ export default {
                 });
                 return acc;
               }, []);
-              this.tdlsHistroyData.list = reduceData;
+              this.tdlsHistoryData.list = reduceData;
             }
-            console.log(' this.tdlsHistroyData', this.tdlsHistroyData);
           } else {
             this.$message.error('获取历史数据失败，请稍后重试');
           }
@@ -528,29 +527,29 @@ export default {
     viewHistory(id) {
       // 查看历史
       this.tdlshistoryId = id;
-      this.tdlsHistroyData = restList;
-      this.histroyVisible = true;
-      this.tdlsHistroyData.pageNum = 1;
-      this.tdlsHistroyData.pageSize = 5;
-      this.getHistroy(id);
+      this.tdlsHistoryData = restList;
+      this.historyVisible = true;
+      this.tdlsHistoryData.pageNum = 1;
+      this.tdlsHistoryData.pageSize = 5;
+      this.getHistory(id);
     },
     indexMethod(index) {
-      return this.tdlsHistroyData.pageSize * (this.tdlsHistroyData.pageNum - 1) + index + 1;
+      return this.tdlsHistoryData.pageSize * (this.tdlsHistoryData.pageNum - 1) + index + 1;
     },
     // 分页
     handleSizeChange(pageSize) {
-      if (pageSize === this.tdlsHistroyData.pageSize) {
+      if (pageSize === this.tdlsHistoryData.pageSize) {
         return;
       }
-      this.tdlsHistroyData.pageSize = pageSize;
-      this.getHistroy(this.tdlshistoryId);
+      this.tdlsHistoryData.pageSize = pageSize;
+      this.getHistory(this.tdlshistoryId);
     },
     handleCurrentChange(pageNum) {
-      if (pageNum === this.tdlsHistroyData.pageNum) {
+      if (pageNum === this.tdlsHistoryData.pageNum) {
         return;
       }
-      this.tdlsHistroyData.pageNum = pageNum;
-      this.getHistroy(this.tdlshistoryId);
+      this.tdlsHistoryData.pageNum = pageNum;
+      this.getHistory(this.tdlshistoryId);
     },
   },
 };
@@ -617,7 +616,7 @@ export default {
       height: 280px;
       background: url(/static/images/dashboard/left-border.png) no-repeat;
       background-size: 100% auto;
-      .histroy {
+      .history {
         color: #88ede7;
       }
       .chart-footer {
@@ -672,7 +671,7 @@ export default {
     }
     .middle-b {
       .middle-b-chart {
-        .histroy {
+        .history {
           color: #88ede7;
         }
         .sonic {
@@ -693,7 +692,7 @@ export default {
       .header-title {
         display: inline-block;
       }
-      .histroy {
+      .history {
         color: #88ede7;
       }
       .chart-footer {

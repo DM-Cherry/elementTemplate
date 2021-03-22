@@ -88,19 +88,6 @@ export default {
             target: '/project/email',
           },
         },
-        {
-          id: 6,
-          route_name: 'sonic',
-          name: '声波历史数据',
-          module: '',
-          icon: 'fa fa-paper-plane',
-          children: [],
-          visible: true,
-          url: '/project/sonic',
-          attributes: {
-            target: '/project/sonic',
-          },
-        },
         // {
         //   id: 6,
         //   route_name: 'test',
