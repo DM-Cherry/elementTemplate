@@ -300,16 +300,17 @@ export default {
   mounted() {
     this.getData();
     this.getPie();
+    this.getVideo();
     this.getSonicData(this.sonicDevice);
-    // this.hourTimer = setInterval(() => {
-    //   this.getPie();
-    //   this.getSonicData(this.sonicDevice);
-    // }, 3600000);
-    // this.getVideo();
-    // this.timer = setInterval(() => {
-    //   this.update = true;
-    //   this.getData();
-    // }, 5000);
+    this.hourTimer = setInterval(() => {
+      this.getPie();
+      this.getSonicData(this.sonicDevice);
+    }, 3600000);
+
+    this.timer = setInterval(() => {
+      this.update = true;
+      this.getData();
+    }, 5000);
   },
   methods: {
     sonicChange(i, id) {
