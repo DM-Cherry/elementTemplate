@@ -1,5 +1,6 @@
 <template>
   <section>
+    <!-- 测试 -->
     <el-form :inline="true" :model="search" class="demo-form-inline">
       <el-form-item label="设备编码">
         <el-input v-model="search.deviceCode" clearable placeholder="请输入设备编码"></el-input>
