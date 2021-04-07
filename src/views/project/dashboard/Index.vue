@@ -89,26 +89,30 @@
                     </small>
                   </div>
                 </div>
-                <div class="equipment-img ml-3 mt-3">
+                <div class="equipment-img ml-3 mt-1">
                   <div v-for="(item, index) in staticData.equImages" :key="index">
-                    <el-image v-if="index === activeOption" :src="item"></el-image>
+                    <el-image
+                      style="height: 210px;"
+                      v-if="index === activeOption"
+                      :src="`${isDev ? '' : './'}${item}`"
+                    ></el-image>
                   </div>
                 </div>
               </el-col>
-              <el-col :span="12" class="middle-t-r mt-1 clearfix">
+              <el-col :span="12" class="middle-t-r clearfix">
                 <div class="float-right mr-1">
                   <el-image
                     :src="
                       deviceState === '0'
-                        ? '/static/images/dashboard/normal.png'
-                        : '/static/images/dashboard/warn.png'
+                        ? `${isDev ? '' : '.'}/static/images/dashboard/normal.png`
+                        : `${isDev ? '' : '.'}/static/images/dashboard/warn.png`
                     "
                   ></el-image>
                 </div>
                 <Pie ref="pie" class="mt-2" />
               </el-col>
             </el-row>
-            <div class="middle-b mt-1">
+            <div class="middle-b">
               <div class="clearfix middle-b-chart">
                 <span class="float-right cursor-pointer history ml-3" @click="viewHistory('')">
                   历史报警
@@ -285,6 +289,7 @@ export default {
       statistics3: {},
       deviceState: '0',
       sonicDevice: 1,
+      isDev: true,
     };
   },
   destroyed() {
@@ -298,6 +303,7 @@ export default {
     }
   },
   mounted() {
+    this.isDev = process.env.NODE_ENV === 'development';
     this.getData();
     this.getPie();
     this.getVideo();
@@ -557,6 +563,7 @@ export default {
 </script>
 
 <style lang="scss">
+@import './scss/core/_dashboard';
 .app {
   /deep/ .app-body {
     // declaration-no-important
@@ -577,7 +584,9 @@ export default {
   padding: 30px 20px;
   .header-title {
     height: 60px;
-    background: url(/static/images/dashboard/header.png) no-repeat center center;
+    background: $header;
+    background-position: center center;
+    background-repeat: no-repeat;
     background-size: 100% auto;
   }
   .header-menu {
@@ -587,7 +596,9 @@ export default {
       height: 30px;
       line-height: 30px;
       text-align: center;
-      background: url(/static/images/dashboard/menu.png) no-repeat center center;
+      background: $menu;
+      background-position: center center;
+      background-repeat: no-repeat;
       background-size: 100px auto;
       .menu-item-link {
         font-size: 14px;
@@ -615,7 +626,8 @@ export default {
     .main-data-l-t,
     .main-data-l-b {
       height: 280px;
-      background: url(/static/images/dashboard/left-border.png) no-repeat;
+      background: $left;
+      background-repeat: no-repeat;
       background-size: 100% auto;
       .history {
         color: #88ede7;
@@ -646,7 +658,8 @@ export default {
   .main-data-middle {
     height: 560px;
     margin-top: -8px;
-    background: url(/static/images/dashboard/middle-border.png) no-repeat;
+    background: $middle;
+    background-repeat: no-repeat;
     background-size: 100% 540px;
     .middle-header {
       text-align: center;
@@ -658,7 +671,8 @@ export default {
             width: 74px;
             line-height: 28px;
             text-align: center;
-            background: url(/static/images/dashboard/btn.png) no-repeat;
+            background: $option_btn;
+            background-repeat: no-repeat;
             background-size: 100% auto;
             .small-name {
               color: #fff;
@@ -688,7 +702,8 @@ export default {
     .main-data-r-b {
       height: 280px;
       text-align: right;
-      background: url(/static/images/dashboard/right-border.png) no-repeat;
+      background: $right;
+      background-repeat: no-repeat;
       background-size: 100% auto;
       .header-title {
         display: inline-block;

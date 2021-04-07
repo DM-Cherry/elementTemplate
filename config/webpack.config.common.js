@@ -51,7 +51,7 @@ const webpackConfig = {
               sourceMap: isDev,
               alias: {
                 '../images': helpers.root('static/images'),
-              },
+              }
             },
           },
           {
