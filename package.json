@@ -84,7 +84,6 @@
   "dependencies": {
     "@babel/polyfill": "~7.2",
     "@riophae/vue-treeselect": "^0.4.0",
-    "@toast-ui/vue-editor": "^1.1.1",
     "add": "^2.0.6",
     "animate.css": "^3.6.1",
     "area-data": "^5.0.6",
