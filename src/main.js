@@ -1,5 +1,4 @@
 // 引入一堆兼容
-import 'url-search-params-polyfill';
 import 'babel-polyfill';
 
 import Vue from 'vue';
@@ -19,8 +18,6 @@ import VueSweetalert2 from 'vue-sweetalert2';
 import Element from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 // import * as directives from "./directives";
-import VueSilentbox from 'vue-silentbox';
-
 import echarts from 'echarts';
 
 import dayjs from 'dayjs';
@@ -34,7 +31,6 @@ dayjs.extend(relativeTime);
 
 // iView 4.x
 // Vue.use(ViewUI);
-Vue.use(VueSilentbox);
 Vue.use(Element);
 
 Vue.use(VeeValidate, {
