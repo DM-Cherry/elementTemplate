@@ -3,7 +3,7 @@
     <div class="container-fluid">
       <div class="animated fadeIn">
         <div class="dashboard-header">
-          <div class="header-title"></div>
+          <div class="header-title"><span class="name">氨泄漏实时动态监测预警系统</span></div>
           <div class="header-menu clearfix">
             <div v-for="(item, index) in staticData.routerList" :key="index" class="menu-item">
               <router-link :to="item.url" class="menu-item-link">
@@ -254,7 +254,8 @@
 import ColumnChart from '@/components/Common/Dashboard/Column';
 import Pie from '@/components/Common/Dashboard/Pie';
 import DoubleColumn from '@/components/Common/Dashboard/DoubleColumn';
-import qs from 'qs';
+// import qs from 'qs';
+// import login from '@/core/mixins/login';
 import staticData from './mixins/static';
 
 const restList = {
@@ -327,33 +328,11 @@ export default {
     async getVideo() {
       // 获取视频数据
       try {
-        const response = await this.$axios.post(
-          `https://api2.hik-cloud.com/oauth/token?${qs.stringify({
-            client_id: 'd6f7b8b5288c47949f2f943bdf9597ec',
-            client_secret: 'd30c818702b34c5bb41aa2430f44d8d5',
-            grant_type: 'client_credentials',
-          })}`,
-        );
+        const response = await this.$axios.post('/videoToken/getVideoToken');
         if (response.status === 200) {
-          const token = JSON.parse(JSON.stringify(response.data));
-          if (token.access_token) {
-            this.$axios
-              .get(
-                `https://api2.hik-cloud.com/v1/ezviz/account/info?access_token=${token.access_token}`,
-              )
-              .then(res => {
-                if (res.data.code === 200) {
-                  const data = JSON.parse(JSON.stringify(res.data.data));
-                  this.videoSrc = `https://open.ys7.com/ezopen/h5/iframe_se?url=ezopen://open.ys7.com/F10524474/1.live&autoplay=1&accessToken=${data.token}`;
-                } else {
-                  this.$message.error('获取视频流失败，请稍后重试');
-                }
-              });
-          } else {
-            this.$message.error('获取AccessToken为空，请稍后重试');
-          }
+          this.videoSrc = `https://open.ys7.com/ezopen/h5/iframe_se?url=ezopen://open.ys7.com/F10524474/1.live&autoplay=1&accessToken=${response.data.data}`;
         } else {
-          this.$message.error('获取AccessToken失败，请稍后重试');
+          this.$message.error('获取视频流失败，请稍后重试');
         }
       } catch (err) {
         this.$message.error(err);
@@ -584,10 +563,16 @@ export default {
   padding: 30px 20px;
   .header-title {
     height: 60px;
+    text-align: center;
     background: $header;
     background-position: center center;
     background-repeat: no-repeat;
     background-size: 100% auto;
+    .name {
+      font-size: 28px;
+      font-weight: 500;
+      color: #fff;
+    }
   }
   .header-menu {
     margin: -30px 10% 0;
