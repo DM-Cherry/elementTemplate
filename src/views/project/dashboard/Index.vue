@@ -317,7 +317,7 @@ export default {
     this.timer = setInterval(() => {
       this.update = true;
       this.getData();
-    }, 5000);
+    }, 3000);
   },
   methods: {
     sonicChange(i, id) {

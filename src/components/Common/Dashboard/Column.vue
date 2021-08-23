@@ -88,73 +88,77 @@ export default {
   methods: {
     initialize(unit, xList, value, color, names, update) {
       const t = this;
-      t.columnTimer = setInterval(() => {
-        if (update) {
-          for (let i = 0; i < value.length; i += 1) {
-            if (t.storageXlist.length > 0 && t.storageValue.length > 0) {
-              t.storageXlist.concat(xList);
-              t.storageValue[i].concat(value[i]);
-            } else {
-              t.storageXlist = xList;
-              t.storageValue = value;
-            }
-            t.firstXlist.shift();
-            t.firstValue[i].shift();
-            t.firstXlist.push(t.storageXlist[0]);
-            t.firstValue[i].push(t.storageValue[i][0]);
-            t.storageXlist.shift();
-            t.storageValue[i].shift();
+      // t.columnTimer = setInterval(() => {
+      if (update) {
+        for (let i = 0; i < value.length; i += 1) {
+          if (t.storageXlist.length > 0 && t.storageValue.length > 0) {
+            t.storageXlist.concat(xList);
+            t.storageValue[i].concat(value[i]);
+          } else {
+            t.storageXlist = xList;
+            t.storageValue = value;
           }
-        } else {
-          t.firstXlist = xList;
-          t.firstValue = value;
+          t.firstXlist.shift();
+          t.firstValue[i].shift();
+          t.firstXlist.push(t.storageXlist[0]);
+          t.firstValue[i].push(t.storageValue[i][0]);
+          t.storageXlist.shift();
+          t.storageValue[i].shift();
         }
-        const dataArr = [];
-        for (let i = 0; i < names.length; i += 1) {
-          let x = i;
-          if (x > color.length - 1) {
-            x = color.length - 1;
-          }
-          const data = {
-            name: names[i],
-            type: 'line',
-            color: `${color[x]})`,
-            smooth: true,
-            areaStyle: {
-              normal: {
-                color: new t.$echarts.graphic.LinearGradient(
-                  0,
-                  0,
-                  0,
-                  1,
-                  [
-                    {
-                      offset: 0,
-                      color: `${color[x]}, 0.3)`,
-                    },
-                    {
-                      offset: 0.8,
-                      color: `${color[x]}, 0)`,
-                    },
-                  ],
-                  false,
-                ),
-                shadowColor: 'rgba(0, 0, 0, 0.1)',
-                shadowBlur: 10,
-              },
+      } else {
+        t.firstXlist = xList;
+        t.firstValue = value;
+      }
+      const dataArr = [];
+      for (let i = 0; i < names.length; i += 1) {
+        let x = i;
+        if (x > color.length - 1) {
+          x = color.length - 1;
+        }
+        const data = {
+          name: names[i],
+          type: 'line',
+          color: `${color[x]})`,
+          smooth: true,
+          areaStyle: {
+            normal: {
+              color: new t.$echarts.graphic.LinearGradient(
+                0,
+                0,
+                0,
+                1,
+                [
+                  {
+                    offset: 0,
+                    color: `${color[x]}, 0.3)`,
+                  },
+                  {
+                    offset: 0.8,
+                    color: `${color[x]}, 0)`,
+                  },
+                ],
+                false,
+              ),
+              shadowColor: 'rgba(0, 0, 0, 0.1)',
+              shadowBlur: 10,
             },
-            symbol: 'circle',
-            symbolSize: 5,
-            data: t.firstValue[i],
-          };
-          dataArr.push(data);
-        }
-        t.option.xAxis.data = t.firstXlist;
-        t.option.series = dataArr;
-        t.option.yAxis.name = unit || '';
-        t.myechart.setOption(this.option);
-        window.addEventListener('resize', this.resize);
-      }, 200);
+          },
+          symbol: 'circle',
+          symbolSize: 5,
+          data: t.firstValue[i],
+        };
+        dataArr.push(data);
+      }
+      t.option.xAxis.data = t.firstXlist;
+      t.option.series = dataArr;
+      t.option.yAxis.name = unit || '';
+      t.myechart.setOption(this.option);
+      window.addEventListener('resize', this.resize);
+      // }, 200);
+      // this.option.xAxis.data = xList;
+      // this.option.yAxis.name = unit || '';
+      // this.myechart.setOption(this.option);
+      // window.addEventListener('resize', this.resize);
     },
     resize() {
       if (this.myechart) {
