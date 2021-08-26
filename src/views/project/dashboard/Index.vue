@@ -19,7 +19,7 @@
                 <span class="name float-left mt-2 ml-3">1号TDLAS设备（室内）</span>
                 <span
                   class="history float-right mt-4 mr-4 cursor-pointer"
-                  @click="viewHistory('gateway-1234_1')"
+                  @click="viewHistory('TDLAS-1')"
                 >
                   历史报警
                 </span>
@@ -47,7 +47,7 @@
                 <span class="name float-left mt-2 ml-3">1号TDLAS设备（室内）</span>
                 <span
                   class="history float-right mt-4 mr-4 cursor-pointer"
-                  @click="viewHistory('gateway-1234_2')"
+                  @click="viewHistory('TDLAS-2')"
                 >
                   历史报警
                 </span>
@@ -153,7 +153,7 @@
               <div class="header clearfix">
                 <span
                   class="history float-left mt-3 ml-4 cursor-pointer"
-                  @click="viewHistory('gateway-1234_3')"
+                  @click="viewHistory('TDLAS-3')"
                 >
                   历史报警
                 </span>
@@ -378,9 +378,9 @@ export default {
     getData() {
       // 获取折线图
       const request = [
-        this.$axios.get('/tdlasDeviceMonitor/queryLineChart?deviceCode=gateway-1234_1'),
-        this.$axios.get('/tdlasDeviceMonitor/queryLineChart?deviceCode=gateway-1234_2'),
-        this.$axios.get('/tdlasDeviceMonitor/queryLineChart?deviceCode=gateway-1234_3'),
+        this.$axios.get('/tdlasDeviceMonitor/queryLineChart?deviceCode=TDLAS-1'),
+        this.$axios.get('/tdlasDeviceMonitor/queryLineChart?deviceCode=TDLAS-2'),
+        this.$axios.get('/tdlasDeviceMonitor/queryLineChart?deviceCode=TDLAS-3'),
       ];
       let indoor = [];
       let indoor2 = [];
