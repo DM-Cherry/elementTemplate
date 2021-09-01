@@ -42,11 +42,11 @@ export default {
         sonicList: [
           {
             id: 1,
-            name: '设备1',
+            name: '机房内超声波监测仪',
           },
           {
             id: 2,
-            name: '设备2',
+            name: '出发区超声波监测仪',
           },
         ],
       },

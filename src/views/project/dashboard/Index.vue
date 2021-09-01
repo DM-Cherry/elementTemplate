@@ -16,7 +16,7 @@
           <el-col :span="7" class="main-data-left">
             <div class="main-data-l-t">
               <div class="chart-header clearfix">
-                <span class="name float-left mt-2 ml-3">1号TDLAS设备（室内）</span>
+                <span class="name float-left mt-2 ml-3">训练馆TDLAS</span>
                 <span
                   class="history float-right mt-4 mr-4 cursor-pointer"
                   @click="viewHistory('TDLAS-1')"
@@ -44,7 +44,7 @@
             </div>
             <div class="main-data-l-b">
               <div class="chart-header clearfix">
-                <span class="name float-left mt-2 ml-3">1号TDLAS设备（室内）</span>
+                <span class="name float-left mt-2 ml-3">制冷机房门口TDLAS</span>
                 <span
                   class="history float-right mt-4 mr-4 cursor-pointer"
                   @click="viewHistory('TDLAS-2')"
@@ -95,6 +95,7 @@
                       style="height: 210px;"
                       v-if="index === activeOption"
                       :src="`${isDev ? '' : './'}${item}`"
+                      :preview-src-list="[`${isDev ? '' : './'}${item}`]"
                     ></el-image>
                   </div>
                 </div>
@@ -157,7 +158,7 @@
                 >
                   历史报警
                 </span>
-                <span class="name float-right mt-2 mr-2">1号TDLAS设备（室内）</span>
+                <span class="name float-right mt-2 mr-3">制冷机房中心TDLAS</span>
               </div>
               <div class="chart mt-1">
                 <ColumnChart ref="indoor3" />
@@ -212,6 +213,7 @@
                 style="width: 50px; height: 50px;"
                 :src="scope.row.url"
                 :preview-src-list="scope.row.srcList"
+                :z-index="3000"
               ></el-image>
             </template>
           </el-table-column>
@@ -317,7 +319,7 @@ export default {
     this.timer = setInterval(() => {
       this.update = true;
       this.getData();
-    }, 3000);
+    }, 1200);
   },
   methods: {
     sonicChange(i, id) {
@@ -330,7 +332,7 @@ export default {
       try {
         const response = await this.$axios.post('/videoToken/getVideoToken');
         if (response.status === 200) {
-          this.videoSrc = `https://open.ys7.com/ezopen/h5/iframe_se?url=ezopen://open.ys7.com/F10524474/1.live&autoplay=1&accessToken=${response.data.data}`;
+          this.videoSrc = `https://open.ys7.com/ezopen/h5/iframe_se?url=ezopen://open.ys7.com/F34056591/1.live&autoplay=1&accessToken=${response.data.data}`;
         } else {
           this.$message.error('获取视频流失败，请稍后重试');
         }

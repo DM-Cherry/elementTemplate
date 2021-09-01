@@ -87,6 +87,7 @@ export default {
   },
   methods: {
     initialize(unit, xList, value, color, names, update) {
+      // console.log(xList, '横坐标');
       const t = this;
       // t.columnTimer = setInterval(() => {
       if (update) {
