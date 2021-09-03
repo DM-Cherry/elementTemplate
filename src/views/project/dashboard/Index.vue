@@ -278,6 +278,7 @@ export default {
   mixins: [staticData],
   data() {
     return {
+      newDate: '2020-01-01',
       timer: null,
       hourTimer: null,
       update: false,
@@ -321,7 +322,6 @@ export default {
       this.getPie();
       this.getSonicData(this.sonicDevice);
     }, 3600000);
-
     this.timer = setInterval(() => {
       this.update = true;
       this.getData();
@@ -386,9 +386,15 @@ export default {
     getData() {
       // 获取折线图
       const request = [
-        this.$axios.get('/tdlasDeviceMonitor/queryLineChart?deviceCode=TDLAS-1'),
-        this.$axios.get('/tdlasDeviceMonitor/queryLineChart?deviceCode=TDLAS-2'),
-        this.$axios.get('/tdlasDeviceMonitor/queryLineChart?deviceCode=TDLAS-3'),
+        this.$axios.get(
+          `/tdlasDeviceMonitor/queryLineChart?deviceCode=TDLAS-1&newDate=${this.newDate}`,
+        ),
+        this.$axios.get(
+          `/tdlasDeviceMonitor/queryLineChart?deviceCode=TDLAS-2&newDate=${this.newDate}`,
+        ),
+        this.$axios.get(
+          `/tdlasDeviceMonitor/queryLineChart?deviceCode=TDLAS-3&newDate=${this.newDate}`,
+        ),
       ];
       let indoor = [];
       let indoor2 = [];
@@ -404,6 +410,7 @@ export default {
               talsData1 = tdlas1.data.data;
               talsData2 = tdlas2.data.data;
               talsData3 = tdlas3.data.data;
+              this.newDate = talsData1.newDate;
               this.statistics1 = talsData1.statistics;
               this.statistics2 = talsData2.statistics;
               this.statistics3 = talsData3.statistics;
