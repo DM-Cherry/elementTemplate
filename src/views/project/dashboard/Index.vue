@@ -191,6 +191,12 @@
           width="50"
           :index="indexMethod"
         ></el-table-column>
+        <el-table-column
+          align="center"
+          property="deviceCode"
+          label="设备编号"
+          width="100"
+        ></el-table-column>
         <el-table-column property="deviceState" align="center" label="设备状态" width="150">
           <template slot-scope="scope">
             <el-tag size="medium" type="danger" v-if="scope.row.deviceState === false">
@@ -497,6 +503,7 @@ export default {
                   url: cur.deviceImage,
                   srcList: cur.deviceImage ? [cur.deviceImage] : [],
                   creatertime: cur.creatertime,
+                  deviceCode: cur.deviceCode,
                 });
                 return acc;
               }, []);
