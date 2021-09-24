@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div ref="columnechart" style="width: 100%; height: 165px; margin: 0 auto;" />
+    <div ref="columnechart" style="width: 100%; height: 175px; margin: 0 auto;" />
   </div>
 </template>
 
@@ -87,33 +87,26 @@ export default {
   },
   methods: {
     initialize(unit, xList, value, color, names, update) {
-      console.log(xList, '横坐标');
       const t = this;
       // t.columnTimer = setInterval(() => {
       if (update) {
         for (let i = 0; i < value.length; i += 1) {
           if (t.storageXlist.length > 0 && t.storageValue.length > 0) {
-            console.log(t.storageXlist, 1);
             t.storageXlist.concat(xList);
-            console.log(t.storageXlist, 2);
             t.storageValue[i].concat(value[i]);
           } else {
             t.storageXlist = xList;
             t.storageValue = value;
-            console.log(t.storageXlist, 3);
           }
           t.firstXlist.shift();
           t.firstValue[i].shift();
-          console.log(t.storageXlist, 4);
           t.firstXlist.push(t.storageXlist[0]);
           t.firstValue[i].push(t.storageValue[i][0]);
           t.storageXlist.shift();
-          console.log(t.storageXlist, 5);
           t.storageValue[i].shift();
         }
       } else {
         t.firstXlist = xList;
-        console.log(t.firstXlist, 6);
         t.firstValue = value;
       }
       const dataArr = [];

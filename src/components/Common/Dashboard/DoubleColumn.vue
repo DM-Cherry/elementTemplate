@@ -13,12 +13,6 @@ export default {
       option: {
         tooltip: {
           trigger: 'axis',
-          axisPointer: {
-            type: 'cross',
-            crossStyle: {
-              color: '#999',
-            },
-          },
         },
         toolbox: {
           feature: {},
@@ -49,9 +43,6 @@ export default {
           {
             type: 'value',
             name: '声贝',
-            min: 0,
-            max: 0,
-            interval: 50,
             axisLabel: {
               formatter: '{value} ',
               color: '#fff',
@@ -195,6 +186,13 @@ export default {
       this.option.yAxis[0].max = max;
       this.myechart.setOption(this.option);
       window.addEventListener('resize', this.resize);
+    },
+    resize() {
+      if (this.myechart) {
+        setTimeout(() => {
+          this.myechart.resize();
+        }, 400);
+      }
     },
   },
 };

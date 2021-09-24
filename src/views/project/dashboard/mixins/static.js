@@ -23,21 +23,21 @@ export default {
         options: [
           {
             id: 1,
-            name: '设备1',
+            name: '制冷房-中',
           },
           {
             id: 2,
-            name: '设备2',
+            name: '制冷房-门',
           },
           {
             id: 3,
-            name: '设备3',
+            name: '训练馆',
           },
         ],
         equImages: [
           `${process.env.NODE_ENV === 'development' ? '' : '.'}/static/images/dashboard/floor1.png`,
           `${process.env.NODE_ENV === 'development' ? '' : '.'}/static/images/dashboard/floor1.png`,
-          `${process.env.NODE_ENV === 'development' ? '' : '.'}/static/images/dashboard/floor1.png`,
+          `${process.env.NODE_ENV === 'development' ? '' : '.'}/static/images/dashboard/floor4.png`,
         ],
         sonicList: [
           {

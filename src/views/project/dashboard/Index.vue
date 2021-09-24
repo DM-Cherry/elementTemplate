@@ -17,6 +17,9 @@
             <div class="main-data-l-t">
               <div class="chart-header clearfix">
                 <span class="name float-left mt-2 ml-3">训练馆TDLAS</span>
+                <span class="float-right mt-4 mr-4 cursor-pointer" @click="closeHistory('TDLAS-1')">
+                  关闭报警
+                </span>
                 <span
                   class="history float-right mt-4 mr-4 cursor-pointer"
                   @click="viewHistory('TDLAS-1')"
@@ -24,7 +27,7 @@
                   历史报警
                 </span>
               </div>
-              <div class="chart">
+              <div class="chart" style="margin-top: 20px;">
                 <ColumnChart ref="indoor" />
               </div>
               <el-row class="chart-footer">
@@ -45,6 +48,9 @@
             <div class="main-data-l-b">
               <div class="chart-header clearfix">
                 <span class="name float-left mt-2 ml-3">制冷机房门口TDLAS</span>
+                <span class="float-right mt-4 mr-4 cursor-pointer" @click="closeHistory('TDLAS-2')">
+                  关闭报警
+                </span>
                 <span
                   class="history float-right mt-4 mr-4 cursor-pointer"
                   @click="viewHistory('TDLAS-2')"
@@ -52,7 +58,7 @@
                   历史报警
                 </span>
               </div>
-              <div class="chart">
+              <div class="chart" style="margin-top: 20px;">
                 <ColumnChart ref="indoor2" />
               </div>
               <el-row class="chart-footer">
@@ -75,7 +81,7 @@
             <div class="middle-header mt-2">
               <span class="theme-name">监测位示意图</span>
             </div>
-            <el-row class="middle-t">
+            <el-row class="middle-t" style="margin-top: 20px;">
               <el-col :span="12" class="middle-t-l">
                 <div class="options clearfix mt-2">
                   <div
@@ -89,13 +95,13 @@
                     </small>
                   </div>
                 </div>
-                <div class="equipment-img ml-3 mt-1">
+                <div class="equipment-img ml-3 mt-2">
                   <div v-for="(item, index) in staticData.equImages" :key="index">
                     <el-image
                       style="height: 210px;"
                       v-if="index === activeOption"
                       :src="`${isDev ? '' : './'}${item}`"
-                      :preview-src-list="[`${isDev ? '' : './'}${item}`]"
+                      @click="previewImg(index)"
                     ></el-image>
                   </div>
                 </div>
@@ -113,7 +119,7 @@
                 <Pie ref="pie" class="mt-2" />
               </el-col>
             </el-row>
-            <div class="middle-b">
+            <div class="middle-b" style="margin-top: 100px;">
               <div class="clearfix middle-b-chart">
                 <span class="float-right cursor-pointer history ml-3" @click="viewHistory('')">
                   历史报警
@@ -138,9 +144,9 @@
             </div>
           </el-col>
           <el-col :span="7" class="main-data-right">
-            <div class="main-data-l-t px-3">
+            <div class="main-data-l-t px-3" style="margin-top: 30px;">
               <span class="header-title mt-2 mr-2">监控摄像</span>
-              <div style="height: 195px;" class="mt-1">
+              <div style="height: 195px; margin-top: 40px;">
                 <iframe
                   :src="videoSrc"
                   height="100%"
@@ -151,16 +157,19 @@
               </div>
             </div>
             <div class="main-data-r-b">
-              <div class="header clearfix">
+              <div class="header clearfix" style="margin-top: 20px;">
                 <span
                   class="history float-left mt-3 ml-4 cursor-pointer"
                   @click="viewHistory('TDLAS-3')"
                 >
                   历史报警
                 </span>
+                <span class="float-left mt-3 ml-4 cursor-pointer" @click="closeHistory('TDLAS-3')">
+                  关闭报警
+                </span>
                 <span class="name float-right mt-2 mr-3">制冷机房中心TDLAS</span>
               </div>
-              <div class="chart mt-1">
+              <div class="chart mt-1" style="margin-top: 20px;">
                 <ColumnChart ref="indoor3" />
               </div>
               <el-row class="chart-footer">
@@ -255,11 +264,39 @@
       </div>
       <!-- 分页 -->
     </el-dialog>
+    <el-dialog title="示意图" :visible.sync="imgVisible">
+      <el-table border height="350" :data="imgList">
+        <el-table-column align="center" type="index" label="序号" width="50"></el-table-column>
+        <el-table-column
+          align="center"
+          property="deviceCode"
+          label="设备编号"
+          width="100"
+        ></el-table-column>
+        <el-table-column
+          align="center"
+          property="deviceAngle"
+          label="设备角度"
+          width="100"
+        ></el-table-column>
+        <el-table-column property="warnimg" align="center" label="图片预览">
+          <template slot-scope="scope">
+            <el-image
+              style="width: 50px; height: 50px;"
+              :src="scope.row.deviceImage"
+              :preview-src-list="scope.row.srcList"
+              :z-index="3000"
+            ></el-image>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-dialog>
   </section>
 </template>
 
 <script>
-import ColumnChart from '@/components/Common/Dashboard/Column';
+// import ColumnChart from '@/components/Common/Dashboard/Column';
+import ColumnChart from '@/components/Common/Dashboard/newColumn';
 import Pie from '@/components/Common/Dashboard/Pie';
 import DoubleColumn from '@/components/Common/Dashboard/DoubleColumn';
 // import qs from 'qs';
@@ -278,6 +315,8 @@ export default {
   mixins: [staticData],
   data() {
     return {
+      imgVisible: false,
+      imgList: [],
       newDate: '2020-01-01',
       timer: null,
       hourTimer: null,
@@ -300,6 +339,7 @@ export default {
       deviceState: '0',
       sonicDevice: 1,
       isDev: true,
+      viewImgList: [],
     };
   },
   destroyed() {
@@ -315,19 +355,44 @@ export default {
   mounted() {
     this.isDev = process.env.NODE_ENV === 'development';
     this.getData();
+    this.getImgList();
     this.getPie();
     this.getVideo();
     this.getSonicData(this.sonicDevice);
     this.hourTimer = setInterval(() => {
       this.getPie();
       this.getSonicData(this.sonicDevice);
-    }, 3600000);
+    }, 3000);
     this.timer = setInterval(() => {
       this.update = true;
       this.getData();
-    }, 1200);
+    }, 3000);
   },
   methods: {
+    getImgList() {
+      const request = [
+        this.$axios.get('/devcie3D/gettdlasDataConfigList?deviceCode=TDLAS-1'),
+        this.$axios.get('/devcie3D/gettdlasDataConfigList?deviceCode=TDLAS-2'),
+        this.$axios.get('/devcie3D/gettdlasDataConfigList?deviceCode=TDLAS-3'),
+      ];
+      this.$axios.all(request).then(
+        this.$axios.spread((tdlas1, tdlas2, tdlas3) => {
+          this.$nextTick(() => {
+            this.viewImgList[0] = tdlas1.data.data;
+            this.viewImgList[1] = tdlas2.data.data;
+            this.viewImgList[2] = tdlas3.data.data;
+          });
+        }),
+      );
+    },
+    previewImg(idx) {
+      this.imgList = this.viewImgList[idx];
+      this.viewImgList[idx].forEach(item => {
+        // eslint-disable-next-line no-param-reassign
+        item.srcList = [item.deviceImage];
+      });
+      this.imgVisible = true;
+    },
     sonicChange(i, id) {
       this.activeSonic = i;
       this.sonicDevice = id;
@@ -418,33 +483,35 @@ export default {
               indoor = this.filterData(talsData1.TdlasDeviceMonitorList);
               indoor2 = this.filterData(talsData2.TdlasDeviceMonitorList);
               indoor3 = this.filterData(talsData3.TdlasDeviceMonitorList);
-              // eslint-disable-next-line no-unused-expressions
-              this.$refs.indoor?.initialize(
-                'ppm*m',
-                talsData1.time,
-                indoor,
-                talsData1.colourList,
-                talsData1.deviceAngleList,
-                this.update,
-              );
-              // eslint-disable-next-line no-unused-expressions
-              this.$refs.indoor2?.initialize(
-                'ppm*m',
-                talsData2.time,
-                indoor2,
-                talsData1.colourList,
-                talsData2.deviceAngleList,
-                this.update,
-              );
-              // eslint-disable-next-line no-unused-expressions
-              this.$refs.indoor3?.initialize(
-                'ppm*m',
-                talsData3.time,
-                indoor3,
-                talsData1.colourList,
-                talsData3.deviceAngleList,
-                this.update,
-              );
+              this.$nextTick(() => {
+                // eslint-disable-next-line no-unused-expressions
+                this.$refs.indoor?.initialize(
+                  'ppm',
+                  talsData1.time,
+                  indoor,
+                  talsData1.colourList,
+                  talsData1.deviceAngleList,
+                  this.update,
+                );
+                // eslint-disable-next-line no-unused-expressions
+                this.$refs.indoor2?.initialize(
+                  'ppm',
+                  talsData2.time,
+                  indoor2,
+                  talsData1.colourList,
+                  talsData2.deviceAngleList,
+                  this.update,
+                );
+                // eslint-disable-next-line no-unused-expressions
+                this.$refs.indoor3?.initialize(
+                  'ppm',
+                  talsData3.time,
+                  indoor3,
+                  talsData1.colourList,
+                  talsData3.deviceAngleList,
+                  this.update,
+                );
+              });
             }),
           )
           .catch(err => {
@@ -534,6 +601,22 @@ export default {
       this.tdlsHistoryData.pageNum = 1;
       this.tdlsHistoryData.pageSize = 5;
       this.getHistory(id);
+    },
+    closeHistory(id) {
+      const url = `/tdlasDeviceMonitor/tdlasControlDeploymentWithdrawal?tdlasCode=${id}`;
+      try {
+        this.$axios.get(url).then(res => {
+          if (res.status === 200 && res.data.code === 200) {
+            this.$message.success('成功关闭报警');
+          } else {
+            this.$message.error('关闭报警失败，请稍后重试');
+          }
+        });
+      } catch (e) {
+        console.error(e);
+        const err = e || '请求服务出错了，请稍后重试';
+        this.$message.error(err);
+      }
     },
     indexMethod(index) {
       return this.tdlsHistoryData.pageSize * (this.tdlsHistoryData.pageNum - 1) + index + 1;
@@ -626,12 +709,16 @@ export default {
   .main-data-left {
     .main-data-l-t,
     .main-data-l-b {
-      height: 280px;
+      height: 40vh;
+      padding: 10px;
       background: $left;
       background-repeat: no-repeat;
-      background-size: 100% auto;
+      background-size: 100% 35vh;
       .history {
         color: #88ede7;
+      }
+      .danger {
+        color: red;
       }
       .chart-footer {
         .data-item {
@@ -657,11 +744,11 @@ export default {
     }
   }
   .main-data-middle {
-    height: 560px;
+    height: 80vh;
     margin-top: -8px;
     background: $middle;
     background-repeat: no-repeat;
-    background-size: 100% 540px;
+    background-size: 100% 75vh;
     .middle-header {
       text-align: center;
     }
@@ -690,6 +777,9 @@ export default {
         .history {
           color: #88ede7;
         }
+        .danger {
+          color: red;
+        }
         .sonic {
           .active {
             color: #88ede7;
@@ -701,16 +791,20 @@ export default {
   .main-data-right {
     .main-data-l-t,
     .main-data-r-b {
-      height: 280px;
+      height: 40vh;
+      padding: 10px;
       text-align: right;
       background: $right;
       background-repeat: no-repeat;
-      background-size: 100% auto;
+      background-size: 100% 35vh;
       .header-title {
         display: inline-block;
       }
       .history {
         color: #88ede7;
+      }
+      .danger {
+        color: red;
       }
       .chart-footer {
         .data-item {

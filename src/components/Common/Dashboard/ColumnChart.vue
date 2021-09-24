@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div ref="columnechart" style="width: 100%; height: 240px; margin: 0 auto;" />
+    <div ref="columnechart" style="width: 100%; height: 250px; margin: 0 auto;" />
   </div>
 </template>
 
