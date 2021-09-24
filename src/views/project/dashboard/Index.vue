@@ -48,12 +48,12 @@
             <div class="main-data-l-b">
               <div class="chart-header clearfix">
                 <span class="name float-left mt-2 ml-3">制冷机房门口TDLAS</span>
-                <span class="float-right mt-4 mr-4 cursor-pointer" @click="closeHistory('TDLAS-2')">
+                <span class="float-right mt-4 mr-4 cursor-pointer" @click="closeHistory('TDLAS-3')">
                   关闭报警
                 </span>
                 <span
                   class="history float-right mt-4 mr-4 cursor-pointer"
-                  @click="viewHistory('TDLAS-2')"
+                  @click="viewHistory('TDLAS-3')"
                 >
                   历史报警
                 </span>
@@ -160,11 +160,11 @@
               <div class="header clearfix" style="margin-top: 20px;">
                 <span
                   class="history float-left mt-3 ml-4 cursor-pointer"
-                  @click="viewHistory('TDLAS-3')"
+                  @click="viewHistory('TDLAS-2')"
                 >
                   历史报警
                 </span>
-                <span class="float-left mt-3 ml-4 cursor-pointer" @click="closeHistory('TDLAS-3')">
+                <span class="float-left mt-3 ml-4 cursor-pointer" @click="closeHistory('TDLAS-2')">
                   关闭报警
                 </span>
                 <span class="name float-right mt-2 mr-3">制冷机房中心TDLAS</span>
@@ -455,10 +455,10 @@ export default {
           `/tdlasDeviceMonitor/queryLineChart?deviceCode=TDLAS-1&newDate=${this.newDate}`,
         ),
         this.$axios.get(
-          `/tdlasDeviceMonitor/queryLineChart?deviceCode=TDLAS-2&newDate=${this.newDate}`,
+          `/tdlasDeviceMonitor/queryLineChart?deviceCode=TDLAS-3&newDate=${this.newDate}`,
         ),
         this.$axios.get(
-          `/tdlasDeviceMonitor/queryLineChart?deviceCode=TDLAS-3&newDate=${this.newDate}`,
+          `/tdlasDeviceMonitor/queryLineChart?deviceCode=TDLAS-2&newDate=${this.newDate}`,
         ),
       ];
       let indoor = [];
@@ -483,35 +483,45 @@ export default {
               indoor = this.filterData(talsData1.TdlasDeviceMonitorList);
               indoor2 = this.filterData(talsData2.TdlasDeviceMonitorList);
               indoor3 = this.filterData(talsData3.TdlasDeviceMonitorList);
-              this.$nextTick(() => {
-                // eslint-disable-next-line no-unused-expressions
-                this.$refs.indoor?.initialize(
-                  'ppm',
-                  talsData1.time,
-                  indoor,
-                  talsData1.colourList,
-                  talsData1.deviceAngleList,
-                  this.update,
-                );
-                // eslint-disable-next-line no-unused-expressions
-                this.$refs.indoor2?.initialize(
-                  'ppm',
-                  talsData2.time,
-                  indoor2,
-                  talsData1.colourList,
-                  talsData2.deviceAngleList,
-                  this.update,
-                );
-                // eslint-disable-next-line no-unused-expressions
-                this.$refs.indoor3?.initialize(
-                  'ppm',
-                  talsData3.time,
-                  indoor3,
-                  talsData1.colourList,
-                  talsData3.deviceAngleList,
-                  this.update,
-                );
-              });
+              if (talsData1.time.length > 0 && indoor.length > 0) {
+                this.$nextTick(() => {
+                  // eslint-disable-next-line no-unused-expressions
+                  this.$refs.indoor?.initialize(
+                    'ppm',
+                    talsData1.time,
+                    indoor,
+                    talsData1.colourList,
+                    talsData1.deviceAngleList,
+                    this.update,
+                  );
+                });
+              }
+              if (talsData2.time.length > 0 && indoor2.length > 0) {
+                this.$nextTick(() => {
+                  // eslint-disable-next-line no-unused-expressions
+                  this.$refs.indoor2?.initialize(
+                    'ppm',
+                    talsData2.time,
+                    indoor2,
+                    talsData1.colourList,
+                    talsData2.deviceAngleList,
+                    this.update,
+                  );
+                });
+              }
+              if (talsData3.time.length > 0 && indoor3.length > 0) {
+                this.$nextTick(() => {
+                  // eslint-disable-next-line no-unused-expressions
+                  this.$refs.indoor3?.initialize(
+                    'ppm',
+                    talsData3.time,
+                    indoor3,
+                    talsData1.colourList,
+                    talsData3.deviceAngleList,
+                    this.update,
+                  );
+                });
+              }
             }),
           )
           .catch(err => {
