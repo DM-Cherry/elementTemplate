@@ -420,10 +420,10 @@ export default {
       this.$axios.all(request).then(
         this.$axios.spread((tdlas1, tdlas2, tdlas3) => {
           this.$nextTick(() => {
-            this.viewImgList[0] = tdlas1.data.data;
+            this.viewImgList[0] = tdlas1.data.data.unshift(this.staticData.coverImages[0]);
             // console.log(tdlas1.data.data)
-            this.viewImgList[1] = tdlas2.data.data;
-            this.viewImgList[2] = tdlas3.data.data;
+            this.viewImgList[1] = tdlas2.data.data.unshift(this.staticData.coverImages[1]);
+            this.viewImgList[2] = tdlas3.data.data.unshift(this.staticData.coverImages[2]);
           });
         }),
       );
