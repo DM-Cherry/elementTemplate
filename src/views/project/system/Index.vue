@@ -31,7 +31,7 @@
                           type="number"
                           min="0"
                         >
-                          <template slot="append">ppm*m</template>
+                          <template slot="append">ppm</template>
                         </el-input>
                       </el-form-item>
                     </el-col>

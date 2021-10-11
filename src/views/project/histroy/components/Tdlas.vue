@@ -13,7 +13,13 @@
       </el-form-item>
     </el-form>
     <div class="mb-3">
-      <el-table v-loading="loading" border :data="historyData.list" style="width: 100%;">
+      <el-table
+        v-loading="loading"
+        border
+        :data="historyData.list"
+        @sort-change="sortTable"
+        style="width: 100%;"
+      >
         <el-table-column
           align="center"
           type="index"
@@ -27,12 +33,14 @@
           prop="deviceAngle"
           label="位置编号"
           width="180"
+          sortable="custom"
         ></el-table-column>
         <el-table-column
           align="center"
           prop="deviceAmmoniaConcentration"
           label="氨浓度"
-          width="80"
+          width="100"
+          sortable="custom"
         ></el-table-column>
         <!-- <el-table-column
           align="center"
@@ -40,7 +48,13 @@
           label="报警等级"
           width="100"
         ></el-table-column> -->
-        <el-table-column align="center" prop="creatertime" label="创建日期" width="120">
+        <el-table-column
+          align="center"
+          prop="creatertime"
+          sortable="custom"
+          label="创建日期"
+          width="120"
+        >
           <template slot-scope="scope">
             <div>
               {{ $dayjs(scope.row.creatertime).format('YYYY-MM-DD') }}
@@ -109,6 +123,24 @@ export default {
     this.getHistory();
   },
   methods: {
+    sortTable(current) {
+      console.log(current);
+      this.loading = true;
+      try {
+        this.$axios.post().then(res => {
+          if (res.data.code !== 200) {
+            this.$message.error('排序失败，请稍后重试');
+          } else {
+            console.log('获取最新信息');
+          }
+        });
+      } catch (e) {
+        this.loading = false;
+        const err = e || '请求服务出错了，请稍后重试';
+        this.$message.error(err);
+        console.error(e);
+      }
+    },
     handleEdit(row) {
       this.loading = true;
       try {

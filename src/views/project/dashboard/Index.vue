@@ -96,11 +96,11 @@
                   </div>
                 </div>
                 <div class="equipment-img ml-3 mt-2">
-                  <div v-for="(item, index) in staticData.equImages" :key="index">
+                  <div v-for="(item, index) in staticData.coverImages" :key="index">
                     <el-image
                       style="height: 210px;"
                       v-if="index === activeOption"
-                      :src="`${isDev ? '' : './'}${item}`"
+                      :src="item['deviceImage']"
                       @click="previewImg(index)"
                     ></el-image>
                   </div>

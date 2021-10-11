@@ -39,6 +39,20 @@ export default {
           `${process.env.NODE_ENV === 'development' ? '' : '.'}/static/images/dashboard/floor1.png`,
           `${process.env.NODE_ENV === 'development' ? '' : '.'}/static/images/dashboard/floor4.png`,
         ],
+        coverImages: [
+          {
+            deviceAngle: '制冷房中心',
+            deviceImage: 'https://www.csei.org.cn/image/3d/jfzx.jpg',
+          },
+          {
+            deviceAngle: '制冷房门口',
+            deviceImage: 'https://www.csei.org.cn/image/3d/jfmk.jpg',
+          },
+          {
+            deviceAngle: '训练馆',
+            deviceImage: 'https://www.csei.org.cn/image/3d/xlg.jpg',
+          },
+        ],
         sonicList: [
           {
             id: 1,
