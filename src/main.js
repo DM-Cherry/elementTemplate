@@ -29,6 +29,9 @@ Element.Dialog.props.closeOnClickModal.default = false;
 dayjs.locale('zh-cn');
 dayjs.extend(relativeTime);
 
+import VueAwesomeSwiper from 'vue-awesome-swiper'
+import 'swiper/dist/css/swiper.css'
+Vue.use(VueAwesomeSwiper)
 // iView 4.x
 // Vue.use(ViewUI);
 Vue.use(Element);

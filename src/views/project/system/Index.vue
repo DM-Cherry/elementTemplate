@@ -1,6 +1,6 @@
 <template>
   <section>
-    <div class="container-fluid mt-2">
+    <div class="container-fluid mt-2 system">
       <div class="animated fadeIn">
         <el-row>
           <el-col>
@@ -36,7 +36,7 @@
                       </el-form-item>
                     </el-col>
                   </el-row>
-                  <h6>1号超声波设备</h6>
+                  <h6>出发区超声设备</h6>
                   <el-row :gutter="12">
                     <el-col
                       :sm="12"
@@ -53,7 +53,7 @@
                       </el-form-item>
                     </el-col>
                   </el-row>
-                  <h6>2号超声波设备</h6>
+                  <h6>机房超声设备</h6>
                   <el-row :gutter="12">
                     <el-col
                       :sm="12"
@@ -220,6 +220,12 @@ export default {
 </script>
 
 <style lang="scss">
+.system .el-form-item__label {
+  width: 200px !important;
+}
+.system .el-input-group {
+  width: 85%;
+}
 /*stylelint-disable */
 .system-form input::-webkit-outer-spin-button,
 .system-form input::-webkit-inner-spin-button {

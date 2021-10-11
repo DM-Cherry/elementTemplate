@@ -291,6 +291,28 @@
         </el-table-column>
       </el-table>
     </el-dialog>
+    <div class="swiper-dialog-container" v-if="swiperVisible">
+      <el-button
+        type="primary"
+        icon="el-icon-close"
+        @click="handleClose"
+        class="close-swiper"
+        circle
+      ></el-button>
+      <div class="swiper-container" ref="mySwiper">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide" v-for="(item, index) in swiperList" :key="index">
+            <el-image
+              style="height: 150px;"
+              :src="item.deviceImage"
+              :preview-src-list="[item.deviceImage]"
+              :z-index="3000"
+            ></el-image>
+            <div>{{ item.deviceAngle }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
   </section>
 </template>
 
@@ -301,6 +323,8 @@ import Pie from '@/components/Common/Dashboard/Pie';
 import DoubleColumn from '@/components/Common/Dashboard/DoubleColumn';
 // import qs from 'qs';
 // import login from '@/core/mixins/login';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import Swiper from 'swiper';
 import staticData from './mixins/static';
 
 const restList = {
@@ -315,6 +339,7 @@ export default {
   mixins: [staticData],
   data() {
     return {
+      swiperVisible: false,
       imgVisible: false,
       imgList: [],
       newDate: '2020-01-01',
@@ -340,8 +365,11 @@ export default {
       sonicDevice: 1,
       isDev: true,
       viewImgList: [],
+      swiperContainer: null,
+      swiperList: [],
     };
   },
+  computed: {},
   destroyed() {
     if (this.timer) {
       clearInterval(this.timer);
@@ -352,10 +380,12 @@ export default {
       this.hourTimer = null;
     }
   },
+  created() {
+    this.getImgList();
+  },
   mounted() {
     this.isDev = process.env.NODE_ENV === 'development';
     this.getData();
-    this.getImgList();
     this.getPie();
     this.getVideo();
     this.getSonicData(this.sonicDevice);
@@ -366,19 +396,32 @@ export default {
     this.timer = setInterval(() => {
       this.update = true;
       this.getData();
-    }, 3000);
+    }, 1400);
   },
   methods: {
+    handleClose() {
+      this.swiperVisible = false;
+      this.swiperContainer = null;
+    },
+    prev() {
+      // const _this = this
+      console.log(this.$refs.mySwiper.swiper, 'this.$refs.mySwiper.$swiper');
+      this.$refs.mySwiper.swiper.slidePrev();
+    },
+    next() {
+      this.$refs.mySwiper.swiper.slideNext();
+    },
     getImgList() {
       const request = [
-        this.$axios.get('/devcie3D/gettdlasDataConfigList?deviceCode=TDLAS-1'),
         this.$axios.get('/devcie3D/gettdlasDataConfigList?deviceCode=TDLAS-2'),
         this.$axios.get('/devcie3D/gettdlasDataConfigList?deviceCode=TDLAS-3'),
+        this.$axios.get('/devcie3D/gettdlasDataConfigList?deviceCode=TDLAS-1'),
       ];
       this.$axios.all(request).then(
         this.$axios.spread((tdlas1, tdlas2, tdlas3) => {
           this.$nextTick(() => {
             this.viewImgList[0] = tdlas1.data.data;
+            // console.log(tdlas1.data.data)
             this.viewImgList[1] = tdlas2.data.data;
             this.viewImgList[2] = tdlas3.data.data;
           });
@@ -386,12 +429,32 @@ export default {
       );
     },
     previewImg(idx) {
-      this.imgList = this.viewImgList[idx];
-      this.viewImgList[idx].forEach(item => {
-        // eslint-disable-next-line no-param-reassign
-        item.srcList = [item.deviceImage];
+      // this.imgList = this.viewImgList[idx];
+      // this.viewImgList[idx].forEach(item => {
+      //   // eslint-disable-next-line no-param-reassign
+      //   item.srcList = [item.deviceImage];
+      // });
+      // this.imgVisible = true;
+      this.swiperList = this.viewImgList[idx];
+      this.swiperVisible = true;
+      if (this.swiperContainer !== null) return;
+      this.initSwiper();
+    },
+    initSwiper() {
+      this.$nextTick(() => {
+        this.swiperContainer = new Swiper('.swiper-container', {
+          observeParents: true,
+          observe: true,
+          slidesPerView: 5,
+          spaceBetween: 30,
+          slidesPerGroup: 5,
+          loop: true,
+          loopFillGroupWithBlank: true,
+          onSlideChangeEnd(swiper) {
+            swiper.update();
+          },
+        });
       });
-      this.imgVisible = true;
     },
     sonicChange(i, id) {
       this.activeSonic = i;
@@ -652,12 +715,52 @@ export default {
 
 <style lang="scss">
 @import './scss/core/_dashboard';
+//.el-image-viewer__wrapper {
+//  bottom: 200px !important;
+//}
+.el-image-viewer__img {
+  max-height: 50% !important;
+}
 .app {
   /deep/ .app-body {
+    position: relative;
     // declaration-no-important
     // property-no-vendor-prefix
     overflow-x: scroll !important;
   }
+}
+.swiper-dialog {
+  /deep/.el-dialog {
+    background: none;
+  }
+}
+.swiper-dialog-container {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 2001;
+  margin: 0;
+  overflow: auto;
+  background: rgba(0, 0, 0, 0.3);
+}
+.swiper-container {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 200px;
+}
+.swiper-slide {
+  padding-top: 10px;
+  font-size: 18px;
+  text-align: center;
+  background: #fff;
+}
+.close-swiper {
+  position: fixed;
+  top: 80px;
+  right: 80px;
 }
 .dashboard-container {
   height: 100%;
