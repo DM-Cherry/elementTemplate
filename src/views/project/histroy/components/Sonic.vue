@@ -35,6 +35,7 @@
         ></el-table-column>
         <el-table-column align="center" prop="l" label="瞬时声强" width="80"></el-table-column>
         <el-table-column align="center" prop="leq" label="等效声强" width="80"></el-table-column>
+        <el-table-column align="center" prop="deviceType" label="描述"></el-table-column>
         <el-table-column align="center" prop="creatertime" label="创建日期" width="120">
           <template slot-scope="scope">
             <div>

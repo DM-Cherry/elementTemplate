@@ -36,7 +36,7 @@
                       </el-form-item>
                     </el-col>
                   </el-row>
-                  <h6>出发区超声设备</h6>
+                  <h6>出发1#区超声设备</h6>
                   <el-row :gutter="12">
                     <el-col
                       :sm="12"

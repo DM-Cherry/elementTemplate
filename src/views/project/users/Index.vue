@@ -24,6 +24,13 @@
                       clearable
                     ></el-input>
                   </el-form-item>
+                  <el-form-item label="账号">
+                    <el-input
+                      v-model="search.userName"
+                      placeholder="请输入账号"
+                      clearable
+                    ></el-input>
+                  </el-form-item>
                   <el-form-item>
                     <el-button type="primary" @click="getUsers">查询</el-button>
                   </el-form-item>
@@ -103,7 +110,12 @@
       >
         <el-row>
           <el-col :sm="12" :md="12" :lg="12" class="filter-item">
-            <el-form-item label="名称">
+            <el-form-item label="账号">
+              <el-input v-model="form.userName" autocomplete="off"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :sm="12" :md="12" :lg="12" class="filter-item">
+            <el-form-item label="用户名">
               <el-input v-model="form.realName" autocomplete="off"></el-input>
             </el-form-item>
           </el-col>
@@ -155,6 +167,7 @@ export default {
       search: {
         phone: '',
         realName: '',
+        userName: '',
       },
       type: 'add',
       page_sizes: [5, 10, 15, 20, 50],
@@ -173,7 +186,7 @@ export default {
       },
       rules: {
         mail: [{ validator: checkEmail }],
-        phone: [{ required: true, message: '请输入联系方式', trigger: 'blur' }],
+        // phone: [{ required: true, message: '请输入联系方式', trigger: 'blur' }],
       },
     };
   },

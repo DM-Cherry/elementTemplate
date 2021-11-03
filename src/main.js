@@ -6,6 +6,7 @@ import Vue from 'vue';
 import App from '@/App';
 import router from '@/router';
 import axios from '@/core/auth';
+import dataV from '@jiaminghi/data-view';
 // import iviewFixer from '@/core/mixins/iview'
 import store from '@/store';
 import VeeValidate, { Validator } from 'vee-validate';
@@ -45,6 +46,7 @@ Validator.localize('zh', zh);
 // Vue.use(BootstrapVue);
 Vue.use(VueSweetalert2);
 // Vue.mixin(iviewFixer)
+Vue.use(dataV)
 
 Vue.prototype.$storage = {};
 for (let name in store.state.default.storage.localforage) {

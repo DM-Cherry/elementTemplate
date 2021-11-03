@@ -22,28 +22,31 @@
                 </span>
                 <span
                   class="history float-right mt-4 mr-4 cursor-pointer"
+                  :class="`${closeDanger === 'TDLAS-1' ? '' : ''}`"
                   @click="viewHistory('TDLAS-1')"
                 >
                   历史报警
                 </span>
               </div>
-              <div class="chart" style="margin-top: 20px;">
-                <ColumnChart ref="indoor" />
+              <div class="main-content">
+                <div class="chart">
+                  <ColumnChart ref="indoor" />
+                </div>
+                <el-row class="chart-footer">
+                  <el-col :span="8" class="data-item">
+                    <div class="data-name">时均浓度值</div>
+                    <p>{{ statistics1.isAvg }}</p>
+                  </el-col>
+                  <el-col :span="8" class="data-item">
+                    <div class="data-name">最大浓度值</div>
+                    <p>{{ statistics1.isMAx }}</p>
+                  </el-col>
+                  <el-col :span="8" class="data-item">
+                    <div class="data-name">最小浓度值</div>
+                    <p>{{ statistics1.isMin }}</p>
+                  </el-col>
+                </el-row>
               </div>
-              <el-row class="chart-footer">
-                <el-col :span="8" class="data-item">
-                  <div class="data-name">时均浓度值</div>
-                  <p>{{ statistics1.isAvg }}</p>
-                </el-col>
-                <el-col :span="8" class="data-item">
-                  <div class="data-name">最大浓度值</div>
-                  <p>{{ statistics1.isMAx }}</p>
-                </el-col>
-                <el-col :span="8" class="data-item">
-                  <div class="data-name">最小浓度值</div>
-                  <p>{{ statistics1.isMin }}</p>
-                </el-col>
-              </el-row>
             </div>
             <div class="main-data-l-b">
               <div class="chart-header clearfix">
@@ -58,30 +61,32 @@
                   历史报警
                 </span>
               </div>
-              <div class="chart" style="margin-top: 20px;">
-                <ColumnChart ref="indoor2" />
+              <div class="main-content">
+                <div class="chart">
+                  <ColumnChart ref="indoor2" />
+                </div>
+                <el-row class="chart-footer">
+                  <el-col :span="8" class="data-item">
+                    <div class="data-name">时均浓度值</div>
+                    <p>{{ statistics2.isAvg }}</p>
+                  </el-col>
+                  <el-col :span="8" class="data-item">
+                    <div class="data-name">最大浓度值</div>
+                    <p>{{ statistics2.isMAx }}</p>
+                  </el-col>
+                  <el-col :span="8" class="data-item">
+                    <div class="data-name">最小浓度值</div>
+                    <p>{{ statistics2.isMin }}</p>
+                  </el-col>
+                </el-row>
               </div>
-              <el-row class="chart-footer">
-                <el-col :span="8" class="data-item">
-                  <div class="data-name">时均浓度值</div>
-                  <p>{{ statistics2.isAvg }}</p>
-                </el-col>
-                <el-col :span="8" class="data-item">
-                  <div class="data-name">最大浓度值</div>
-                  <p>{{ statistics2.isMAx }}</p>
-                </el-col>
-                <el-col :span="8" class="data-item">
-                  <div class="data-name">最小浓度值</div>
-                  <p>{{ statistics2.isMin }}</p>
-                </el-col>
-              </el-row>
             </div>
           </el-col>
           <el-col :span="10" class="main-data-middle">
             <div class="middle-header mt-2">
               <span class="theme-name">监测位示意图</span>
             </div>
-            <el-row class="middle-t" style="margin-top: 20px;">
+            <el-row class="middle-t">
               <el-col :span="12" class="middle-t-l">
                 <div class="options clearfix mt-2">
                   <div
@@ -107,19 +112,19 @@
                 </div>
               </el-col>
               <el-col :span="12" class="middle-t-r clearfix">
-                <div class="float-right mr-1">
-                  <el-image
-                    :src="
-                      deviceState === '0'
-                        ? `${isDev ? '' : '.'}/static/images/dashboard/normal.png`
-                        : `${isDev ? '' : '.'}/static/images/dashboard/warn.png`
-                    "
-                  ></el-image>
-                </div>
+                <!--                <div class="float-right mr-1">-->
+                <!--                  <el-image-->
+                <!--                    :src="-->
+                <!--                      deviceState === '0'-->
+                <!--                        ? `${isDev ? '' : '.'}/static/images/dashboard/normal.png`-->
+                <!--                        : `${isDev ? '' : '.'}/static/images/dashboard/warn.png`-->
+                <!--                    "-->
+                <!--                  ></el-image>-->
+                <!--                </div>-->
                 <Pie ref="pie" class="mt-2" />
               </el-col>
             </el-row>
-            <div class="middle-b" style="margin-top: 100px;">
+            <div class="middle-b">
               <div class="clearfix middle-b-chart">
                 <span class="float-right cursor-pointer history ml-3" @click="viewHistory('')">
                   历史报警
@@ -144,20 +149,22 @@
             </div>
           </el-col>
           <el-col :span="7" class="main-data-right">
-            <div class="main-data-l-t px-3" style="margin-top: 30px;">
+            <div class="main-data-l-t px-3">
               <span class="header-title mt-2 mr-2">监控摄像</span>
-              <div style="height: 195px; margin-top: 40px;">
-                <iframe
-                  :src="videoSrc"
-                  height="100%"
-                  width="100%"
-                  id="F10524474"
-                  allowfullscreen
-                ></iframe>
+              <div class="main-content">
+                <div style="height: 195px;">
+                  <iframe
+                    :src="videoSrc"
+                    height="100%"
+                    width="100%"
+                    id="F10524474"
+                    allowfullscreen
+                  ></iframe>
+                </div>
               </div>
             </div>
             <div class="main-data-r-b">
-              <div class="header clearfix" style="margin-top: 20px;">
+              <div class="header clearfix">
                 <span
                   class="history float-left mt-3 ml-4 cursor-pointer"
                   @click="viewHistory('TDLAS-2')"
@@ -169,23 +176,25 @@
                 </span>
                 <span class="name float-right mt-2 mr-3">制冷机房中心TDLAS</span>
               </div>
-              <div class="chart mt-1" style="margin-top: 20px;">
-                <ColumnChart ref="indoor3" />
+              <div class="main-content">
+                <div class="chart mt-1">
+                  <ColumnChart ref="indoor3" />
+                </div>
+                <el-row class="chart-footer">
+                  <el-col :span="8" class="data-item">
+                    <div class="data-name">时均浓度值</div>
+                    <p>{{ statistics3.isAvg }}</p>
+                  </el-col>
+                  <el-col :span="8" class="data-item">
+                    <div class="data-name">最大浓度值</div>
+                    <p>{{ statistics3.isMAx }}</p>
+                  </el-col>
+                  <el-col :span="8" class="data-item">
+                    <div class="data-name">最小浓度值</div>
+                    <p>{{ statistics3.isMin }}</p>
+                  </el-col>
+                </el-row>
               </div>
-              <el-row class="chart-footer">
-                <el-col :span="8" class="data-item">
-                  <div class="data-name">时均浓度值</div>
-                  <p>{{ statistics3.isAvg }}</p>
-                </el-col>
-                <el-col :span="8" class="data-item">
-                  <div class="data-name">最大浓度值</div>
-                  <p>{{ statistics3.isMAx }}</p>
-                </el-col>
-                <el-col :span="8" class="data-item">
-                  <div class="data-name">最小浓度值</div>
-                  <p>{{ statistics3.isMin }}</p>
-                </el-col>
-              </el-row>
             </div>
           </el-col>
         </el-row>
@@ -339,6 +348,7 @@ export default {
   mixins: [staticData],
   data() {
     return {
+      closeDanger: '',
       swiperVisible: false,
       imgVisible: false,
       imgList: [],
@@ -396,7 +406,7 @@ export default {
     this.timer = setInterval(() => {
       this.update = true;
       this.getData();
-    }, 1400);
+    }, 1600);
   },
   methods: {
     handleClose() {
@@ -419,11 +429,15 @@ export default {
       ];
       this.$axios.all(request).then(
         this.$axios.spread((tdlas1, tdlas2, tdlas3) => {
+          console.log(tdlas1, tdlas2, tdlas3, '获取图片');
           this.$nextTick(() => {
-            this.viewImgList[0] = tdlas1.data.data.unshift(this.staticData.coverImages[0]);
+            this.viewImgList[0] = [this.staticData.coverImages[0]].concat(tdlas1.data.data);
+            this.viewImgList[1] = [this.staticData.coverImages[1]].concat(tdlas2.data.data);
+            this.viewImgList[2] = [this.staticData.coverImages[2]].concat(tdlas3.data.data);
             // console.log(tdlas1.data.data)
-            this.viewImgList[1] = tdlas2.data.data.unshift(this.staticData.coverImages[1]);
-            this.viewImgList[2] = tdlas3.data.data.unshift(this.staticData.coverImages[2]);
+            // this.viewImgList[1] = tdlas2.data.data.splice(0, this.staticData.coverImages[1]);
+            // this.viewImgList[2] = tdlas3.data.data.splice(0, this.staticData.coverImages[2]);
+            console.log(this.viewImgList, 'this.viewImgList');
           });
         }),
       );
@@ -680,6 +694,7 @@ export default {
       try {
         this.$axios.get(url).then(res => {
           if (res.status === 200 && res.data.code === 200) {
+            this.closeDanger = id;
             this.$message.success('成功关闭报警');
           } else {
             this.$message.error('关闭报警失败，请稍后重试');
@@ -727,6 +742,7 @@ export default {
     // declaration-no-important
     // property-no-vendor-prefix
     overflow-x: scroll !important;
+    //min-width: 1400px;
   }
 }
 .swiper-dialog {
@@ -759,14 +775,13 @@ export default {
 }
 .close-swiper {
   position: fixed;
-  top: 80px;
   right: 80px;
+  bottom: 280px;
+  font-weight: bold;
 }
 .dashboard-container {
   height: 100%;
-  min-width: 1380px;
-  // declaration-no-important
-  // property-no-vendor-prefix
+  min-width: 1400px;
   overflow-x: scroll !important;
   background: #060d2a;
 }
@@ -833,30 +848,36 @@ export default {
       .danger {
         color: red;
       }
-      .chart-footer {
-        .data-item {
-          position: relative;
-          text-align: center;
-          &:first-child,
-          &:nth-child(2) {
-            &:after {
-              position: absolute;
-              top: 0;
-              right: 0;
-              width: 2px;
-              height: 30px;
-              background: #fff;
-              content: '';
+      .main-content {
+        position: relative;
+        top: 40%;
+        transform: translateY(-50%);
+        .chart-footer {
+          .data-item {
+            position: relative;
+            text-align: center;
+            &:first-child,
+            &:nth-child(2) {
+              &:after {
+                position: absolute;
+                top: 0;
+                right: 0;
+                width: 2px;
+                height: 30px;
+                background: #fff;
+                content: '';
+              }
             }
-          }
-          .data-name {
-            margin-top: -5px;
+            .data-name {
+              margin-top: -5px;
+            }
           }
         }
       }
     }
   }
   .main-data-middle {
+    position: relative;
     height: 80vh;
     margin-top: -8px;
     background: $middle;
@@ -886,6 +907,10 @@ export default {
       }
     }
     .middle-b {
+      position: absolute;
+      bottom: 10%;
+      left: 0;
+      width: 100%;
       .middle-b-chart {
         .history {
           color: #88ede7;
@@ -919,24 +944,29 @@ export default {
       .danger {
         color: red;
       }
-      .chart-footer {
-        .data-item {
-          position: relative;
-          text-align: center;
-          &:first-child,
-          &:nth-child(2) {
-            &:after {
-              position: absolute;
-              top: 0;
-              right: 0;
-              width: 2px;
-              height: 30px;
-              background: #fff;
-              content: '';
+      .main-content {
+        position: relative;
+        top: 40%;
+        transform: translateY(-50%);
+        .chart-footer {
+          .data-item {
+            position: relative;
+            text-align: center;
+            &:first-child,
+            &:nth-child(2) {
+              &:after {
+                position: absolute;
+                top: 0;
+                right: 0;
+                width: 2px;
+                height: 30px;
+                background: #fff;
+                content: '';
+              }
             }
-          }
-          .data-name {
-            margin-top: -5px;
+            .data-name {
+              margin-top: -5px;
+            }
           }
         }
       }

@@ -88,6 +88,19 @@ export default {
             target: '/project/email',
           },
         },
+        {
+          id: 6,
+          route_name: 'time',
+          name: '实时数据',
+          module: '',
+          icon: 'fa fa-calendar',
+          children: [],
+          visible: true,
+          url: '/project/time',
+          attributes: {
+            target: '/project/time',
+          },
+        },
         // {
         //   id: 6,
         //   route_name: 'test',

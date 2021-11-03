@@ -13,6 +13,14 @@ export default [
         component: () => import('@/views/project/dashboard/Index.vue'),
       },
       {
+        path: 'time',
+        name: 'project.time',
+        meta: {
+          name: '实时数据',
+        },
+        component: () => import('@/views/project/time/Index.vue'),
+      },
+      {
         path: 'users',
         name: 'project.users',
         meta: {

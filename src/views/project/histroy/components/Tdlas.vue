@@ -42,12 +42,7 @@
           width="100"
           sortable="custom"
         ></el-table-column>
-        <!-- <el-table-column
-          align="center"
-          prop="grade"
-          label="报警等级"
-          width="100"
-        ></el-table-column> -->
+        <el-table-column align="center" prop="deviceType" label="描述"></el-table-column>
         <el-table-column
           align="center"
           prop="creatertime"
@@ -126,14 +121,34 @@ export default {
     sortTable(current) {
       console.log(current);
       this.loading = true;
+      let parameter = null;
+      // eslint-disable-next-line default-case
+      switch (current.prop) {
+        case 'deviceAmmoniaConcentration':
+          parameter = 'device_ammonia_concentration';
+          break;
+        case 'creatertime':
+          parameter = 'creatertime';
+          break;
+        case 'deviceAngle':
+          parameter = 'device_angle';
+          break;
+      }
       try {
-        this.$axios.post().then(res => {
-          if (res.data.code !== 200) {
-            this.$message.error('排序失败，请稍后重试');
-          } else {
-            console.log('获取最新信息');
-          }
-        });
+        this.$axios
+          .get(
+            `/tdlasDeviceLog/byPageCondition?orderByParameter=${parameter}&orderByLift=${current.order}`,
+          )
+          .then(res => {
+            if (res.data.code !== 200) {
+              this.$message.error('获取排序数据失败，请稍后重试');
+              this.loading = false;
+            } else {
+              this.loading = false;
+              this.historyData = JSON.parse(JSON.stringify(res.data.data));
+              console.log('获取最新信息');
+            }
+          });
       } catch (e) {
         this.loading = false;
         const err = e || '请求服务出错了，请稍后重试';
