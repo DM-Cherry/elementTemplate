@@ -48,11 +48,11 @@
           prop="creatertime"
           sortable="custom"
           label="创建日期"
-          width="120"
+          width="180"
         >
           <template slot-scope="scope">
             <div>
-              {{ $dayjs(scope.row.creatertime).format('YYYY-MM-DD') }}
+              {{ $dayjs(scope.row.creatertime).format('YYYY-MM-DD HH:mm:ss') }}
             </div>
           </template>
         </el-table-column>

@@ -17,7 +17,11 @@
             <div class="main-data-l-t">
               <div class="chart-header clearfix">
                 <span class="name float-left mt-2 ml-3">训练馆TDLAS</span>
-                <span class="float-right mt-4 mr-4 cursor-pointer" @click="closeHistory('TDLAS-1')">
+                <span
+                  class="float-right mt-4 mr-4 cursor-pointer"
+                  :class="`${warnStatus1 ? 'default-status' : 'warning-status'}`"
+                  @click="closeHistory('TDLAS-1')"
+                >
                   关闭报警
                 </span>
                 <span
@@ -51,7 +55,11 @@
             <div class="main-data-l-b">
               <div class="chart-header clearfix">
                 <span class="name float-left mt-2 ml-3">制冷机房门口TDLAS</span>
-                <span class="float-right mt-4 mr-4 cursor-pointer" @click="closeHistory('TDLAS-3')">
+                <span
+                  class="float-right mt-4 mr-4 cursor-pointer"
+                  :class="`${warnStatus2 ? 'default-status' : 'warning-status'}`"
+                  @click="closeHistory('TDLAS-3')"
+                >
                   关闭报警
                 </span>
                 <span
@@ -171,7 +179,11 @@
                 >
                   历史报警
                 </span>
-                <span class="float-left mt-3 ml-4 cursor-pointer" @click="closeHistory('TDLAS-2')">
+                <span
+                  class="float-left mt-3 ml-4 cursor-pointer"
+                  :class="`${warnStatus3 ? 'default-status' : 'warning-status'}`"
+                  @click="closeHistory('TDLAS-2')"
+                >
                   关闭报警
                 </span>
                 <span class="name float-right mt-2 mr-3">制冷机房中心TDLAS</span>
@@ -371,6 +383,9 @@ export default {
       statistics1: {},
       statistics2: {},
       statistics3: {},
+      warnStatus1: true,
+      warnStatus2: true,
+      warnStatus3: true,
       deviceState: '0',
       sonicDevice: 1,
       isDev: true,
@@ -553,6 +568,9 @@ export default {
               talsData2 = tdlas2.data.data;
               talsData3 = tdlas3.data.data;
               this.newDate = talsData1.newDate;
+              this.warnStatus1 = talsData1.isWarning;
+              this.warnStatus2 = talsData2.isWarning;
+              this.warnStatus3 = talsData3.isWarning;
               this.statistics1 = talsData1.statistics;
               this.statistics2 = talsData2.statistics;
               this.statistics3 = talsData3.statistics;
@@ -860,7 +878,7 @@ export default {
             &:nth-child(2) {
               &:after {
                 position: absolute;
-                top: 0;
+                top: -5px;
                 right: 0;
                 width: 2px;
                 height: 30px;
@@ -956,7 +974,7 @@ export default {
             &:nth-child(2) {
               &:after {
                 position: absolute;
-                top: 0;
+                top: -5px;
                 right: 0;
                 width: 2px;
                 height: 30px;
@@ -972,5 +990,11 @@ export default {
       }
     }
   }
+}
+.default-status {
+  color: #fff;
+}
+.warning-status {
+  color: red;
 }
 </style>

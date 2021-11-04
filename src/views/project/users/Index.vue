@@ -62,10 +62,10 @@
                     <el-table-column align="center" prop="password" label="密码"></el-table-column>
                     <el-table-column align="center" prop="mail" label="邮箱"></el-table-column>
                     <el-table-column align="center" prop="phone" label="电话"></el-table-column>
-                    <el-table-column align="center" prop="createTime" label="创建日期" width="120">
+                    <el-table-column align="center" prop="createTime" label="创建日期" width="180">
                       <template slot-scope="scope">
                         <div>
-                          {{ $dayjs(scope.row.createTime).format('YYYY-MM-DD') }}
+                          {{ $dayjs(scope.row.createTime).format('YYYY-MM-DD HH:mm:ss') }}
                         </div>
                       </template>
                     </el-table-column>

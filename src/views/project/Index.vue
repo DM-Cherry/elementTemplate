@@ -101,6 +101,19 @@ export default {
             target: '/project/time',
           },
         },
+        {
+          id: 7,
+          route_name: 'point',
+          name: '测点距离配置',
+          module: '',
+          icon: 'fa fa-podcast',
+          children: [],
+          visible: true,
+          url: '/project/point',
+          attributes: {
+            target: '/project/point',
+          },
+        },
         // {
         //   id: 6,
         //   route_name: 'test',

@@ -52,6 +52,14 @@ export default [
         },
         component: () => import('@/views/project/email/Index.vue'),
       },
+      {
+        path: 'point',
+        name: 'project.point',
+        meta: {
+          name: '测点距离配置',
+        },
+        component: () => import('@/views/project/point/Index.vue'),
+      },
       // {
       //   path: 'test',
       //   name: 'project.test',

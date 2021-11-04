@@ -36,10 +36,10 @@
         <el-table-column align="center" prop="l" label="瞬时声强" width="80"></el-table-column>
         <el-table-column align="center" prop="leq" label="等效声强" width="80"></el-table-column>
         <el-table-column align="center" prop="deviceType" label="描述"></el-table-column>
-        <el-table-column align="center" prop="creatertime" label="创建日期" width="120">
+        <el-table-column align="center" prop="creatertime" label="创建日期" width="180">
           <template slot-scope="scope">
             <div>
-              {{ $dayjs(scope.row.creatertime).format('YYYY-MM-DD') }}
+              {{ $dayjs(scope.row.creatertime).format('YYYY-MM-DD HH:mm:ss') }}
             </div>
           </template>
         </el-table-column>
