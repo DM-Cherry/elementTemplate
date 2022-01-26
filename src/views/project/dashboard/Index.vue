@@ -361,6 +361,7 @@
               :src="item.deviceImage"
               :preview-src-list="[item.deviceImage]"
               :z-index="3000"
+              :preview="item.deviceAngle"
             />
             <div>{{ item.deviceAngle }}</div>
           </div>
@@ -603,12 +604,11 @@ export default {
           watchSlidesVisibility: true,
           observeParents: true,
           observer: true,
-          slidesPerView: 3,
+          slidesPerView: 5,
           spaceBetween: 30,
           slidesPerGroup: 1,
           loop: true,
           onSlideChangeEnd(swiper) {
-            console.log('到头了', swiper);
             swiper.update();
           },
         });
@@ -895,9 +895,14 @@ export default {
 //.el-image-viewer__wrapper {
 //  bottom: 200px !important;
 //}
+.pswp {
+  z-index: 3000 !important;
+}
+
 .el-image-viewer__img {
   max-height: 50% !important;
 }
+
 .app {
   /deep/ .app-body {
     position: relative;
@@ -912,6 +917,7 @@ export default {
     background: none;
   }
 }
+
 .swiper-dialog-container {
   position: fixed;
   top: 0;

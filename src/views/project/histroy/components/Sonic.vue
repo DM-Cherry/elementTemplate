@@ -14,6 +14,16 @@
           ></el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="日期">
+        <el-date-picker
+          v-model="search.date"
+          type="daterange"
+          value-format="yyyy-MM-dd"
+          range-separator="至"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+        />
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="getSonic('search')">查询</el-button>
         <el-link :href="exportUrl" target="_blank" type="primary" class="mx-3">
@@ -62,7 +72,7 @@
           align="center"
           prop="createTime"
           sortable="custom"
-          label="创建日期666"
+          label="创建日期"
           width="180"
         >
           <template slot-scope="scope">
@@ -179,9 +189,12 @@ export default {
           label: '未修复',
         },
       ],
+      date: [],
       search: {
         deviceCode: '',
         deviceState: null,
+        startTime: '',
+        endTime: '',
       },
       sonicData: {
         list: [],
@@ -303,7 +316,9 @@ export default {
       if (source === 'search') {
         this.sonicData.pageNum = 1;
         this.sonicData.pageSize = 5;
+        this.exportUrl = `${this.$store.state.default.apiBase}tdlasSonicWave/exportTdlasSonicLog?startTime=${this.search.startTime}&endTime=${this.search.endTime}`;
       }
+      [this.search.startTime, this.search.endTime] = this.date;
       // 获取声波数据
       this.loading = true;
       const params = Object.assign(this.search, {
@@ -414,5 +429,8 @@ export default {
   .el-dialog__body {
     background: #060d2a;
   }
+}
+.el-date-editor .el-range-separator {
+  width: 7% !important;
 }
 </style>

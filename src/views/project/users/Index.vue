@@ -277,7 +277,7 @@ export default {
       // 删除用户
       try {
         this.$axios
-          .delete(`/user/userDelete?id=${row.userId}`)
+          .get(`/user/userDelete?id=${row.userId}`)
           .then(res => {
             if (res.data.code === 200) {
               this.$message.success('删除用户信息成功');

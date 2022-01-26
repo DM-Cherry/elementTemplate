@@ -297,6 +297,7 @@ export default {
       if (source === 'search') {
         this.sonicData.pageNum = 1;
         this.sonicData.pageSize = 5;
+        this.exportUrl = `${this.$store.state.default.apiBase}tdlasSonicWave/exportTdlasSonic?startTime=${this.search.creatertime1}&endTime=${this.search.creatertime2}`;
       }
       // 获取声波数据
       this.loading = true;

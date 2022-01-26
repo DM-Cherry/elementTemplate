@@ -6,8 +6,9 @@ import Vue from 'vue';
 import App from '@/App';
 import router from '@/router';
 import axios from '@/core/auth';
-import websocket from 'websocket';
-import dataV from '@jiaminghi/data-view';
+// import websocket from 'websocket';
+import preview from 'vue-photo-preview';
+import 'vue-photo-preview/dist/skin.css';
 // import iviewFixer from '@/core/mixins/iview'
 import store from '@/store';
 import VeeValidate, { Validator } from 'vee-validate';
@@ -27,7 +28,6 @@ import 'dayjs/locale/zh-cn';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import VueAwesomeSwiper from 'vue-awesome-swiper';
 import 'swiper/dist/css/swiper.css';
-
 Element.Dialog.props.closeOnClickModal.default = false;
 
 dayjs.locale('zh-cn');
@@ -46,8 +46,11 @@ Validator.localize('zh', zh);
 
 // Vue.use(BootstrapVue);
 Vue.use(VueSweetalert2);
+
 // Vue.mixin(iviewFixer)
-Vue.use(dataV)
+// Vue.use(dataV)
+
+Vue.use(preview)
 
 Vue.prototype.$storage = {};
 for (let name in store.state.default.storage.localforage) {
@@ -59,7 +62,7 @@ for (let name in store.state.default.storage.localforage) {
 Vue.prototype.$axios = axios;
 Vue.prototype.$dayjs = dayjs;
 Vue.prototype.$echarts = echarts;
-Vue.prototype.$websocket = websocket;
+// Vue.prototype.$websocket = websocket;
 
 // 若是没有开启Devtools工具，在开发环境中开启，在生产环境中关闭
 if (process.env.NODE_ENV !== 'production') {

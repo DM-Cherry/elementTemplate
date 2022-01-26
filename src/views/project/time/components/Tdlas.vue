@@ -218,6 +218,7 @@ export default {
       if (source === 'search') {
         this.historyData.pageNum = 1;
         this.historyData.pageSize = 5;
+        this.exportUrl = `${this.$store.state.default.apiBase}tdlasDeviceMonitor/exportSelectedPromotion?startTime=${this.search.creatertime1}&endTime=${this.search.creatertime2}`;
       }
       this.loading = true;
       const params = Object.assign(this.search, {

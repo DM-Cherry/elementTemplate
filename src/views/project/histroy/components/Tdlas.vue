@@ -5,6 +5,16 @@
       <el-form-item label="设备编码">
         <el-input v-model="search.deviceCode" clearable placeholder="请输入设备编码"></el-input>
       </el-form-item>
+      <el-form-item label="日期">
+        <el-date-picker
+          v-model="date"
+          type="daterange"
+          value-format="yyyy-MM-dd"
+          range-separator="至"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+        />
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="getHistory('search')">查询</el-button>
         <el-link :href="exportUrl" target="_blank" type="primary" class="mx-3">
@@ -112,8 +122,11 @@ export default {
   data() {
     return {
       loading: false,
+      date: '',
       search: {
         deviceCode: '',
+        startTime: '',
+        endTime: '',
       },
       exportUrl: `${this.$store.state.default.apiBase}tdlasDeviceLog/exportTdlasDeviceLog`,
       page_sizes: [5, 10, 15, 20, 50],
@@ -203,7 +216,9 @@ export default {
       if (source === 'search') {
         this.historyData.pageNum = 1;
         this.historyData.pageSize = 5;
+        this.exportUrl = `${this.$store.state.default.apiBase}tdlasDeviceLog/exportTdlasDeviceLog?startTime=${this.search.startTime}&endTime=${this.search.endTime}`;
       }
+      [this.search.startTime, this.search.endTime] = this.date;
       this.loading = true;
       const params = Object.assign(this.search, {
         pageNum: this.historyData.pageNum,
@@ -256,4 +271,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+/deep/.el-date-editor .el-range-separator {
+  width: 7% !important;
+}
+</style>

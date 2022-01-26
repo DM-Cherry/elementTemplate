@@ -243,7 +243,7 @@ export default {
       // 删除用户
       try {
         this.$axios
-          .delete(`/tdlasMail/delete?id=${row.id}`)
+          .get(`/tdlasMail/delete?id=${row.id}`)
           .then(res => {
             if (res.data.code === 200) {
               this.$message.success('删除邮箱信息成功');
