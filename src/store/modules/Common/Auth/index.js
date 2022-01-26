@@ -22,7 +22,7 @@ export default {
     },
     logout({ commit }) {
       this._vm
-        .$axios('/web/auth/logout/')
+        .$axios('/logout/')
         .then(() => {
           console.log('用户退出登录'); // eslint-disable-line no-console
         })
@@ -45,7 +45,7 @@ export default {
             },
           );
           localStorage.clear();
-          commit('logout');
+          // commit('logout');
         });
     },
     // 更新口令牌

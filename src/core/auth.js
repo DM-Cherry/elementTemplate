@@ -13,9 +13,9 @@ axios.interceptors.request.use(
     // console.trace({config})
     // 判断是否存在token，如果存在的话，则每个http header都加上token
     const token = localStorage.getItem('jwtToken');
-    const headerConfig = config;
     if (token) {
-      headerConfig.headers.Authorization = `${token}`;
+      // eslint-disable-next-line no-param-reassign
+      config.headers.Authorization = `${token}`;
     }
     return config;
   },
@@ -43,32 +43,34 @@ function getErrorMessage(error) {
 // http response 拦截器
 axios.interceptors.response.use(
   response => {
-    /* eslint-disable */
-    const url = response?.config?.url || '';
-    return response;
+    switch (response.data.code) {
+      case '400':
+        break;
+      case '401':
+        localStorage.removeItem('jwtToken');
+        router
+          .replace({
+            path: '/',
+          })
+          .catch(err => {
+            console.log(err);
+          });
+        break;
+      case '404':
+        break;
+      default:
+        return response;
+    }
   },
   error => {
     if (error.response) {
-      const body = [];
       let message = '';
       const { vue } = window;
-      const route = vue.$route;
       switch (error.response.status) {
         case 400:
           break;
         case 401: {
-          const r = JSON.stringify({
-            name: route.name,
-            params: route.params,
-          });
-          console.warn('token过期', r); // eslint-disable-line no-console
-          setTimeout(() => {
-            // 返回 401 更新token信息
-            store.commit('Common/Auth/refreshToken');
-            router.replace({
-              name: r.name,
-            });
-          }, 3000);
+          localStorage.removeItem('jwtToken');
           return Promise.reject(error.response);
         }
         case 404:

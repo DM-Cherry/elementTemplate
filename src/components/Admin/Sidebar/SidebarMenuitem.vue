@@ -1,5 +1,11 @@
 <template>
-  <div :class="classList" :data-level="level" :data-id="item.id" :data-module="item.module">
+  <div
+    :class="classList"
+    :data-level="level"
+    :data-id="item.id"
+    :data-module="item.module"
+    v-if="visible"
+  >
     <a v-if="isFolder" class="nav-link nav-dropdown-toggle" href="#" @click="handleClick">
       <i :class="item.icon" />
       {{ item.name }}
@@ -116,6 +122,16 @@ export default {
       // }
       return false;
     },
+    visible() {
+      const name = this.item.route_name;
+      const permissionList = JSON.parse(localStorage.getItem('permission'));
+      const haveRoute = permissionList.filter(item => item.accessUrl === name);
+      console.log(haveRoute.length > 0, 'routes');
+      return haveRoute.length > 0;
+    },
+  },
+  async created() {
+    await this.$store.dispatch('UserStore/initialize', true);
   },
   methods: {
     handleClick(e) {

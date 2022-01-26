@@ -41,13 +41,13 @@
               </li>
             </ul>
           </div>
-          <!-- <hr class="transparent my-3" />
-        <div class="aside-options px-3 text-center">
-          <el-button :block="true" type="danger" @click="logout">
-            <i class="fas fa-sign-out-alt" />
-            退出登录
-          </el-button>
-        </div> -->
+          <hr class="transparent my-3" />
+          <div class="aside-options px-3 text-center">
+            <el-button :block="true" type="danger" @click="logout">
+              <i class="fas fa-sign-out-alt" />
+              退出登录
+            </el-button>
+          </div>
         </el-tab-pane>
       </el-tabs>
     </aside>

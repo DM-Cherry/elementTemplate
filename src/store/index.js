@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import SiteStore from '@/store/modules/Common/SiteStore';
 import defaultState from './ config';
 import UserStore from './modules/Common/UserStore';
 // 通用模块
@@ -9,6 +10,7 @@ Vue.use(Vuex);
 const store = {
   state: defaultState,
   modules: {
+    SiteStore,
     UserStore,
     Common,
   },

@@ -30,6 +30,12 @@
                       :index="indexMethod"
                     ></el-table-column>
                     <el-table-column align="center" prop="mail" label="邮箱"></el-table-column>
+                    <el-table-column align="center" prop="deviceCode" label="类型">
+                      <template slot-scope="scope">
+                        <el-tag v-if="scope.row.deviceCode === '1'" type="success">实时</el-tag>
+                        <el-tag v-else>定时</el-tag>
+                      </template>
+                    </el-table-column>
                     <el-table-column align="center" prop="creatertime" label="创建日期" width="180">
                       <template slot-scope="scope">
                         <div>
@@ -69,9 +75,15 @@
       </div>
     </div>
     <el-dialog title="编辑邮箱" :visible.sync="dialogVisible" width="30%">
-      <el-form :model="form" :rules="rules">
+      <el-form :model="form" :rules="rules" label-position="left" ref="emailForm">
         <el-form-item label="邮箱" prop="mail" label-width="50">
-          <el-input v-model="form.mail" autocomplete="off"></el-input>
+          <el-input v-model="form.mail" autocomplete="off" style="width: 70%;"></el-input>
+        </el-form-item>
+        <el-form-item label="类型" prop="deviceCode" label-width="50">
+          <el-select v-model="form.deviceCode" placeholder="请选择">
+            <el-option key="1" label="实时" value="1"></el-option>
+            <el-option key="2" label="定时" value="2"></el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -108,6 +120,7 @@ export default {
       },
       form: {
         mail: '',
+        deviceCode: '',
       },
       dialogVisible: false,
       type: 'add',
@@ -120,6 +133,13 @@ export default {
       },
       rules: {
         mail: [{ validator: checkEmail, required: true, trigger: 'blur' }],
+        deviceCode: [
+          {
+            message: '请选择类型',
+            required: true,
+            trigger: 'change',
+          },
+        ],
       },
     };
   },
@@ -161,44 +181,50 @@ export default {
     submitForm() {
       this.loading = true;
       const url = this.type === 'add' ? '/tdlasMail/add' : '/tdlasMail/edit';
-      if (this.type === 'edit') {
-        // 过滤敏感字段以及空字段
-        const formData = JSON.parse(JSON.stringify(this.form));
-        console.log('formData', formData);
-        const newForm = {};
-        Object.keys(formData).forEach(key => {
-          if (formData[key] && key !== 'creatertime') {
-            newForm[key] = formData[key];
+      this.$refs.emailForm.validate(valid => {
+        if (valid) {
+          if (this.type === 'edit') {
+            // 过滤敏感字段以及空字段
+            const formData = JSON.parse(JSON.stringify(this.form));
+            console.log('formData', formData);
+            const newForm = {};
+            Object.keys(formData).forEach(key => {
+              if (formData[key] && key !== 'creatertime') {
+                newForm[key] = formData[key];
+              }
+            });
+            this.form = newForm;
           }
-        });
-        this.form = newForm;
-      }
-      try {
-        this.$axios
-          .post(url, qs.stringify(this.form))
-          .then(res => {
-            if (res.data.code !== 200) {
-              this.$message.error(res.data.msg);
-            } else {
-              const msg = this.type === 'add' ? '添加邮箱信息成功' : '编辑邮箱信息成功';
-              this.$message.success(msg);
-              this.getEmail();
-            }
-            this.dialogVisible = false;
+          try {
+            this.$axios
+              .post(url, qs.stringify(this.form))
+              .then(res => {
+                if (res.data.code !== 200) {
+                  this.$message.error(res.data.msg);
+                } else {
+                  const msg = this.type === 'add' ? '添加邮箱信息成功' : '编辑邮箱信息成功';
+                  this.$message.success(msg);
+                  this.getEmail();
+                }
+                this.dialogVisible = false;
+                this.loading = false;
+              })
+              .catch(err => {
+                this.loading = false;
+                const msg = this.type === 'add' ? '添加邮箱信息失败' : '编辑邮箱信息失败';
+                this.$message.error(msg);
+                console.error(err);
+              });
+          } catch (e) {
+            const err = e || '请求服务出错了，请稍后重试';
+            console.error(e);
+            this.$message.error(err);
             this.loading = false;
-          })
-          .catch(err => {
-            this.loading = false;
-            const msg = this.type === 'add' ? '添加邮箱信息失败' : '编辑邮箱信息失败';
-            this.$message.error(msg);
-            console.error(err);
-          });
-      } catch (e) {
-        const err = e || '请求服务出错了，请稍后重试';
-        console.error(e);
-        this.$message.error(err);
-        this.loading = false;
-      }
+          }
+        } else {
+          this.$message.error('请输入必填信息！');
+        }
+      });
     },
     handleEdit(row) {
       if (row) {

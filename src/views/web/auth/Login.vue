@@ -6,6 +6,7 @@
       :model="loginForm"
       ref="loginForm"
       label-position="left"
+      :rules="loginRules"
     >
       <!--登录的标题-->
       <div class="title-container">
@@ -37,6 +38,21 @@
           <i slot="suffix" class="el-input__icon el-icon-lock"></i>
         </el-input>
       </el-form-item>
+
+      <el-form-item prop="imageCode">
+        <el-input
+          name="imageCode"
+          type="text"
+          @keyup.enter.native="handleLogin"
+          v-model="loginForm.imageCode"
+          auto-complete="off"
+          placeholder="验证码"
+        />
+        <span class="imageCode" @click="refreshCode">
+          <img id="code" :src="src" />
+        </span>
+      </el-form-item>
+
       <el-button
         type="primary"
         style="width: 100%; margin-bottom: 30px;"
@@ -56,46 +72,96 @@ import qs from 'qs';
 export default {
   name: 'Login',
   data() {
+    const validatePassword = (rule, value, callback) => {
+      const reg = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[._~!@#$^&*])[A-Za-z0-9._~!@#$^&*]{8,20}$/;
+      if (!value) {
+        return callback(new Error('请输入密码！'));
+      }
+      if (!reg.test(value)) {
+        return callback(new Error('请输入正确的密码（数字、大小写英文、特殊字符8位以上）！'));
+      }
+      callback();
+    };
     return {
+      src: '',
+      uuid: '',
       loginForm: {
         account: '',
         password: '',
+        imageCode: '',
       },
       passwordType: 'password',
       loading: false,
       processing: false,
+      loginRules: {
+        // username: [{ required: true, trigger: 'blur', validator: validateUsername }],
+        password: [{ required: true, trigger: 'blur', validator: validatePassword }],
+        imageCode: [{ required: true, trigger: 'blur', message: '请输入验证码' }],
+      },
     };
   },
   created() {},
   destroyed() {},
-  mounted() {},
+  mounted() {
+    this.refreshCode();
+    // this.src = `${this.$store.state.default.apiBase}api/kaptcha/defaultKaptcha?date=${new Date()}`;
+  },
   methods: {
+    refreshCode() {
+      // 刷新验证码
+      this.$axios.get('/api/kaptcha/captchaImage').then(res => {
+        const response = JSON.parse(JSON.stringify(res.data));
+        if (response.code === 200) {
+          this.src = response.data.img;
+          this.uuid = response.data.uuid;
+        } else {
+          this.$message.error('获取验证码失败，请稍后重试！');
+        }
+      });
+    },
     handleLogin() {
       this.processing = true;
       this.loading = true;
-      // 进行登录
-      this.$axios
-        .post('/user/login', qs.stringify(this.loginForm))
-        .then(res => {
-          if (res.status === 200 && res.data.code === 200) {
-            const data = JSON.parse(JSON.stringify(res.data.data));
-            this.$store.dispatch('Common/Auth/login', data.token);
-            this.$store.dispatch('UserStore/fetch', data);
-            this.$router.push({ path: '/project/dashboard' });
-            this.$message.success('恭喜您，登录成功');
-          } else {
-            // 测试
-            this.$message.error('登录失败，请稍后重试');
-          }
+      this.$refs.loginForm.validate(valid => {
+        if (valid) {
+          // 进行登录
+          this.$axios
+            .post('/user/login', qs.stringify(this.loginForm), {
+              headers: {
+                KAPTCHA_SESSION_KEY: this.uuid,
+              },
+            })
+            .then(res => {
+              console.log(res);
+              if (res.status === 200 && res.data.code === 200) {
+                const data = JSON.parse(JSON.stringify(res.data.data));
+                this.$store.dispatch('Common/Auth/login', data.token);
+                this.$store.dispatch('UserStore/fetch', data);
+                this.$store.commit('SiteStore/permissions', data.permissionList);
+                localStorage.setItem('permission', JSON.stringify(data.permissionList));
+                this.$router.push({ path: '/project/dashboard' });
+                this.$message.success('恭喜您，登录成功');
+              } else {
+                // 测试
+                this.$message.error('登录失败，请稍后重试');
+                this.refreshCode();
+              }
+              this.processing = false;
+              this.loading = false;
+            })
+            .catch(e => {
+              console.error(e);
+              this.processing = false;
+              this.loading = false;
+              this.refreshCode();
+              this.$message.error('登录失败，请您检查您的登录信息。');
+            });
+        } else {
           this.processing = false;
           this.loading = false;
-        })
-        .catch(e => {
-          console.error(e);
-          this.processing = false;
-          this.loading = false;
-          this.$message.error('登录失败，请您检查您的登录信息。');
-        });
+          this.$message.error('请您检查您的登录信息输入是否正确！');
+        }
+      });
     },
   },
 };
@@ -202,7 +268,7 @@ $light_gray: #eee;
   }
   .imageCode {
     position: absolute;
-    top: 8px;
+    top: 2px;
     right: 10px;
     font-size: 16px;
     color: $dark_gray;

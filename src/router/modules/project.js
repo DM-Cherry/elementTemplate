@@ -60,14 +60,14 @@ export default [
         },
         component: () => import('@/views/project/point/Index.vue'),
       },
-      // {
-      //   path: 'test',
-      //   name: 'project.test',
-      //   meta: {
-      //     name: '第二版',
-      //   },
-      //   component: () => import('@/views/project/dashboard/Test.vue'),
-      // },
+      {
+        path: 'historylog',
+        name: 'project.historylog',
+        meta: {
+          name: '日志',
+        },
+        component: () => import('@/views/project/log/Index.vue'),
+      },
     ],
   },
 ];

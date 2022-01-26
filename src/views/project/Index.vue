@@ -31,7 +31,7 @@ export default {
           icon: 'fa fa-tachometer',
           url: '/project/dashboard',
           children: [],
-          visible: true,
+          visible: false,
           attributes: {
             target: '/project/dashboard',
           },
@@ -43,7 +43,7 @@ export default {
           module: '',
           icon: 'fa fa-user-circle',
           children: [],
-          visible: true,
+          visible: false,
           url: '/project/users',
           attributes: {
             target: '/project/users',
@@ -56,7 +56,7 @@ export default {
           module: '',
           icon: 'fa fa-history',
           children: [],
-          visible: true,
+          visible: false,
           url: '/project/histroy',
           attributes: {
             target: '/project/histroy',
@@ -69,7 +69,7 @@ export default {
           module: '',
           icon: 'fa fa-cog',
           children: [],
-          visible: true,
+          visible: false,
           url: '/project/system',
           attributes: {
             target: '/project/system',
@@ -82,7 +82,7 @@ export default {
           module: '',
           icon: 'fa fa-envelope-square',
           children: [],
-          visible: true,
+          visible: false,
           url: '/project/email',
           attributes: {
             target: '/project/email',
@@ -95,7 +95,7 @@ export default {
           module: '',
           icon: 'fa fa-calendar',
           children: [],
-          visible: true,
+          visible: false,
           url: '/project/time',
           attributes: {
             target: '/project/time',
@@ -108,25 +108,25 @@ export default {
           module: '',
           icon: 'fa fa-podcast',
           children: [],
-          visible: true,
+          visible: false,
           url: '/project/point',
           attributes: {
             target: '/project/point',
           },
         },
-        // {
-        //   id: 6,
-        //   route_name: 'test',
-        //   name: '第二版',
-        //   module: '',
-        //   icon: 'fa fa-envelope-square',
-        //   children: [],
-        //   visible: true,
-        //   url: '/project/test',
-        //   attributes: {
-        //     target: '/project/test',
-        //   },
-        // },
+        {
+          id: 8,
+          route_name: 'historylog',
+          name: '日志',
+          module: '',
+          icon: 'fa fa-window-maximize',
+          children: [],
+          visible: false,
+          url: '/project/historylog',
+          attributes: {
+            target: '/project/historylog',
+          },
+        },
       ],
     };
   },

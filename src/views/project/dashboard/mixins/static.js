@@ -53,16 +53,6 @@ export default {
             deviceImage: 'https://www.csei.org.cn/image/3d/xlg.jpg',
           },
         ],
-        sonicList: [
-          {
-            id: 1,
-            name: '机房内超声波监测仪',
-          },
-          {
-            id: 2,
-            name: '出发1#区超声波监测仪',
-          },
-        ],
       },
     };
   },

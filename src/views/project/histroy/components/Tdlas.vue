@@ -27,7 +27,12 @@
           width="50"
           :index="indexMethod"
         ></el-table-column>
-        <el-table-column align="center" prop="deviceCode" label="设备编码"></el-table-column>
+        <el-table-column
+          align="center"
+          prop="deviceCode"
+          sortable="custom"
+          label="设备编码"
+        ></el-table-column>
         <el-table-column
           align="center"
           prop="deviceAngle"
@@ -38,8 +43,8 @@
         <el-table-column
           align="center"
           prop="deviceAmmoniaConcentration"
-          label="氨浓度"
-          width="100"
+          label="记录值ppm·m"
+          width="200"
           sortable="custom"
         ></el-table-column>
         <el-table-column align="center" prop="deviceType" label="描述"></el-table-column>
@@ -56,7 +61,13 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column align="center" prop="deviceState" label="解决状态" width="100">
+        <el-table-column
+          align="center"
+          prop="deviceState"
+          sortable="custom"
+          label="解决状态"
+          width="100"
+        >
           <template slot-scope="scope">
             <el-tag size="medium" type="danger" v-if="scope.row.deviceState === false">
               未解决
@@ -104,7 +115,7 @@ export default {
       search: {
         deviceCode: '',
       },
-      exportUrl: `${this.$store.state.default.apiBase}/tdlasDeviceMonitor/exportSelectedPromotion`,
+      exportUrl: `${this.$store.state.default.apiBase}tdlasDeviceLog/exportTdlasDeviceLog`,
       page_sizes: [5, 10, 15, 20, 50],
       historyData: {
         list: [],
@@ -124,6 +135,9 @@ export default {
       let parameter = null;
       // eslint-disable-next-line default-case
       switch (current.prop) {
+        case 'deviceCode':
+          parameter = 'device_code';
+          break;
         case 'deviceAmmoniaConcentration':
           parameter = 'device_ammonia_concentration';
           break;
@@ -132,6 +146,9 @@ export default {
           break;
         case 'deviceAngle':
           parameter = 'device_angle';
+          break;
+        case 'deviceState':
+          parameter = 'device_state';
           break;
       }
       try {

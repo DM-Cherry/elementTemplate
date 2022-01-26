@@ -17,15 +17,24 @@
             <div class="main-data-l-t">
               <div class="chart-header clearfix">
                 <span class="name float-left mt-2 ml-3">训练馆TDLAS</span>
+                <div class="float-right mt-4 mr-4 cursor-pointer bells">
+                  <el-image
+                    :src="
+                      warnStatus1
+                        ? `${isDev ? '' : '.'}/static/images/dashboard/normal.png`
+                        : `${isDev ? '' : '.'}/static/images/dashboard/warn.png`
+                    "
+                    @click="closeHistory('TDLAS-1')"
+                  ></el-image>
+                </div>
                 <span
-                  class="float-right mt-4 mr-4 cursor-pointer"
-                  :class="`${warnStatus1 ? 'default-status' : 'warning-status'}`"
-                  @click="closeHistory('TDLAS-1')"
+                  class="history float-right mt-4 mr-2 cursor-pointer"
+                  @click="handleCallback('TDLAS-1')"
                 >
-                  关闭报警
+                  点位回调
                 </span>
                 <span
-                  class="history float-right mt-4 mr-4 cursor-pointer"
+                  class="history float-right mt-4 mr-2 cursor-pointer"
                   :class="`${closeDanger === 'TDLAS-1' ? '' : ''}`"
                   @click="viewHistory('TDLAS-1')"
                 >
@@ -55,15 +64,24 @@
             <div class="main-data-l-b">
               <div class="chart-header clearfix">
                 <span class="name float-left mt-2 ml-3">制冷机房门口TDLAS</span>
+                <div class="float-right mt-4 mr-4 cursor-pointer bells">
+                  <el-image
+                    :src="
+                      warnStatus2
+                        ? `${isDev ? '' : '.'}/static/images/dashboard/normal.png`
+                        : `${isDev ? '' : '.'}/static/images/dashboard/warn.png`
+                    "
+                    @click="closeHistory('TDLAS-3')"
+                  ></el-image>
+                </div>
                 <span
-                  class="float-right mt-4 mr-4 cursor-pointer"
-                  :class="`${warnStatus2 ? 'default-status' : 'warning-status'}`"
-                  @click="closeHistory('TDLAS-3')"
+                  class="history float-right mt-4 mr-2 cursor-pointer"
+                  @click="handleCallback('TDLAS-3')"
                 >
-                  关闭报警
+                  点位回调
                 </span>
                 <span
-                  class="history float-right mt-4 mr-4 cursor-pointer"
+                  class="history float-right mt-4 mr-2 cursor-pointer"
                   @click="viewHistory('TDLAS-3')"
                 >
                   历史报警
@@ -120,15 +138,15 @@
                 </div>
               </el-col>
               <el-col :span="12" class="middle-t-r clearfix">
-                <!--                <div class="float-right mr-1">-->
-                <!--                  <el-image-->
-                <!--                    :src="-->
-                <!--                      deviceState === '0'-->
-                <!--                        ? `${isDev ? '' : '.'}/static/images/dashboard/normal.png`-->
-                <!--                        : `${isDev ? '' : '.'}/static/images/dashboard/warn.png`-->
-                <!--                    "-->
-                <!--                  ></el-image>-->
-                <!--                </div>-->
+                <span class="history pie-time" v-if="pieSearch.searchTime[0] !== ''">
+                  {{ pieSearch.searchTime[0] + '-' + pieSearch.searchTime[1] }}
+                </span>
+                <span
+                  class="history float-right mr-2 mt-1 cursor-pointer search-pie"
+                  @click="searchPie()"
+                >
+                  查询
+                </span>
                 <Pie ref="pie" class="mt-2" />
               </el-col>
             </el-row>
@@ -137,12 +155,18 @@
                 <span class="float-right cursor-pointer history ml-3" @click="viewHistory('')">
                   历史报警
                 </span>
-                <div class="float-right sonic cursor-pointer">
-                  <div
-                    class="float-left"
-                    v-for="(item, index) in staticData.sonicList"
-                    :key="index"
-                  >
+                <div class="float-right sonic cursor-pointer" v-if="sonicList.length > 0">
+                  <div class="float-left" v-for="(item, index) in sonicList" :key="index">
+                    <div class="float-left cursor-pointer bells mr-1">
+                      <el-image
+                        @click="closeSonic(item.id)"
+                        :src="
+                          !item.status
+                            ? `${isDev ? '' : '.'}/static/images/dashboard/normal.png`
+                            : `${isDev ? '' : '.'}/static/images/dashboard/warn.png`
+                        "
+                      ></el-image>
+                    </div>
                     <span
                       :class="`${index === activeSonic ? 'active' : ''}`"
                       class="mr-3"
@@ -173,18 +197,27 @@
             </div>
             <div class="main-data-r-b">
               <div class="header clearfix">
+                <div class="float-left mt-3 ml-4 cursor-pointer bells">
+                  <el-image
+                    :src="
+                      warnStatus3
+                        ? `${isDev ? '' : '.'}/static/images/dashboard/normal.png`
+                        : `${isDev ? '' : '.'}/static/images/dashboard/warn.png`
+                    "
+                    @click="closeHistory('TDLAS-2')"
+                  ></el-image>
+                </div>
+                <span
+                  class="history float-left mt-3 ml-2 cursor-pointer"
+                  @click="handleCallback('TDLAS-2')"
+                >
+                  点位回调
+                </span>
                 <span
                   class="history float-left mt-3 ml-4 cursor-pointer"
                   @click="viewHistory('TDLAS-2')"
                 >
                   历史报警
-                </span>
-                <span
-                  class="float-left mt-3 ml-4 cursor-pointer"
-                  :class="`${warnStatus3 ? 'default-status' : 'warning-status'}`"
-                  @click="closeHistory('TDLAS-2')"
-                >
-                  关闭报警
                 </span>
                 <span class="name float-right mt-2 mr-3">制冷机房中心TDLAS</span>
               </div>
@@ -321,19 +354,52 @@
         circle
       ></el-button>
       <div class="swiper-container" ref="mySwiper">
-        <div class="swiper-wrapper">
+        <div class="swiper-wrapper" v-if="swiperList.length">
           <div class="swiper-slide" v-for="(item, index) in swiperList" :key="index">
-            <el-image
+            <img
               style="height: 150px;"
               :src="item.deviceImage"
               :preview-src-list="[item.deviceImage]"
               :z-index="3000"
-            ></el-image>
+            />
             <div>{{ item.deviceAngle }}</div>
           </div>
         </div>
       </div>
     </div>
+    <el-dialog title="点位回调" :visible.sync="pointVisible">
+      <el-form :model="pointForm">
+        <el-form-item label="点位" label-width="80">
+          <el-input type="number" v-model="pointForm.point" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="pointVisible = false">取 消</el-button>
+        <el-button type="primary" @click="updatePoint()">确 定</el-button>
+      </div>
+    </el-dialog>
+    <el-dialog title="日期选择" :visible.sync="searchTimeVisible">
+      <el-row>
+        <el-form :model="pieSearch">
+          <el-form-item label="查询日期" prop="searchTime">
+            <el-date-picker
+              clearable
+              v-model="pieSearch.searchTime"
+              type="daterange"
+              value-format="yyyy-MM-dd"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+            />
+            <el-button type="primary" @click="clearTime">一键清空</el-button>
+          </el-form-item>
+        </el-form>
+      </el-row>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="searchTimeVisible = false">取 消</el-button>
+        <el-button type="primary" @click="getPie('search')">确 定</el-button>
+      </div>
+    </el-dialog>
   </section>
 </template>
 
@@ -346,6 +412,7 @@ import DoubleColumn from '@/components/Common/Dashboard/DoubleColumn';
 // import login from '@/core/mixins/login';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import Swiper from 'swiper';
+import qs from 'qs';
 import staticData from './mixins/static';
 
 const restList = {
@@ -360,6 +427,11 @@ export default {
   mixins: [staticData],
   data() {
     return {
+      searchTimeVisible: false,
+      pieSearch: {
+        searchTime: ['', ''],
+      },
+      sonicStatusList: null,
       closeDanger: '',
       swiperVisible: false,
       imgVisible: false,
@@ -392,6 +464,12 @@ export default {
       viewImgList: [],
       swiperContainer: null,
       swiperList: [],
+      pointVisible: false,
+      pointForm: {
+        point: '',
+        type: '',
+      },
+      sonicList: [],
     };
   },
   computed: {},
@@ -406,6 +484,7 @@ export default {
     }
   },
   created() {
+    this.getSonicStatus();
     this.getImgList();
   },
   mounted() {
@@ -424,13 +503,67 @@ export default {
     }, 1600);
   },
   methods: {
+    async getSonicStatus() {
+      const res = await this.$axios.get('/tdlasSonicWave/getTdlasSonicState');
+      if (res.status === 200) {
+        const status = res.data.data;
+        const sonicList = [
+          {
+            id: 1,
+            name: '机房内超声波监测仪',
+            deviceCode: '1',
+            status: status.sonic1,
+          },
+          {
+            id: 2,
+            name: '出发1#区超声波监测仪',
+            deviceCode: '2',
+            status: status.sonic2,
+          },
+        ];
+        this.$set(this, 'sonicList', sonicList);
+      }
+    },
+    closeSonic(id) {
+      this.$axios.post(`/tdlasSonicWave/relieve?deviceCode=${id}`).then(res => {
+        if (res.status === 200) {
+          this.$message.success('解除报警成功');
+          this.getSonicStatus();
+        } else {
+          this.$message.error('解除报警失败请稍后重试！');
+        }
+      });
+    },
+    clearTime() {
+      this.pieSearch.searchTime = ['', ''];
+    },
+    searchPie() {
+      this.searchTimeVisible = true;
+    },
+    handleCallback(type) {
+      this.pointVisible = true;
+      this.pointForm.type = type;
+      this.pointForm.point = '';
+    },
+    updatePoint() {
+      const params = {
+        tdlasCode: this.pointForm.type,
+        point: this.pointForm.point,
+      };
+      this.$axios.post('/tdlasDeviceMonitor/tdlasFixedPosition', qs.stringify(params)).then(res => {
+        if (res.status === 200) {
+          this.$message.success('复位成功');
+        } else {
+          this.$message.error('复位失败请稍后重试！');
+        }
+        this.pointVisible = false;
+      });
+    },
     handleClose() {
       this.swiperVisible = false;
       this.swiperContainer = null;
     },
     prev() {
-      // const _this = this
-      console.log(this.$refs.mySwiper.swiper, 'this.$refs.mySwiper.$swiper');
       this.$refs.mySwiper.swiper.slidePrev();
     },
     next() {
@@ -444,15 +577,10 @@ export default {
       ];
       this.$axios.all(request).then(
         this.$axios.spread((tdlas1, tdlas2, tdlas3) => {
-          console.log(tdlas1, tdlas2, tdlas3, '获取图片');
           this.$nextTick(() => {
             this.viewImgList[0] = [this.staticData.coverImages[0]].concat(tdlas1.data.data);
             this.viewImgList[1] = [this.staticData.coverImages[1]].concat(tdlas2.data.data);
             this.viewImgList[2] = [this.staticData.coverImages[2]].concat(tdlas3.data.data);
-            // console.log(tdlas1.data.data)
-            // this.viewImgList[1] = tdlas2.data.data.splice(0, this.staticData.coverImages[1]);
-            // this.viewImgList[2] = tdlas3.data.data.splice(0, this.staticData.coverImages[2]);
-            console.log(this.viewImgList, 'this.viewImgList');
           });
         }),
       );
@@ -472,14 +600,15 @@ export default {
     initSwiper() {
       this.$nextTick(() => {
         this.swiperContainer = new Swiper('.swiper-container', {
+          watchSlidesVisibility: true,
           observeParents: true,
-          observe: true,
-          slidesPerView: 5,
+          observer: true,
+          slidesPerView: 3,
           spaceBetween: 30,
-          slidesPerGroup: 5,
+          slidesPerGroup: 1,
           loop: true,
-          loopFillGroupWithBlank: true,
           onSlideChangeEnd(swiper) {
+            console.log('到头了', swiper);
             swiper.update();
           },
         });
@@ -494,7 +623,7 @@ export default {
       // 获取视频数据
       try {
         const response = await this.$axios.post('/videoToken/getVideoToken');
-        if (response.status === 200) {
+        if (response.data && response.status === 200) {
           this.videoSrc = `https://open.ys7.com/ezopen/h5/iframe_se?url=ezopen://open.ys7.com/F34056591/1.live&autoplay=1&accessToken=${response.data.data}`;
         } else {
           this.$message.error('获取视频流失败，请稍后重试');
@@ -509,7 +638,7 @@ export default {
       let sonicData = null;
       try {
         this.$axios.get(url).then(res => {
-          if (res.data.code === 200) {
+          if (res.data && res.data.code === 200) {
             sonicData = JSON.parse(JSON.stringify(res.data.data));
             this.$refs.doublecolumn.initialize(
               sonicData.legend,
@@ -564,64 +693,66 @@ export default {
           .all(request)
           .then(
             this.$axios.spread((tdlas1, tdlas2, tdlas3) => {
-              talsData1 = tdlas1.data.data;
-              talsData2 = tdlas2.data.data;
-              talsData3 = tdlas3.data.data;
-              this.newDate = talsData1.newDate;
-              this.warnStatus1 = talsData1.isWarning;
-              this.warnStatus2 = talsData2.isWarning;
-              this.warnStatus3 = talsData3.isWarning;
-              this.statistics1 = talsData1.statistics;
-              this.statistics2 = talsData2.statistics;
-              this.statistics3 = talsData3.statistics;
-              this.deviceState = talsData3.deviceState;
-              indoor = this.filterData(talsData1.TdlasDeviceMonitorList);
-              indoor2 = this.filterData(talsData2.TdlasDeviceMonitorList);
-              indoor3 = this.filterData(talsData3.TdlasDeviceMonitorList);
-              if (talsData1.time.length > 0 && indoor.length > 0) {
-                this.$nextTick(() => {
-                  // eslint-disable-next-line no-unused-expressions
-                  this.$refs.indoor?.initialize(
-                    'ppm',
-                    talsData1.time,
-                    indoor,
-                    talsData1.colourList,
-                    talsData1.deviceAngleList,
-                    this.update,
-                  );
-                });
-              }
-              if (talsData2.time.length > 0 && indoor2.length > 0) {
-                this.$nextTick(() => {
-                  // eslint-disable-next-line no-unused-expressions
-                  this.$refs.indoor2?.initialize(
-                    'ppm',
-                    talsData2.time,
-                    indoor2,
-                    talsData1.colourList,
-                    talsData2.deviceAngleList,
-                    this.update,
-                  );
-                });
-              }
-              if (talsData3.time.length > 0 && indoor3.length > 0) {
-                this.$nextTick(() => {
-                  // eslint-disable-next-line no-unused-expressions
-                  this.$refs.indoor3?.initialize(
-                    'ppm',
-                    talsData3.time,
-                    indoor3,
-                    talsData1.colourList,
-                    talsData3.deviceAngleList,
-                    this.update,
-                  );
-                });
+              if (tdlas1.data.data && tdlas2.data.data && tdlas3.data.data) {
+                talsData1 = tdlas1.data.data;
+                talsData2 = tdlas2.data.data;
+                talsData3 = tdlas3.data.data;
+                this.newDate = talsData1.newDate;
+                this.warnStatus1 = talsData1.isWarning;
+                this.warnStatus2 = talsData2.isWarning;
+                this.warnStatus3 = talsData3.isWarning;
+                this.statistics1 = talsData1.statistics;
+                this.statistics2 = talsData2.statistics;
+                this.statistics3 = talsData3.statistics;
+                this.deviceState = talsData3.deviceState;
+                indoor = this.filterData(talsData1.TdlasDeviceMonitorList);
+                indoor2 = this.filterData(talsData2.TdlasDeviceMonitorList);
+                indoor3 = this.filterData(talsData3.TdlasDeviceMonitorList);
+                if (talsData1.time.length > 0 && indoor.length > 0) {
+                  this.$nextTick(() => {
+                    // eslint-disable-next-line no-unused-expressions
+                    this.$refs.indoor?.initialize(
+                      'ppm',
+                      talsData1.time,
+                      indoor,
+                      talsData1.colourList,
+                      talsData1.deviceAngleList,
+                      this.update,
+                    );
+                  });
+                }
+                if (talsData2.time.length > 0 && indoor2.length > 0) {
+                  this.$nextTick(() => {
+                    // eslint-disable-next-line no-unused-expressions
+                    this.$refs.indoor2?.initialize(
+                      'ppm',
+                      talsData2.time,
+                      indoor2,
+                      talsData1.colourList,
+                      talsData2.deviceAngleList,
+                      this.update,
+                    );
+                  });
+                }
+                if (talsData3.time.length > 0 && indoor3.length > 0) {
+                  this.$nextTick(() => {
+                    // eslint-disable-next-line no-unused-expressions
+                    this.$refs.indoor3?.initialize(
+                      'ppm',
+                      talsData3.time,
+                      indoor3,
+                      talsData1.colourList,
+                      talsData3.deviceAngleList,
+                      this.update,
+                    );
+                  });
+                }
               }
             }),
           )
           .catch(err => {
-            this.$message.error('请求失败，请稍后重试');
-            console.error(err);
+            const msg = err.msg || '请求超时，请稍后重试';
+            this.$message.error(msg);
             clearInterval(this.timer);
             this.timer = null;
           });
@@ -632,28 +763,41 @@ export default {
         console.error(e);
       }
     },
-    getPie() {
+    getPie(type) {
       // 饼状图
       const color = ['#FF903A', '#EECE15', '#FF6061', '#823AFF', '#0BE0FF'];
       let pieData = null;
       try {
-        this.$axios.get('tdlasDeviceMonitor/queryPieRadarChart').then(res => {
-          if (res.data.code === 200) {
-            pieData = res.data.data;
-            // eslint-disable-next-line no-unused-expressions
-            this.$refs.pie?.initialize(
-              pieData.areaData,
-              pieData.areaValueData,
-              pieData.proportion,
-              color,
-            );
-          } else {
-            this.$message.error('获取数据失败，请稍后重试');
-            clearInterval(this.timer);
-            this.timer = null;
-          }
-        });
+        this.$axios
+          .get(
+            `/tdlasDeviceMonitor/queryPieRadarChart?startTime=${this.pieSearch.searchTime[0]}&endTime=${this.pieSearch.searchTime[1]}`,
+          )
+          .then(res => {
+            if (res.data && res.data.code === 200) {
+              if (type === 'search') {
+                this.searchTimeVisible = false;
+              }
+              pieData = res.data.data;
+              // eslint-disable-next-line no-unused-expressions
+              this.$refs.pie?.initialize(
+                pieData.areaData,
+                pieData.areaValueData,
+                pieData.proportion,
+                color,
+              );
+            } else {
+              if (type === 'search') {
+                this.searchTimeVisible = false;
+              }
+              this.$message.error('获取数据失败，请稍后重试');
+              clearInterval(this.timer);
+              this.timer = null;
+            }
+          });
       } catch (e) {
+        if (type === 'search') {
+          this.searchTimeVisible = false;
+        }
         this.$message.error(e);
         console.error(e);
         clearInterval(this.hourTimer);
@@ -671,7 +815,7 @@ export default {
         : 'tdlasSonicWave/byPageCondition';
       try {
         this.$axios.get(url, { params }).then(res => {
-          if (res.status === 200 && res.data.code === 200) {
+          if (res.data && res.data.code === 200) {
             this.tdlsHistoryData = JSON.parse(JSON.stringify(res.data.data));
             if (code) {
               const data = res.data.data.list;
@@ -711,7 +855,7 @@ export default {
       const url = `/tdlasDeviceMonitor/tdlasControlDeploymentWithdrawal?tdlasCode=${id}`;
       try {
         this.$axios.get(url).then(res => {
-          if (res.status === 200 && res.data.code === 200) {
+          if (res.data && res.data.code === 200) {
             this.closeDanger = id;
             this.$message.success('成功关闭报警');
           } else {
@@ -905,6 +1049,20 @@ export default {
       text-align: center;
     }
     .middle-t {
+      .history {
+        color: #88ede7;
+      }
+      .pie-time {
+        position: absolute;
+        top: 14px;
+        right: 60px;
+      }
+      .search-pie {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 999999;
+      }
       .middle-t-l {
         .options {
           .option-item {
@@ -996,5 +1154,9 @@ export default {
 }
 .warning-status {
   color: red;
+}
+.bells {
+  width: 20px;
+  height: 20px;
 }
 </style>

@@ -9,8 +9,33 @@
             </div>
             <template>
               <section class="point">
+                <el-form :inline="true" :model="search" class="demo-form-inline">
+                  <el-form-item label="设备编号">
+                    <el-input
+                      v-model="search.deviceCode"
+                      clearable
+                      placeholder="请输入设备编号"
+                    ></el-input>
+                  </el-form-item>
+                  <el-form-item label="角度">
+                    <el-input
+                      v-model="search.deviceAngle"
+                      clearable
+                      placeholder="请输入角度"
+                    ></el-input>
+                  </el-form-item>
+                  <el-form-item>
+                    <el-button type="primary" @click="getPoint('search')">查询</el-button>
+                  </el-form-item>
+                </el-form>
                 <div class="mb-3">
-                  <el-table v-loading="loading" border :data="pointData.list" style="width: 100%;">
+                  <el-table
+                    v-loading="loading"
+                    border
+                    :data="pointData.list"
+                    @sort-change="sortTable"
+                    style="width: 100%;"
+                  >
                     <el-table-column
                       align="center"
                       type="index"
@@ -28,6 +53,7 @@
                       align="center"
                       prop="deviceAngle"
                       label="角度"
+                      sortable="custom"
                     ></el-table-column>
                     <el-table-column align="center" prop="deviceImage" label="图片">
                       <template slot-scope="scope">
@@ -91,6 +117,10 @@ export default {
     return {
       loading: false,
       currentId: '',
+      search: {
+        deviceCode: '',
+        deviceAngle: '',
+      },
       pointData: {
         list: [],
         total: 1,
@@ -104,12 +134,49 @@ export default {
     this.getPoint();
   },
   methods: {
+    sortTable(current) {
+      console.log(current);
+      this.loading = true;
+      const parameter = 'device_angle';
+      // eslint-disable-next-line default-case
+      // switch (current.prop) {
+      //   case 'deviceAmmoniaConcentration':
+      //     parameter = 'device_ammonia_concentration';
+      //     break;
+      //   case 'creatertime':
+      //     parameter = 'creatertime';
+      //     break;
+      //   case 'deviceAngle':
+      //     parameter = 'device_angle';
+      //     break;
+      // }
+      try {
+        this.$axios
+          .get(
+            `/tdlasDataConfigController/byPageCondition?orderByParameter=${parameter}&orderByLift=${current.order}`,
+          )
+          .then(res => {
+            if (res.data.code !== 200) {
+              this.$message.error('获取排序数据失败，请稍后重试');
+              this.loading = false;
+            } else {
+              this.loading = false;
+              this.pointData = JSON.parse(JSON.stringify(res.data.data));
+              console.log('获取最新信息');
+            }
+          });
+      } catch (e) {
+        this.loading = false;
+        const err = e || '请求服务出错了，请稍后重试';
+        this.$message.error(err);
+        console.error(e);
+      }
+    },
     editImg(row) {
       this.loading = true;
       this.currentId = row.id;
     },
     handleChangeRestsFile(file) {
-      console.log(file, 'file');
       const formData = new FormData();
       formData.append('deviceImage', file.raw);
       formData.append('id', this.currentId);
@@ -159,13 +226,17 @@ export default {
           });
         });
     },
-    getPoint() {
+    getPoint(type) {
       // 获取声波数据
       this.loading = true;
-      const params = {
+      if (type === 'search') {
+        this.pointData.pageNum = 1;
+        this.pointData.pageSize = 5;
+      }
+      const params = Object.assign(this.search, {
         pageNum: this.pointData.pageNum,
         pageSize: this.pointData.pageSize,
-      };
+      });
       try {
         this.$axios
           .get('/tdlasDataConfigController/byPageCondition', { params })

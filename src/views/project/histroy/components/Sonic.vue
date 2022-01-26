@@ -16,10 +16,19 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="getSonic('search')">查询</el-button>
+        <el-link :href="exportUrl" target="_blank" type="primary" class="mx-3">
+          导出
+        </el-link>
       </el-form-item>
     </el-form>
     <div class="mb-3">
-      <el-table v-loading="loading" border :data="sonicData.list" style="width: 100%;">
+      <el-table
+        v-loading="loading"
+        border
+        :data="sonicData.list"
+        @sort-change="sortTable"
+        style="width: 100%;"
+      >
         <el-table-column
           align="center"
           type="index"
@@ -31,19 +40,44 @@
           align="center"
           prop="deviceCode"
           label="设备编码"
+          sortable="custom"
           width="100"
         ></el-table-column>
-        <el-table-column align="center" prop="l" label="瞬时声强" width="80"></el-table-column>
-        <el-table-column align="center" prop="leq" label="等效声强" width="80"></el-table-column>
+        <el-table-column
+          align="center"
+          prop="l"
+          label="瞬时声强"
+          sortable="custom"
+          width="80"
+        ></el-table-column>
+        <el-table-column
+          align="center"
+          prop="leq"
+          label="等效声强"
+          sortable="custom"
+          width="80"
+        ></el-table-column>
         <el-table-column align="center" prop="deviceType" label="描述"></el-table-column>
-        <el-table-column align="center" prop="creatertime" label="创建日期" width="180">
+        <el-table-column
+          align="center"
+          prop="createTime"
+          sortable="custom"
+          label="创建日期666"
+          width="180"
+        >
           <template slot-scope="scope">
             <div>
-              {{ $dayjs(scope.row.creatertime).format('YYYY-MM-DD HH:mm:ss') }}
+              {{ $dayjs(scope.row.createTime).format('YYYY-MM-DD HH:mm:ss') }}
             </div>
           </template>
         </el-table-column>
-        <el-table-column align="center" prop="deviceState" label="解决状态" width="80">
+        <el-table-column
+          align="center"
+          prop="deviceState"
+          sortable="custom"
+          label="解决状态"
+          width="80"
+        >
           <template slot-scope="scope">
             <el-tag size="medium" type="danger" v-if="scope.row.deviceState === false">
               未解决
@@ -51,7 +85,13 @@
             <el-tag v-else size="medium" type="success">已解决</el-tag>
           </template>
         </el-table-column>
-        <el-table-column align="center" prop="trueAndFalse" label="故障状态" width="80">
+        <el-table-column
+          align="center"
+          prop="trueAndFalse"
+          sortable="custom"
+          label="故障状态"
+          width="80"
+        >
           <template slot-scope="scope">
             <el-tag size="medium" type="warning" v-if="scope.row.trueAndFalse === '0'">
               待确认
@@ -60,7 +100,7 @@
             <el-tag v-if="scope.row.trueAndFalse === '2'" size="medium" type="info">误报</el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="操作" align="center">
+        <el-table-column label="操作" align="center" width="400">
           <template slot-scope="scope">
             <el-button
               size="mini"
@@ -128,6 +168,7 @@ export default {
       loading: false,
       historyVisible: false,
       activeOption: 0,
+      exportUrl: `${this.$store.state.default.apiBase}tdlasSonicWave/exportTdlasSonicLog`,
       options: [
         {
           value: true,
@@ -155,6 +196,53 @@ export default {
     this.getSonic();
   },
   methods: {
+    sortTable(current) {
+      console.log(current);
+      this.loading = true;
+      let parameter = null;
+      // eslint-disable-next-line default-case
+      switch (current.prop) {
+        case 'deviceCode':
+          parameter = 'device_code';
+          break;
+        case 'l':
+          parameter = 'l';
+          break;
+        case 'leq':
+          parameter = 'leq';
+          break;
+        case 'deviceState':
+          parameter = 'device_state';
+          break;
+        case 'creatertime':
+          parameter = 'create_time';
+          break;
+        case 'trueAndFalse':
+          parameter = 'true_and_false';
+          break;
+      }
+      try {
+        this.$axios
+          .get(
+            `/tdlasSonicWave/byPageCondition?orderByParameter=${parameter}&orderByLift=${current.order}`,
+          )
+          .then(res => {
+            if (res.data.code !== 200) {
+              this.$message.error('获取排序数据失败，请稍后重试');
+              this.loading = false;
+            } else {
+              this.loading = false;
+              this.sonicData = JSON.parse(JSON.stringify(res.data.data));
+              console.log('获取最新信息');
+            }
+          });
+      } catch (e) {
+        this.loading = false;
+        const err = e || '请求服务出错了，请稍后重试';
+        this.$message.error(err);
+        console.error(e);
+      }
+    },
     handleRepairEdit(row) {
       // 解决状态修改
       this.loading = true;
@@ -227,7 +315,7 @@ export default {
           .get('/tdlasSonicWave/byPageCondition', { params })
           .then(response => {
             if (response.status === 200 && response.data.code === 200) {
-              this.sonicData = JSON.parse(JSON.stringify(response.data.data));
+              this.sonicData = response.data.data && JSON.parse(JSON.stringify(response.data.data));
               this.loading = false;
             } else {
               this.loading = false;

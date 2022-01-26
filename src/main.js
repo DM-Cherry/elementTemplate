@@ -6,6 +6,7 @@ import Vue from 'vue';
 import App from '@/App';
 import router from '@/router';
 import axios from '@/core/auth';
+import websocket from 'websocket';
 import dataV from '@jiaminghi/data-view';
 // import iviewFixer from '@/core/mixins/iview'
 import store from '@/store';
@@ -24,14 +25,14 @@ import echarts from 'echarts';
 import dayjs from 'dayjs';
 import 'dayjs/locale/zh-cn';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import VueAwesomeSwiper from 'vue-awesome-swiper';
+import 'swiper/dist/css/swiper.css';
 
 Element.Dialog.props.closeOnClickModal.default = false;
 
 dayjs.locale('zh-cn');
 dayjs.extend(relativeTime);
 
-import VueAwesomeSwiper from 'vue-awesome-swiper'
-import 'swiper/dist/css/swiper.css'
 Vue.use(VueAwesomeSwiper)
 // iView 4.x
 // Vue.use(ViewUI);
@@ -58,6 +59,7 @@ for (let name in store.state.default.storage.localforage) {
 Vue.prototype.$axios = axios;
 Vue.prototype.$dayjs = dayjs;
 Vue.prototype.$echarts = echarts;
+Vue.prototype.$websocket = websocket;
 
 // 若是没有开启Devtools工具，在开发环境中开启，在生产环境中关闭
 if (process.env.NODE_ENV !== 'production') {

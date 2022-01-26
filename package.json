@@ -113,7 +113,8 @@
     "vue-froala-wysiwyg": "^3.2.1-1",
     "vue-router": "^3.0.1",
     "vue-sweetalert2": "^1.2.4",
-    "vuex": "^3.0.1"
+    "vuex": "^3.0.1",
+    "websocket": "^1.0.34"
   },
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server --progress",
