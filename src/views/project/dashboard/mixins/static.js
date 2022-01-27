@@ -17,7 +17,7 @@ export default {
           },
           {
             name: '历史数据',
-            url: '/project/histroy',
+            url: '/project/history',
           },
         ],
         options: [

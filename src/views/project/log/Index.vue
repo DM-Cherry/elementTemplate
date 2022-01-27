@@ -24,7 +24,7 @@
                   ></el-input>
                 </el-form-item>
                 <el-form-item>
-                  <el-button type="primary" @click="getLogList">查询</el-button>
+                  <el-button type="primary" @click="getLogList('search')">查询</el-button>
                 </el-form-item>
                 <el-link :href="exportUrl" target="_blank" type="primary" class="mx-3 mt-2">
                   导出
@@ -132,7 +132,6 @@ export default {
   },
   methods: {
     sortTable(current) {
-      console.log(current);
       this.loading = true;
       let parameter = null;
       // eslint-disable-next-line default-case

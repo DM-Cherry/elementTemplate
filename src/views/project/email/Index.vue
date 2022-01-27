@@ -14,7 +14,7 @@
                     <el-input v-model="search.mail" placeholder="请输入邮箱" clearable></el-input>
                   </el-form-item>
                   <el-form-item>
-                    <el-button type="primary" @click="getEmail">查询</el-button>
+                    <el-button type="primary" @click="getEmail('search')">查询</el-button>
                   </el-form-item>
                   <el-form-item>
                     <el-button @click="handleEdit('')">添加</el-button>
@@ -149,7 +149,11 @@ export default {
   },
   methods: {
     handleClose() {},
-    getEmail() {
+    getEmail(type) {
+      if (type === 'search') {
+        this.emailData.pageNum = 1;
+        this.emailData.pageSize = 5;
+      }
       this.loading = true;
       const params = Object.assign(this.search, {
         pageNum: this.emailData.pageNum,
@@ -186,7 +190,6 @@ export default {
           if (this.type === 'edit') {
             // 过滤敏感字段以及空字段
             const formData = JSON.parse(JSON.stringify(this.form));
-            console.log('formData', formData);
             const newForm = {};
             Object.keys(formData).forEach(key => {
               if (formData[key] && key !== 'creatertime') {

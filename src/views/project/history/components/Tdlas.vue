@@ -53,7 +53,7 @@
         <el-table-column
           align="center"
           prop="deviceAmmoniaConcentration"
-          label="记录值ppm·m"
+          label="浓度值ppm"
           width="200"
           sortable="custom"
         ></el-table-column>
@@ -143,7 +143,6 @@ export default {
   },
   methods: {
     sortTable(current) {
-      console.log(current);
       this.loading = true;
       let parameter = null;
       // eslint-disable-next-line default-case

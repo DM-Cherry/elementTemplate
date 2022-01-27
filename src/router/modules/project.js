@@ -29,12 +29,12 @@ export default [
         component: () => import('@/views/project/users/Index.vue'),
       },
       {
-        path: 'histroy',
-        name: 'project.histroy',
+        path: 'history',
+        name: 'project.history',
         meta: {
           name: '历史数据管理',
         },
-        component: () => import('@/views/project/histroy/Index.vue'),
+        component: () => import('@/views/project/history/Index.vue'),
       },
       {
         path: 'system',

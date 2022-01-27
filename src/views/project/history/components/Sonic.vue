@@ -16,7 +16,7 @@
       </el-form-item>
       <el-form-item label="日期">
         <el-date-picker
-          v-model="search.date"
+          v-model="date"
           type="daterange"
           value-format="yyyy-MM-dd"
           range-separator="至"
@@ -181,15 +181,15 @@ export default {
       exportUrl: `${this.$store.state.default.apiBase}tdlasSonicWave/exportTdlasSonicLog`,
       options: [
         {
-          value: true,
+          value: 1,
           label: '已修复',
         },
         {
-          value: false,
+          value: 0,
           label: '未修复',
         },
       ],
-      date: [],
+      date: '',
       search: {
         deviceCode: '',
         deviceState: null,
@@ -210,7 +210,6 @@ export default {
   },
   methods: {
     sortTable(current) {
-      console.log(current);
       this.loading = true;
       let parameter = null;
       // eslint-disable-next-line default-case

@@ -32,7 +32,7 @@
                     ></el-input>
                   </el-form-item>
                   <el-form-item>
-                    <el-button type="primary" @click="getUsers">查询</el-button>
+                    <el-button type="primary" @click="getUsers('search')">查询</el-button>
                   </el-form-item>
                   <el-form-item>
                     <el-button @click="handleEdit('')">添加</el-button>
@@ -228,7 +228,11 @@ export default {
         this.loading = false;
       }
     },
-    getUsers() {
+    getUsers(type) {
+      if (type === 'search') {
+        this.usersData.pageNum = 1;
+        this.usersData.pageSize = 5;
+      }
       // 获取用户列表
       this.loading = true;
       const params = Object.assign(this.search, {

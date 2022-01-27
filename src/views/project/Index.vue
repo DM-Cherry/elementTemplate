@@ -51,15 +51,15 @@ export default {
         },
         {
           id: 3,
-          route_name: 'histroy',
+          route_name: 'history',
           name: '历史数据管理',
           module: '',
           icon: 'fa fa-history',
           children: [],
           visible: false,
-          url: '/project/histroy',
+          url: '/project/history',
           attributes: {
-            target: '/project/histroy',
+            target: '/project/history',
           },
         },
         {

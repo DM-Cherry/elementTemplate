@@ -29,8 +29,8 @@
 </template>
 
 <script>
-import Tdlas from '@/views/project/histroy/components/Tdlas';
-import Sonic from '@/views/project/histroy/components/Sonic';
+import Tdlas from '@/views/project/history/components/Tdlas';
+import Sonic from '@/views/project/history/components/Sonic';
 
 export default {
   name: 'History',
