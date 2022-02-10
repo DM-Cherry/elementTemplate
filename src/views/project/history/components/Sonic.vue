@@ -237,6 +237,8 @@ export default {
         pageSize: 5,
       },
       page_sizes: [5, 10, 15, 20, 50],
+      parameter: '',
+      order: '',
     };
   },
   mounted() {
@@ -245,62 +247,35 @@ export default {
   },
   methods: {
     sortTable(current) {
-      this.search = {
-        deviceCode: '',
-        deviceState: null,
-        startTime: '',
-        endTime: '',
-      };
-      this.loading = true;
-      let parameter = null;
       // eslint-disable-next-line default-case
       switch (current.prop) {
         case 'deviceCode':
-          parameter = 'device_code';
+          this.parameter = 'device_code';
           break;
         case 'l':
-          parameter = 'l';
+          this.parameter = 'l';
           break;
         case 'leq':
-          parameter = 'leq';
+          this.parameter = 'leq';
           break;
         case 'deviceState':
-          parameter = 'device_state';
+          this.parameter = 'device_state';
           break;
         case 'creatertime':
-          parameter = 'create_time';
+          this.parameter = 'create_time';
           break;
         case 'trueAndFalse':
-          parameter = 'true_and_false';
+          this.parameter = 'true_and_false';
           break;
         case 'lf':
-          parameter = 'lf';
+          this.parameter = 'lf';
           break;
         case 'lf2':
-          parameter = 'lf2';
+          this.parameter = 'lf2';
           break;
       }
-      try {
-        this.$axios
-          .get(
-            `/tdlasSonicWave/byPageCondition?orderByParameter=${parameter}&orderByLift=${current.order}`,
-          )
-          .then(res => {
-            if (res.data.code !== 200) {
-              this.$message.error('获取排序数据失败，请稍后重试');
-              this.loading = false;
-            } else {
-              this.loading = false;
-              this.sonicData = JSON.parse(JSON.stringify(res.data.data));
-              console.log('获取最新信息');
-            }
-          });
-      } catch (e) {
-        this.loading = false;
-        const err = e || '请求服务出错了，请稍后重试';
-        this.$message.error(err);
-        console.error(e);
-      }
+      this.order = current.order;
+      this.getSonic('sort');
     },
     handleRepairEdit(row) {
       // 解决状态修改
@@ -369,6 +344,8 @@ export default {
       const params = Object.assign(this.search, {
         pageNum: this.sonicData.pageNum,
         pageSize: this.sonicData.pageSize,
+        orderByParameter: this.parameter,
+        orderByLift: this.order,
       });
       try {
         this.$axios

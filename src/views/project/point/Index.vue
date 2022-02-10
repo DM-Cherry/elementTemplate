@@ -128,6 +128,8 @@ export default {
         pageSize: 5,
       },
       page_sizes: [5, 10, 15, 20, 50],
+      parameter: '',
+      order: '',
     };
   },
   mounted() {
@@ -135,42 +137,9 @@ export default {
   },
   methods: {
     sortTable(current) {
-      console.log(current);
-      this.loading = true;
-      const parameter = 'device_angle';
-      // eslint-disable-next-line default-case
-      // switch (current.prop) {
-      //   case 'deviceAmmoniaConcentration':
-      //     parameter = 'device_ammonia_concentration';
-      //     break;
-      //   case 'creatertime':
-      //     parameter = 'creatertime';
-      //     break;
-      //   case 'deviceAngle':
-      //     parameter = 'device_angle';
-      //     break;
-      // }
-      try {
-        this.$axios
-          .get(
-            `/tdlasDataConfigController/byPageCondition?orderByParameter=${parameter}&orderByLift=${current.order}`,
-          )
-          .then(res => {
-            if (res.data.code !== 200) {
-              this.$message.error('获取排序数据失败，请稍后重试');
-              this.loading = false;
-            } else {
-              this.loading = false;
-              this.pointData = JSON.parse(JSON.stringify(res.data.data));
-              console.log('获取最新信息');
-            }
-          });
-      } catch (e) {
-        this.loading = false;
-        const err = e || '请求服务出错了，请稍后重试';
-        this.$message.error(err);
-        console.error(e);
-      }
+      this.parameter = 'device_angle';
+      this.order = current.order;
+      this.getPoint('sort');
     },
     editImg(row) {
       this.loading = true;
@@ -236,6 +205,8 @@ export default {
       const params = Object.assign(this.search, {
         pageNum: this.pointData.pageNum,
         pageSize: this.pointData.pageSize,
+        orderByParameter: this.parameter,
+        orderByLift: this.order,
       });
       try {
         this.$axios

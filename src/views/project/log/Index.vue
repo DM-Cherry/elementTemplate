@@ -125,6 +125,8 @@ export default {
         pageSize: 5,
       },
       page_sizes: [5, 10, 15, 20, 50],
+      parameter: '',
+      order: '',
     };
   },
   mounted() {
@@ -132,47 +134,26 @@ export default {
   },
   methods: {
     sortTable(current) {
-      this.loading = true;
-      let parameter = null;
       // eslint-disable-next-line default-case
       switch (current.prop) {
         case 'userName':
-          parameter = 'user_name';
+          this.parameter = 'user_name';
           break;
         case 'operUrl':
-          parameter = 'oper_url';
+          this.parameter = 'oper_url';
           break;
         case 'operTitle':
-          parameter = 'oper_title';
+          this.parameter = 'oper_title';
           break;
         case 'operDescribe':
-          parameter = 'oper_describe';
+          this.parameter = 'oper_describe';
           break;
         case 'operTime':
-          parameter = 'oper_time';
+          this.parameter = 'oper_time';
           break;
       }
-      try {
-        this.$axios
-          .get(
-            `/tlImportLogController/byPageCondition?orderByParameter=${parameter}&orderByLift=${current.order}`,
-          )
-          .then(res => {
-            if (res.data.code !== 200) {
-              this.$message.error('获取排序数据失败，请稍后重试');
-              this.loading = false;
-            } else {
-              this.loading = false;
-              this.logData = JSON.parse(JSON.stringify(res.data.data));
-              console.log('获取最新信息');
-            }
-          });
-      } catch (e) {
-        this.loading = false;
-        const err = e || '请求服务出错了，请稍后重试';
-        this.$message.error(err);
-        console.error(e);
-      }
+      this.order = current.order;
+      this.getLogList('sort');
     },
     getLogList(source) {
       // 获取日志数据
@@ -185,6 +166,8 @@ export default {
       const params = Object.assign(this.search, {
         pageNum: this.logData.pageNum,
         pageSize: this.logData.pageSize,
+        orderByParameter: this.parameter,
+        orderByLift: this.order,
       });
       try {
         this.$axios

@@ -155,6 +155,8 @@ export default {
         pageNum: 1,
         pageSize: 5,
       },
+      parameter: '',
+      order: '',
     };
   },
   mounted() {
@@ -163,52 +165,26 @@ export default {
   },
   methods: {
     sortTable(current) {
-      this.search = {
-        deviceCode: '',
-        creatertime1: '',
-        creatertime2: '',
-      };
-      this.loading = true;
-      let parameter = null;
       // eslint-disable-next-line default-case
       switch (current.prop) {
         case 'deviceCode':
-          parameter = 'device_code';
+          this.parameter = 'device_code';
           break;
         case 'deviceAngle':
-          parameter = 'device_angle';
+          this.parameter = 'device_angle';
           break;
         case 'deviceAmmoniaConcentration':
-          parameter = 'device_ammonia_concentration';
+          this.parameter = 'device_ammonia_concentration';
           break;
         case 'creatertime':
-          parameter = 'creater_time';
+          this.parameter = 'creater_time';
           break;
         case 'deviceAmmoniaConcentrationAverage':
-          parameter = 'device_ammonia_concentration_average';
+          this.parameter = 'device_ammonia_concentration_average';
           break;
       }
-      try {
-        this.$axios
-          .get(
-            `/tdlasDeviceMonitor/byPageCondition?orderByParameter=${parameter}&orderByLift=${current.order}`,
-          )
-          .then(res => {
-            if (res.data.code !== 200) {
-              this.$message.error('获取排序数据失败，请稍后重试');
-              this.loading = false;
-            } else {
-              this.loading = false;
-              this.historyData = JSON.parse(JSON.stringify(res.data.data));
-              console.log('获取最新信息');
-            }
-          });
-      } catch (e) {
-        this.loading = false;
-        const err = e || '请求服务出错了，请稍后重试';
-        this.$message.error(err);
-        console.error(e);
-      }
+      this.order = current.order;
+      this.getHistory('sort');
     },
     handleEdit(row) {
       this.loading = true;
@@ -246,6 +222,8 @@ export default {
       const params = Object.assign(this.search, {
         pageNum: this.historyData.pageNum,
         pageSize: this.historyData.pageSize,
+        orderByParameter: this.parameter,
+        orderByLift: this.order,
       });
       try {
         this.$axios
