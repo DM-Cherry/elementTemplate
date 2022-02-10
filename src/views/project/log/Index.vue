@@ -80,7 +80,7 @@
                   >
                     <template slot-scope="scope">
                       <div>
-                        {{ $dayjs(scope.row.creatertime).format('YYYY-MM-DD HH:mm:ss') }}
+                        {{ $dayjs(scope.row.operTime).format('YYYY-MM-DD HH:mm:ss') }}
                       </div>
                     </template>
                   </el-table-column>

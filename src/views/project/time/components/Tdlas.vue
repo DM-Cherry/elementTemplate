@@ -148,7 +148,11 @@ export default {
   },
   methods: {
     sortTable(current) {
-      console.log(current);
+      this.search = {
+        deviceCode: '',
+        creatertime1: '',
+        creatertime2: '',
+      };
       this.loading = true;
       let parameter = null;
       // eslint-disable-next-line default-case
@@ -163,7 +167,7 @@ export default {
           parameter = 'device_ammonia_concentration';
           break;
         case 'creatertime':
-          parameter = 'create_time';
+          parameter = 'creater_time';
           break;
       }
       try {
@@ -177,7 +181,7 @@ export default {
               this.loading = false;
             } else {
               this.loading = false;
-              this.sonicData = JSON.parse(JSON.stringify(res.data.data));
+              this.historyData = JSON.parse(JSON.stringify(res.data.data));
               console.log('获取最新信息');
             }
           });
@@ -218,7 +222,7 @@ export default {
       if (source === 'search') {
         this.historyData.pageNum = 1;
         this.historyData.pageSize = 5;
-        this.exportUrl = `${this.$store.state.default.apiBase}tdlasDeviceMonitor/exportSelectedPromotion?startTime=${this.search.creatertime1}&endTime=${this.search.creatertime2}`;
+        this.exportUrl = `${this.$store.state.default.apiBase}tdlasDeviceMonitor/exportSelectedPromotion?startTime=${this.search.creatertime1}&endTime=${this.search.creatertime2}&deviceCode=${this.search.deviceCode}`;
       }
       this.loading = true;
       const params = Object.assign(this.search, {

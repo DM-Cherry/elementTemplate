@@ -5,15 +5,28 @@
       <el-form-item label="设备编码">
         <el-input v-model="search.deviceCode" clearable placeholder="请输入设备编码"></el-input>
       </el-form-item>
-      <el-form-item label="日期">
-        <el-date-picker
-          v-model="date"
-          type="daterange"
-          value-format="yyyy-MM-dd"
-          range-separator="至"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-        />
+      <el-form-item label="时间区间">
+        <el-col :span="11">
+          <el-date-picker
+            v-model="search.startTime"
+            type="datetime"
+            placeholder="选择开始时间"
+            style="width: 100%;"
+            format="yyyy-MM-dd HH:mm:ss"
+            value-format="yyyy-MM-dd HH:mm:ss"
+          ></el-date-picker>
+        </el-col>
+        <el-col class="line" style="text-align: center;" :span="2">-</el-col>
+        <el-col :span="11">
+          <el-date-picker
+            v-model="search.endTime"
+            type="datetime"
+            placeholder="选择结束时间"
+            style="width: 100%;"
+            format="yyyy-MM-dd HH:mm:ss"
+            value-format="yyyy-MM-dd HH:mm:ss"
+          ></el-date-picker>
+        </el-col>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="getHistory('search')">查询</el-button>
@@ -122,7 +135,6 @@ export default {
   data() {
     return {
       loading: false,
-      date: '',
       search: {
         deviceCode: '',
         startTime: '',
@@ -143,6 +155,11 @@ export default {
   },
   methods: {
     sortTable(current) {
+      this.search = {
+        deviceCode: '',
+        startTime: '',
+        endTime: '',
+      };
       this.loading = true;
       let parameter = null;
       // eslint-disable-next-line default-case
@@ -215,9 +232,8 @@ export default {
       if (source === 'search') {
         this.historyData.pageNum = 1;
         this.historyData.pageSize = 5;
-        this.exportUrl = `${this.$store.state.default.apiBase}tdlasDeviceLog/exportTdlasDeviceLog?startTime=${this.search.startTime}&endTime=${this.search.endTime}`;
+        this.exportUrl = `${this.$store.state.default.apiBase}tdlasDeviceLog/exportTdlasDeviceLog?startTime=${this.search.startTime}&endTime=${this.search.endTime}&deviceCode=${this.search.deviceCode}`;
       }
-      [this.search.startTime, this.search.endTime] = this.date;
       this.loading = true;
       const params = Object.assign(this.search, {
         pageNum: this.historyData.pageNum,

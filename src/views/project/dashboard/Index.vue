@@ -4,7 +4,7 @@
       <div class="animated fadeIn">
         <div class="dashboard-header">
           <div class="header-title"><span class="name">氨泄漏实时动态监测预警系统</span></div>
-          <div class="header-menu clearfix">
+          <div class="header-menu clearfix" v-if="menuList.length === 8">
             <div v-for="(item, index) in staticData.routerList" :key="index" class="menu-item">
               <router-link :to="item.url" class="menu-item-link">
                 {{ item.name }}
@@ -268,13 +268,6 @@
             <el-tag v-else size="medium" type="success">已解决</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="creatertime" label="创建日期" align="center" width="180">
-          <template slot-scope="scope">
-            <div>
-              {{ $dayjs(scope.row.creatertime).format('YYYY-MM-DD HH:mm:ss') }}
-            </div>
-          </template>
-        </el-table-column>
         <template v-if="tdlshistoryId !== ''">
           <el-table-column property="warnimg" align="center" label="报警预览">
             <template v-if="tdlshistoryId !== ''" slot-scope="scope">
@@ -292,8 +285,22 @@
             label="设备角度"
             width="100"
           ></el-table-column>
+          <el-table-column prop="creatertime" label="创建日期" align="center" width="180">
+            <template slot-scope="scope">
+              <div>
+                {{ $dayjs(scope.row.creatertime).format('YYYY-MM-DD HH:mm:ss') }}
+              </div>
+            </template>
+          </el-table-column>
         </template>
         <template v-else>
+          <el-table-column prop="createTime" label="创建日期" align="center" width="180">
+            <template slot-scope="scope">
+              <div>
+                {{ $dayjs(scope.row.createTime).format('YYYY-MM-DD HH:mm:ss') }}
+              </div>
+            </template>
+          </el-table-column>
           <el-table-column
             align="center"
             property="deviceCode"
@@ -414,6 +421,7 @@ import DoubleColumn from '@/components/Common/Dashboard/DoubleColumn';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import Swiper from 'swiper';
 import qs from 'qs';
+import { mapGetters } from 'vuex';
 import staticData from './mixins/static';
 
 const restList = {
@@ -471,9 +479,12 @@ export default {
         type: '',
       },
       sonicList: [],
+      menuList: 0,
     };
   },
-  computed: {},
+  computed: {
+    ...mapGetters('UserStore', ['info']),
+  },
   destroyed() {
     if (this.timer) {
       clearInterval(this.timer);
@@ -489,6 +500,7 @@ export default {
     this.getImgList();
   },
   mounted() {
+    this.menuList = JSON.parse(localStorage.getItem('permission'));
     this.isDev = process.env.NODE_ENV === 'development';
     this.getData();
     this.getPie();

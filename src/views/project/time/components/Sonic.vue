@@ -197,7 +197,11 @@ export default {
   },
   methods: {
     sortTable(current) {
-      console.log(current);
+      this.search = {
+        deviceCode: '',
+        creatertime1: '',
+        creatertime2: '',
+      };
       this.loading = true;
       let parameter = null;
       // eslint-disable-next-line default-case
@@ -297,7 +301,7 @@ export default {
       if (source === 'search') {
         this.sonicData.pageNum = 1;
         this.sonicData.pageSize = 5;
-        this.exportUrl = `${this.$store.state.default.apiBase}tdlasSonicWave/exportTdlasSonic?startTime=${this.search.creatertime1}&endTime=${this.search.creatertime2}`;
+        this.exportUrl = `${this.$store.state.default.apiBase}tdlasSonicWave/exportTdlasSonic?startTime=${this.search.creatertime1}&endTime=${this.search.creatertime2}&deviceCode=${this.search.deviceCode}`;
       }
       // 获取声波数据
       this.loading = true;
