@@ -39,7 +39,13 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="getSonic('search')">查询</el-button>
-        <el-link :href="exportUrl" target="_blank" type="primary" class="mx-3">
+        <el-link
+          :href="exportUrl"
+          target="_blank"
+          v-if="menuList.length === 8"
+          type="primary"
+          class="mx-3"
+        >
           导出
         </el-link>
       </el-form-item>
@@ -188,6 +194,7 @@ export default {
   },
   data() {
     return {
+      menuList: 0,
       loading: false,
       historyVisible: false,
       activeOption: 0,
@@ -219,6 +226,7 @@ export default {
     };
   },
   mounted() {
+    this.menuList = JSON.parse(localStorage.getItem('permission'));
     this.getSonic();
   },
   methods: {

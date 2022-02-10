@@ -30,7 +30,13 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="getHistory('search')">查询</el-button>
-        <el-link :href="exportUrl" target="_blank" type="primary" class="mx-3">
+        <el-link
+          :href="exportUrl"
+          v-if="menuList.length === 8"
+          target="_blank"
+          type="primary"
+          class="mx-3"
+        >
           导出
         </el-link>
       </el-form-item>
@@ -127,6 +133,7 @@ export default {
   name: 'Tdlas',
   data() {
     return {
+      menuList: 0,
       loading: false,
       search: {
         deviceCode: '',
@@ -144,6 +151,7 @@ export default {
     };
   },
   mounted() {
+    this.menuList = JSON.parse(localStorage.getItem('permission'));
     this.getHistory();
   },
   methods: {

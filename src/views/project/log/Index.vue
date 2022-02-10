@@ -179,6 +179,7 @@ export default {
       if (source === 'search') {
         this.logData.pageNum = 1;
         this.logData.pageSize = 5;
+        this.exportUrl = `${this.$store.state.default.apiBase}tlImportLogController/exportSysLog?operTitle=${this.search.operTitle}&userName=${this.search.userName}`;
       }
       this.loading = true;
       const params = Object.assign(this.search, {
