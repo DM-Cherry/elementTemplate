@@ -500,20 +500,21 @@ export default {
     this.getImgList();
   },
   mounted() {
-    this.menuList = JSON.parse(localStorage.getItem('permission'));
-    this.isDev = process.env.NODE_ENV === 'development';
-    this.getData();
-    this.getPie();
-    this.getVideo();
-    this.getSonicData(this.sonicDevice);
+    // this.menuList = JSON.parse(localStorage.getItem('permission'));
+    // this.isDev = process.env.NODE_ENV === 'development';
+    // this.getData();
+    // this.getPie();
+    // this.getVideo();
+    // this.getSonicData(this.sonicDevice);
     this.hourTimer = setInterval(() => {
-      this.getPie();
-      this.getSonicData(this.sonicDevice);
+      // this.getPie();
+      // this.getSonicData(this.sonicDevice);
+      this.getSonicStatus();
     }, 3000);
-    this.timer = setInterval(() => {
-      this.update = true;
-      this.getData();
-    }, 1600);
+    // this.timer = setInterval(() => {
+    //   this.update = true;
+    //   this.getData();
+    // }, 1600);
   },
   methods: {
     async getSonicStatus() {

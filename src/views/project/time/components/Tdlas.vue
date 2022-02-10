@@ -71,10 +71,17 @@
         ></el-table-column>
         <el-table-column
           align="center"
-          prop="deviceAmmoniaConcentration"
-          label="氨浓度"
+          prop="deviceAmmoniaConcentrationAverage"
+          label="处理后的氨浓度值（ppm）"
           sortable="custom"
-          width="100"
+          width="200"
+        ></el-table-column>
+        <el-table-column
+          align="center"
+          prop="deviceAmmoniaConcentration"
+          label="测量值（ppm·m）"
+          sortable="custom"
+          width="170"
         ></el-table-column>
         <el-table-column
           align="center"
@@ -176,6 +183,9 @@ export default {
           break;
         case 'creatertime':
           parameter = 'creater_time';
+          break;
+        case 'deviceAmmoniaConcentrationAverage':
+          parameter = 'device_ammonia_concentration_average';
           break;
       }
       try {

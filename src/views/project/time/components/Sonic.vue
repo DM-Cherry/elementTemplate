@@ -70,6 +70,20 @@
         ></el-table-column>
         <el-table-column
           align="center"
+          prop="lf"
+          label="瞬时差值"
+          sortable="custom"
+          width="80"
+        ></el-table-column>
+        <el-table-column
+          align="center"
+          prop="lf2"
+          label="等效差值"
+          sortable="custom"
+          width="80"
+        ></el-table-column>
+        <el-table-column
+          align="center"
           prop="leq"
           label="等效声强"
           sortable="custom"
@@ -225,6 +239,12 @@ export default {
           break;
         case 'creatertime':
           parameter = 'create_time';
+          break;
+        case 'lf':
+          parameter = 'lf';
+          break;
+        case 'lf2':
+          parameter = 'lf2';
           break;
       }
       try {
