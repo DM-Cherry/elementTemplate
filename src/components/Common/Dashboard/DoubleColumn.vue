@@ -18,6 +18,7 @@ export default {
           feature: {},
         },
         legend: {
+          top: 'bottom',
           data: [],
           textStyle: {
             color: '#fff',

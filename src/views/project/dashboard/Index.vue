@@ -19,11 +19,13 @@
                 <span class="name float-left mt-2 ml-3">训练馆TDLAS</span>
                 <div class="float-right mt-4 mr-4 cursor-pointer bells">
                   <el-image
-                    :src="
-                      warnStatus1
-                        ? `${isDev ? '' : '.'}/static/images/dashboard/normal.png`
-                        : `${isDev ? '' : '.'}/static/images/dashboard/warn.png`
-                    "
+                    v-if="warnStatus1"
+                    :src="`${isDev ? '' : '.'}/static/images/dashboard/normal.png`"
+                    @click="closeHistory('TDLAS-1')"
+                  ></el-image>
+                  <el-image
+                    v-else
+                    :src="`${isDev ? '' : '.'}/static/images/dashboard/warn.png`"
                     @click="closeHistory('TDLAS-1')"
                   ></el-image>
                 </div>
@@ -66,11 +68,13 @@
                 <span class="name float-left mt-2 ml-3">制冷机房门口TDLAS</span>
                 <div class="float-right mt-4 mr-4 cursor-pointer bells">
                   <el-image
-                    :src="
-                      warnStatus2
-                        ? `${isDev ? '' : '.'}/static/images/dashboard/normal.png`
-                        : `${isDev ? '' : '.'}/static/images/dashboard/warn.png`
-                    "
+                    v-if="warnStatus2"
+                    :src="`${isDev ? '' : '.'}/static/images/dashboard/normal.png`"
+                    @click="closeHistory('TDLAS-3')"
+                  ></el-image>
+                  <el-image
+                    v-else
+                    :src="`${isDev ? '' : '.'}/static/images/dashboard/warn.png`"
                     @click="closeHistory('TDLAS-3')"
                   ></el-image>
                 </div>
@@ -199,11 +203,13 @@
               <div class="header clearfix">
                 <div class="float-left mt-3 ml-4 cursor-pointer bells">
                   <el-image
-                    :src="
-                      warnStatus3
-                        ? `${isDev ? '' : '.'}/static/images/dashboard/normal.png`
-                        : `${isDev ? '' : '.'}/static/images/dashboard/warn.png`
-                    "
+                    v-if="warnStatus3"
+                    :src="`${isDev ? '' : '.'}/static/images/dashboard/normal.png`"
+                    @click="closeHistory('TDLAS-2')"
+                  ></el-image>
+                  <el-image
+                    v-else
+                    :src="`${isDev ? '' : '.'}/static/images/dashboard/warn.png`"
                     @click="closeHistory('TDLAS-2')"
                   ></el-image>
                 </div>

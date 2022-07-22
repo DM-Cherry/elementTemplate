@@ -60,27 +60,28 @@
           prop="deviceCode"
           sortable="custom"
           label="设备编码"
+          width="180"
         ></el-table-column>
         <el-table-column
           align="center"
           prop="l"
           label="瞬时声强"
           sortable="custom"
-          width="120"
+          width="140"
         ></el-table-column>
         <el-table-column
           align="center"
           prop="lf"
           label="瞬时差值"
           sortable="custom"
-          width="80"
+          width="140"
         ></el-table-column>
         <el-table-column
           align="center"
           prop="lf2"
           label="等效差值"
           sortable="custom"
-          width="80"
+          width="120"
         ></el-table-column>
         <el-table-column
           align="center"
@@ -89,16 +90,10 @@
           sortable="custom"
           width="120"
         ></el-table-column>
-        <el-table-column
-          align="center"
-          prop="creatertime"
-          label="创建日期"
-          sortable="custom"
-          width="180"
-        >
+        <el-table-column align="center" prop="createTime" label="创建日期" sortable="custom">
           <template slot-scope="scope">
             <div>
-              {{ $dayjs(scope.row.creatertime).format('YYYY-MM-DD HH:mm:ss') }}
+              {{ $dayjs(scope.row.createTime).format('YYYY-MM-DD HH:mm:ss') }}
             </div>
           </template>
         </el-table-column>
@@ -232,7 +227,7 @@ export default {
         case 'leq':
           this.parameter = 'leq';
           break;
-        case 'creatertime':
+        case 'createTime':
           this.parameter = 'create_time';
           break;
         case 'lf':

@@ -61,6 +61,7 @@
           prop="deviceCode"
           sortable="custom"
           label="设备编码"
+          width="180"
         ></el-table-column>
         <el-table-column
           align="center"
@@ -74,7 +75,7 @@
           prop="deviceAmmoniaConcentrationAverage"
           label="处理后的氨浓度值（ppm）"
           sortable="custom"
-          width="200"
+          width="220"
         ></el-table-column>
         <el-table-column
           align="center"
@@ -83,13 +84,7 @@
           sortable="custom"
           width="170"
         ></el-table-column>
-        <el-table-column
-          align="center"
-          sortable="custom"
-          prop="creatertime"
-          label="创建日期"
-          width="180"
-        >
+        <el-table-column align="center" sortable="custom" prop="creatertime" label="创建日期">
           <template slot-scope="scope">
             <div>
               {{ $dayjs(scope.row.creatertime).format('YYYY-MM-DD HH:mm:ss') }}
@@ -177,7 +172,7 @@ export default {
           this.parameter = 'device_ammonia_concentration';
           break;
         case 'creatertime':
-          this.parameter = 'creater_time';
+          this.parameter = 'creatertime';
           break;
         case 'deviceAmmoniaConcentrationAverage':
           this.parameter = 'device_ammonia_concentration_average';

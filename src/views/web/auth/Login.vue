@@ -8,37 +8,33 @@
       label-position="left"
       :rules="loginRules"
     >
-      <!--登录的标题-->
       <div class="title-container">
-        <h3 class="title">登录</h3>
+        <h3 class="title">系统登录</h3>
       </div>
-      <!--登录表单-->
       <el-form-item prop="account">
         <el-input
           name="account"
           type="text"
           v-model="loginForm.account"
-          auto-complete="on"
+          auto-complete="off"
           placeholder="请输入用户名"
         >
-          <i slot="suffix" class="el-input__icon el-icon-user"></i>
+          <i slot="suffix" class="el-input__icon el-icon-user" style="color: #023bcf;"></i>
         </el-input>
       </el-form-item>
-
       <el-form-item prop="password">
         <el-input
           name="password"
-          :type="passwordType"
+          type="password"
           @keyup.enter.native="handleLogin"
           v-model="loginForm.password"
-          auto-complete="on"
+          auto-complete="off"
           placeholder="请输入用户密码"
           show-password
         >
-          <i slot="suffix" class="el-input__icon el-icon-lock"></i>
+          <i slot="suffix" class="el-input__icon el-icon-lock" style="color: #023bcf;"></i>
         </el-input>
       </el-form-item>
-
       <el-form-item prop="imageCode">
         <el-input
           name="imageCode"
@@ -46,13 +42,12 @@
           @keyup.enter.native="handleLogin"
           v-model="loginForm.imageCode"
           auto-complete="off"
-          placeholder="验证码"
+          placeholder="请输入验证码"
         />
         <span class="imageCode" @click="refreshCode">
-          <img id="code" :src="src" />
+          <img id="code" :src="src" style="width: 130px; height: 47px;" />
         </span>
       </el-form-item>
-
       <el-button
         type="primary"
         style="width: 100%; margin-bottom: 30px;"
@@ -90,7 +85,6 @@ export default {
         password: '',
         imageCode: '',
       },
-      passwordType: 'password',
       loading: false,
       processing: false,
       loginRules: {
@@ -179,19 +173,21 @@ $light_gray: #eee;
     input {
       height: 47px;
       padding: 12px 5px 12px 15px;
-      color: $light_gray;
+      color: #333;
       background: transparent;
       border: 0;
       border-radius: 0;
       /* stylelint-disable */
       -webkit-appearance: none;
-      /* stylelint-enable */
-      &:-webkit-autofill {
-        /* stylelint-disable selector-no-id, declaration-no-important   */
-        box-shadow: 0 0 0 1000px $bg inset !important;
-        -webkit-text-fill-color: #fff !important;
-        /* stylelint-enable */
-      }
+    }
+    input::-webkit-input-placeholder {
+      color: #fff !important;
+    }
+    input::-moz-input-placeholder {
+      color: #fff !important;
+    }
+    input::-ms-input-placeholder {
+      color: #fff !important;
     }
   }
   .el-form-item {
@@ -207,19 +203,33 @@ $light_gray: #eee;
 $bg: #2d3a4b;
 $dark_gray: #889aa4;
 $light_gray: #eee;
+$background: url('../images/bg.jpg') !default;
 
 .login-container {
-  position: fixed;
   width: 100%;
-  height: 100%;
-  background-color: $bg;
+  min-height: 100vh;
+  min-width: 1440px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  position: relative;
+  background: $background no-repeat, #ffe400;
+  background: $background no-repeat, -moz-linear-gradient(top, #ffd100, #ffe400);
+  background: $background no-repeat, -o-linear-gradient(top, #ffd100, #ffe400);
+  background: $background no-repeat,
+    -webkit-gradient(linear, 0 0, 0 bottom, from(#ffd100), to(#ffe400));
+  -moz-background-size: cover;
+  -webkit-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
   .login-form {
     position: absolute;
-    right: 0;
-    left: 0;
+    top: 25%;
+    right: 5%;
+    text-align: center;
     width: 520px;
     padding: 35px 35px 15px;
-    margin: 120px auto;
+    background: rgba(255, 255, 255, 0.6);
   }
   .tips {
     margin-bottom: 10px;
@@ -247,7 +257,7 @@ $light_gray: #eee;
       margin: 0 auto 40px;
       font-size: 26px;
       font-weight: bold;
-      color: $light_gray;
+      color: #000;
       text-align: center;
     }
     .set-language {
@@ -268,8 +278,8 @@ $light_gray: #eee;
   }
   .imageCode {
     position: absolute;
-    top: 2px;
-    right: 10px;
+    top: 0px;
+    right: 0px;
     font-size: 16px;
     color: $dark_gray;
     cursor: pointer;
@@ -281,4 +291,9 @@ $light_gray: #eee;
     bottom: 28px;
   }
 }
+//@media screen and (min-width: 1300px) {
+//  .login-container {
+//    width: 1500px !important;
+//  }
+//}
 </style>

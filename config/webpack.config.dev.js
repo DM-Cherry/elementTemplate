@@ -14,7 +14,7 @@ const devServer = {
   disableHostCheck: true,
   historyApiFallback: true,
   clientLogLevel: 'none',
-  host: '192.168.108.24',
+  host: '192.168.12.162',
   hot: true,
   open: true,
   overlay: true,

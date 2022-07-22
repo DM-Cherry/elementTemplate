@@ -84,14 +84,14 @@
           prop="lf"
           label="瞬时差值"
           sortable="custom"
-          width="80"
+          width="120"
         ></el-table-column>
         <el-table-column
           align="center"
           prop="lf2"
           label="等效差值"
           sortable="custom"
-          width="80"
+          width="120"
         ></el-table-column>
         <el-table-column
           align="center"
@@ -192,7 +192,12 @@
       </div>
       <!-- 分页 -->
     </div>
-    <el-dialog title="历史数据" :visible.sync="historyVisible" :modal-append-to-body="false">
+    <el-dialog
+      title="历史数据"
+      :visible.sync="historyVisible"
+      style="height: 500px;"
+      :modal-append-to-body="false"
+    >
       <DoubleColumn ref="doublecolumn" />
     </el-dialog>
   </section>
